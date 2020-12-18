@@ -118,20 +118,15 @@ namespace MinimalCover
 
     public static bool operator !=(ReadOnlySet<T> a, ReadOnlySet<T> b) => !(a == b);
 
-    public bool Equals(ReadOnlySet<T> otherSet)
-    {
-      return otherSet != null && SetEquals(otherSet);
-    }
-
     public override bool Equals(object obj)
     {
       if (ReferenceEquals(this, obj))
       {
         return true;
       }
-      else if (obj is ReadOnlySet<T>)
+      else if (obj is IEnumerable<T>)
       {
-        return Equals(obj as ReadOnlySet<T>);
+        return SetEquals(obj as IEnumerable<T>);
       }
       return false;
     }

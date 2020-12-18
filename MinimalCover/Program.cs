@@ -54,7 +54,7 @@ namespace MinimalCover
       var s = new HashSet<string>() { "a", "b", "c" };
       var c = new AttributeSet(s);
 
-      Console.WriteLine(a == b);
+      Console.WriteLine(a == null);
 
 
 

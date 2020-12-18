@@ -46,11 +46,10 @@ namespace MinimalCover
 
     public override string ToString() => $"{Left} ---> {Right}";
 
-    public bool Equals(FunctionalDependency otherFd)
-    {
-      return otherFd != null && Left == otherFd.Left && Right == otherFd.Right;
-    }
-
+    //public bool Equals(FunctionalDependency otherFd)
+    //{
+    //  return otherFd != null && Left == otherFd.Left && Right == otherFd.Right;
+    //}
     public override bool Equals(object obj)
     {
       var otherFd = obj as FunctionalDependency;
