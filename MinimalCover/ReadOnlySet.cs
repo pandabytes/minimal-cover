@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using System.Linq;
 
 namespace MinimalCover
 {
-  public static class SetExtensionMethods
-  {
-    
-  }
-
   /// <summary>
   /// Contain a readonly set of attribute
   /// </summary>

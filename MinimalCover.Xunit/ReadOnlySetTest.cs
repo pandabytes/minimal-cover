@@ -43,6 +43,7 @@ namespace MinimalCover.Xunit
     }
 
     [Theory]
+    [InlineData(new object[] { 1, 2, 3 }, new object[] { 1 })]
     [InlineData(new object[] { 1, 2, 3 }, new object[] { 1, 2 })]
     [InlineData(new object[] { 1, 2, 3 }, new object[] { 1, 2, 4 })]
     public void Not_Equal_Test(object[] a, object[] b)

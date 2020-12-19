@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-
 
 namespace MinimalCover
 {
-  public class FunctionalDependency
+  public sealed class FunctionalDependency
   {
     public AttributeSet Left { get; }
 
@@ -46,23 +44,48 @@ namespace MinimalCover
 
     public override string ToString() => $"{Left} ---> {Right}";
 
-    //public bool Equals(FunctionalDependency otherFd)
-    //{
-    //  return otherFd != null && Left == otherFd.Left && Right == otherFd.Right;
-    //}
+    public static bool operator ==(FunctionalDependency a, FunctionalDependency b)
+    {
+      if ((object)a == null || (object)b == null)
+      {
+        return false;
+      }
+      return a.Equals(b);
+    }
+
+    public static bool operator !=(FunctionalDependency a, FunctionalDependency b) => !(a == b);
+
     public override bool Equals(object obj)
     {
-      var otherFd = obj as FunctionalDependency;
-      if (otherFd != null)
+      if (ReferenceEquals(this, obj))
       {
-        return Left.SetEquals(otherFd.Left) && Right.SetEquals(otherFd.Right);
+        return true;
       }
+
+      if (obj is FunctionalDependency)
+      {
+        var otherFd = obj as FunctionalDependency;
+        return Left == otherFd.Left && Right == otherFd.Right;
+      }
+
       return false;
     }
 
     public override int GetHashCode()
     {
-      return base.GetHashCode();
+      unchecked
+      {
+        int hashcode = 1430287;
+        foreach (var item in Left)
+        {
+          hashcode *= item.GetHashCode();
+        }
+        foreach (var item in Right)
+        {
+          hashcode *= item.GetHashCode();
+        }
+        return hashcode * 17;
+      }
     }
   }
 }
