@@ -17,6 +17,16 @@ namespace MinimalCover.Xunit
     public static TheoryData<FunctionalDependencyTestData> FdsTestData =>
       new TheoryData<FunctionalDependencyTestData>
       {
+        new FunctionalDependencyTestData()
+        {
+          Fds = new FunctionalDependency[3] {
+            new FunctionalDependency("A,B", "D,C"),
+            new FunctionalDependency("D", "E,F,G"),
+            new FunctionalDependency("F,G", "H")
+          },
+          Attributes = new string[8] { "A", "B", "C", "D", "E", "F", "G", "H" }
+        },
+
         new FunctionalDependencyTestData() 
         {
           Fds = new FunctionalDependency[3] {

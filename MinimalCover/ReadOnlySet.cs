@@ -105,7 +105,7 @@ namespace MinimalCover
       {
         return false;
       }
-      return ReferenceEquals(a, b) || a.SetEquals(b);
+      return a.Equals(b);
     }
 
     public static bool operator !=(ReadOnlySet<T> a, ReadOnlySet<T> b) => !(a == b);
