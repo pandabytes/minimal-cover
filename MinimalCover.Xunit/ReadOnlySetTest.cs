@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MinimalCover.Core;
 using Xunit;
 
 namespace MinimalCover.Xunit

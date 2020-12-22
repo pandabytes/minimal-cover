@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MinimalCover.Core;
 using System.Text;
 using Xunit;
 
@@ -9,6 +10,7 @@ namespace MinimalCover.Xunit
   {
     [Theory]
     [InlineData("", ',')]
+    [InlineData("a", ',')]
     [InlineData("a|b|c|d", '-')]
     [InlineData("a,b,c", ',')]
     [InlineData("a,b,c,d,e,f,g,h,i,j,k", ',')]

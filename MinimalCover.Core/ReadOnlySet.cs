@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MinimalCover
+namespace MinimalCover.Core
 {
   /// <summary>
   /// Contain a readonly set of attribute

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MinimalCover
+namespace MinimalCover.Core
 {
   public sealed class FunctionalDependency
   {

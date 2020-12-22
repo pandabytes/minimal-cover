@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace MinimalCover
+namespace MinimalCover.Core
 {
-  public class Program
+  /// <summary>
+  /// Contain logic that computes the minimal cover.
+  /// </summary>
+  public static class MinimalCover
   {
-    public static void CheckSingleAttributeRhs(IEnumerable<FunctionalDependency> fds)
+    private static void CheckSingleAttributeRhs(IEnumerable<FunctionalDependency> fds)
     {
       if (fds.Any(fd => fd.Right.Count > 1))
       {
@@ -142,10 +144,10 @@ namespace MinimalCover
     public static ISet<FunctionalDependency> RemoveExtraFds(IEnumerable<FunctionalDependency> fds)
     {
       CheckSingleAttributeRhs(fds);
-      
+
       // Use list so we can iterate in reverse to make modification
       var fdsList = new List<FunctionalDependency>(fds);
-      
+
       for (int i = fdsList.Count - 1; i >= 0; i--)
       {
         var fd = fdsList[i];
@@ -154,7 +156,7 @@ namespace MinimalCover
         var otherFds = fdsList.Where(otherFd => fd != otherFd);
         var closure = ComputeClosure(fd.Left, otherFds);
 
-        // There should only be 1 attribute on RHS
+        // There should only be 1 attribute on RHS.
         // If the closure contains the "right" attribute
         // then we don't need this fd
         if (closure.Contains(fd.Right.First()))
@@ -165,6 +167,17 @@ namespace MinimalCover
       return new HashSet<FunctionalDependency>(fdsList);
     }
 
+    /// <summary>
+    /// Compute the minimal cover.
+    /// </summary>
+    /// <remarks>
+    /// Call these methods in the following order:
+    /// 1. <see cref="GetSingleAttributeRhsFds(IEnumerable{FunctionalDependency})"/>
+    /// 2. <see cref="RemoveExtrasAttributesLhs(IEnumerable{FunctionalDependency})"/>
+    /// 3. <see cref="RemoveExtraFds(IEnumerable{FunctionalDependency})"/>
+    /// </remarks>
+    /// <param name="fds">Collection of functional dependencies</param>
+    /// <returns>The minimal cover set of functional dependencies</returns>
     public static ISet<FunctionalDependency> ComputeMinimalCover(IEnumerable<FunctionalDependency> fds)
     {
       // 1. Single attribute RHS
@@ -175,65 +188,6 @@ namespace MinimalCover
 
       // 3. Remove extra fds
       return RemoveExtraFds(noExtraLhs);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="args"></param>
-    public static void Main(string[] args)
-    {
-      //var givenFds = new FunctionalDependency[5] {
-      //  new FunctionalDependency("A", "D"),
-      //  new FunctionalDependency("B,C", "A,D"),
-      //  new FunctionalDependency("C", "B"),
-      //  new FunctionalDependency("E", "A"),
-      //  new FunctionalDependency("E", "D")
-      //};
-      //var givenFds = new FunctionalDependency[3] {
-      //      new FunctionalDependency("A", "B,C"),
-      //      new FunctionalDependency("B", "C"),
-      //      new FunctionalDependency("A,B", "D")
-      //};
-      var givenFds = new FunctionalDependency[11] {
-            new FunctionalDependency("A,B", "C"),
-            new FunctionalDependency("C", "A"),
-            new FunctionalDependency("B,C", "D"),
-            new FunctionalDependency("A,C,D", "B,D"),
-            new FunctionalDependency("D", "E"),
-            new FunctionalDependency("D", "G"),
-            new FunctionalDependency("B,E", "C"),
-            new FunctionalDependency("C,G", "B"),
-            new FunctionalDependency("C,G", "D"),
-            new FunctionalDependency("C,E", "A"),
-            new FunctionalDependency("C,E", "G")
-          };
-
-      // 1. Single attribute RHS
-      var fdsSet = GetSingleAttributeRhsFds(givenFds);
-      Console.WriteLine("\n1. Make all fds have single attribute on RHS");
-      foreach (var fd in fdsSet)
-      {
-        Console.WriteLine(fd);
-      }
-
-      // 2. Remove extranenous attributes on LHS
-      var noExtra = RemoveExtrasAttributesLhs(fdsSet);
-      Console.WriteLine("\n2. Remove extraneous attributes on LHS");
-      foreach (var fd in noExtra)
-      {
-        Console.WriteLine(fd);
-      }
-
-      // 3. Remove extra fds
-      var minimalCover = RemoveExtraFds(noExtra);
-      Console.WriteLine($"\n3. Remove extranenous fds");
-      Console.WriteLine($"Minimal Cover ({minimalCover.Count})");
-      foreach (var fd in minimalCover)
-      {
-        Console.WriteLine(fd);
-      }
-
     }
   }
 }

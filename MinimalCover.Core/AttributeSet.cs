@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 using System.Linq;
 
-namespace MinimalCover
+namespace MinimalCover.Core
 {
   /// <summary>
-  /// Contain a readonly set of attribute
+  /// Represent a readonly set of attributes
   /// </summary>
   public class AttributeSet : ReadOnlySet<string>
   {
