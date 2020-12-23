@@ -1,0 +1,48 @@
+{
+  "fds": [
+    {
+      "left": [ "A", "B" ],
+      "right": [ "C" ]
+    },
+    {
+      "left": [ "C" ],
+      "right": [ "A" ]
+    },
+    {
+      "left": [ "B", "C" ],
+      "right": [ "D" ]
+    },
+    {
+      "left": [ "A", "C", "D" ],
+      "right": [ "B", "D" ]
+    },
+    {
+      "left": [ "D" ],
+      "right": [ "E" ]
+    },
+    {
+      "left": [ "D" ],
+      "right": [ "G" ]
+    },
+    {
+      "left": [ "B", "E" ],
+      "right": [ "C" ]
+    },
+    {
+      "left": [ "C", "G" ],
+      "right": [ "B" ]
+    },
+    {
+      "left": [ "C", "G" ],
+      "right": [ "D" ]
+    },
+    {
+      "left": [ "C", "E" ],
+      "right": [ "A" ]
+    },
+    {
+      "left": [ "C", "E" ],
+      "right": [ "G" ]
+    }
+  ]
+}

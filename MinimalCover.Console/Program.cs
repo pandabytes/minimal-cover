@@ -13,12 +13,14 @@ namespace MinimalCover.Console
     {
       // Command line interface
       Cli,
-      Text
+      Text,
+      Json
     }
 
     /// <summary>
     ///  --input=text "..\..\..\TestData\fds_3.txt"
     ///  --input=cli "A-->B;C-->D;A-->D"
+    ///  -i json "..\..\..\TestData\fds_1.json"
     /// </summary>
     /// <param name="args"></param>
     public static int Main(string[] args)
@@ -43,6 +45,9 @@ namespace MinimalCover.Console
             break;
           case InputType.Text:
             parser = new Parsers.TextFileParser(fds);
+            break;
+          case InputType.Json:
+            parser = new Parsers.JsonFileParser(fds);
             break;
           default:
             // System.CommandLine should handle the list of valid input types
