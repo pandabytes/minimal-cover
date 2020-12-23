@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "MinimalCover.Console": {
+      "commandName": "Project"
+    }
+  }
+}

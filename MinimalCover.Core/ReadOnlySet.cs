@@ -5,17 +5,20 @@ using System.Collections.Generic;
 namespace MinimalCover.Core
 {
   /// <summary>
-  /// Contain a readonly set of attribute
+  /// Represent a readonly set where no modification is permitted
   /// </summary>
   public class ReadOnlySet<T> : ISet<T>, IReadOnlyCollection<T>
   {
     protected const string ReadonlySetMessage = "Readonly set does not support this method";
 
+    /// <summary>
+    /// Internal reference to the actual set object
+    /// </summary>
     protected ISet<T> m_set;
 
     /// <summary>
     /// Passed in set can still be update if there is a external reference to it.
-    /// This constructor only stores a reference to <see cref="set"/>
+    /// This constructor only stores a reference to <paramref name="set"/>
     /// </summary>
     public ReadOnlySet(ISet<T> set)
     {
