@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using MinimalCover.Xunit.Data;
-using MinimalCover.Core;
+using MinimalCover.Core.Xunit.Data;
 
-namespace MinimalCover.Xunit
+namespace MinimalCover.Core.Xunit
 {
   public class MinimalCoverTest
   {
@@ -62,7 +60,7 @@ namespace MinimalCover.Xunit
             MemberType = typeof(MinimalCoverTest))]
     public void SingleAttributeRhs_Test(FunctionalDependency fd)
     {
-      var fds = Core.MinimalCover.SingleAttributeRhs(fd);
+      var fds = MinimalCover.SingleAttributeRhs(fd);
       var allSingleRhs = fds.All(singleRhsFd => singleRhsFd.Right.Count == 1);
       Assert.True(allSingleRhs, "Not all fds have only 1 attribute on RHS");
     }
@@ -72,7 +70,7 @@ namespace MinimalCover.Xunit
                 MemberType = typeof(RelationTestData))]
     public void GetSingleAttributeRhsFds_Test(Relation relation)
     {
-      var fds = Core.MinimalCover.GetSingleAttributeRhsFds(relation.Fds);
+      var fds = MinimalCover.GetSingleAttributeRhsFds(relation.Fds);
       var allSingleRhs = fds.All(fd => fd.Right.Count == 1);
       Assert.True(allSingleRhs, "Not all fds have only 1 attribute on RHS");
     }
@@ -86,7 +84,7 @@ namespace MinimalCover.Xunit
       };
 
       Assert.Throws<ArgumentException>(() => {
-        Core.MinimalCover.ComputeClosure("A", sampleFds);
+        MinimalCover.ComputeClosure("A", sampleFds);
       });
     }
 
@@ -94,7 +92,7 @@ namespace MinimalCover.Xunit
     [MemberData(nameof(ComputeClosureTheoryData))]
     public void ComputeClosure_Test(ComputeClosureTestData testData)
     {
-      var closure = Core.MinimalCover.ComputeClosure(testData.Attribute, testData.Fds);
+      var closure = MinimalCover.ComputeClosure(testData.Attribute, testData.Fds);
       Assert.Equal(testData.Closure, closure);
     }
 

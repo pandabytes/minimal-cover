@@ -2,12 +2,12 @@
 using System.Linq;
 using MinimalCover.Core;
 
-namespace MinimalCover.Console.Parsers
+namespace MinimalCover.Core.Parsers.Cli
 {
   /// <summary>
   /// </summary>
   /// <remarks>
-  /// The code in this class may be similar to <see cref="TextFileParser"/>.
+  /// The code in this class may be similar to <see cref="Text.TextFileParser"/>.
   /// But since these are different parsers, they can potentially
   /// have different ways to parse in the future. So it is fine if
   /// the code is be duplicated in these 2 classes for now
@@ -33,7 +33,7 @@ namespace MinimalCover.Console.Parsers
         var fdTokens = fd.Split(LeftRightSeparator);
         if (fdTokens.Length != 2)
         {
-          throw new ArgumentException("Each functional dependency must be separated by '-->'");
+          throw new ArgumentException($"Each functional dependency must be separated by '{LeftRightSeparator}'");
         }
 
         var left = fdTokens[0];

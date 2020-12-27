@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MinimalCover.Console.Parsers
+namespace MinimalCover.Core.Parsers
 {
   public abstract class Parser : IParser
   {

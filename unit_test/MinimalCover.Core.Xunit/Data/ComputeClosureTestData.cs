@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MinimalCover.Core;
 
-namespace MinimalCover.Xunit.Data
+namespace MinimalCover.Core.Xunit.Data
 {
   public class ComputeClosureTestData
   {

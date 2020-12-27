@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MinimalCover.Core;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using MinimalCover.Core.Parsers;
 
 namespace MinimalCover.Console
 {
@@ -16,6 +14,8 @@ namespace MinimalCover.Console
       Text,
       Json
     }
+
+    public delegate void testc(int x);
 
     /// <summary>
     ///  --input=text "..\..\..\TestData\fds_3.txt"
@@ -37,17 +37,17 @@ namespace MinimalCover.Console
       rootCommand.Handler = CommandHandler.Create<InputType, string>((input, fds) =>
       {
         // Parse the functional dependencies
-        Parsers.IParser parser = null;
+        IParser parser = null;
         switch (input)
         {
           case InputType.Cli:
-            parser = new Parsers.CliParser(fds);
+            parser = new Core.Parsers.Cli.CliParser(fds);
             break;
           case InputType.Text:
-            parser = new Parsers.TextFileParser(fds);
+            parser = new Core.Parsers.Text.TextFileParser(fds);
             break;
           case InputType.Json:
-            parser = new Parsers.JsonFileParser(fds);
+            parser = new Core.Parsers.Json.JsonFileParser(fds);
             break;
           default:
             // System.CommandLine should handle the list of valid input types
@@ -79,6 +79,8 @@ namespace MinimalCover.Console
         {
           System.Console.WriteLine(fd);
         }
+
+
       });
 
       return rootCommand.InvokeAsync(args).Result;

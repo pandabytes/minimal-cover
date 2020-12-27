@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using MinimalCover.Xunit.Data;
+﻿using Xunit;
+using MinimalCover.Core.Xunit.Data;
 using MinimalCover.Core;
 
-namespace MinimalCover.Xunit
+namespace MinimalCover.Core.Xunit
 {
   public class RelationTest 
   {

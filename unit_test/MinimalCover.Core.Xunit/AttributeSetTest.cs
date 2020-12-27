@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using MinimalCover.Core;
-using System.Text;
+﻿using MinimalCover.Core;
 using Xunit;
 
-namespace MinimalCover.Xunit
+namespace MinimalCover.Core.Xunit
 {
   public class AttributeSetTest
   {

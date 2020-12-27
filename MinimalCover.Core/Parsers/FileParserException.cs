@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MinimalCover.Console.Parsers
+namespace MinimalCover.Core.Parsers
 {
   public class FileParserException : Exception
   {

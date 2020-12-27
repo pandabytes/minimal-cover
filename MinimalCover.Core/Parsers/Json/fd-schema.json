@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "JSON Schema for Minimal Cover format",
+
+  "type": "array",
+  "description": "Array of objects representing functional dependencies",
+  "items": {
+    "properties": {
+      "left": {
+        "type": "array",
+        "description": "Array of attributes on LHS"
+      },
+      "right": {
+        "type": "array",
+        "description": "Array of attributes on RHS"
+      }
+    },
+    "required": [ "left", "right" ]
+  }
+}

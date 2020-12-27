@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using MinimalCover.Core;
 
-namespace MinimalCover.Console.Parsers
+namespace MinimalCover.Core.Parsers
 {
   public interface IParser
   {
     ReadOnlySet<FunctionalDependency> ParsedFds { get; }
 
     void Parse();
+
   }
 }

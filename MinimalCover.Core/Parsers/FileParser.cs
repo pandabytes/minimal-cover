@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace MinimalCover.Console.Parsers
+namespace MinimalCover.Core.Parsers
 {
   public abstract class FileParser : Parser
   {
