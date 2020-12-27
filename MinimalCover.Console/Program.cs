@@ -80,7 +80,6 @@ namespace MinimalCover.Console
           System.Console.WriteLine(fd);
         }
 
-
       });
 
       return rootCommand.InvokeAsync(args).Result;

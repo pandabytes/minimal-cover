@@ -1,6 +1,4 @@
-﻿using System;
-using MinimalCover.Core;
-using Xunit;
+﻿using Xunit;
 
 namespace MinimalCover.Core.Xunit.Data
 {

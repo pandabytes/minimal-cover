@@ -25,6 +25,9 @@ namespace MinimalCover.Core
       m_set = set;
     }
 
+    /// <summary>
+    /// Needed for subclasses
+    /// </summary>
     protected ReadOnlySet() { }
 
     public int Count => m_set.Count;
@@ -75,7 +78,6 @@ namespace MinimalCover.Core
     /// <exception cref="NotSupportedException">Method not supported for readonly set</exception>
     public void ExceptWith(IEnumerable<T> other) => throw new NotSupportedException(ReadonlySetMessage);
 
-
     /// <summary>
     /// Method not supported.
     /// </summary>
@@ -119,10 +121,12 @@ namespace MinimalCover.Core
       {
         return true;
       }
-      else if (obj is IEnumerable<T>)
+
+      if (obj is ReadOnlySet<T>)
       {
-        return SetEquals(obj as IEnumerable<T>);
+        return SetEquals(obj as ReadOnlySet<T>);
       }
+
       return false;
     }
 

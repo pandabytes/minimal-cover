@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace MinimalCover.Core
 {
@@ -68,14 +66,6 @@ namespace MinimalCover.Core
       Left = new AttributeSet(left);
       Right = new AttributeSet(right, separator);
     }
-
-    public bool IsOnLeft(string attribute) => Left.Contains(attribute);
-
-    public bool IsOnLeft(IEnumerable<string> attributes) => attributes.All(a => IsOnLeft(a));
-
-    public bool IsOnRight(string attribute) => Right.Contains(attribute);
-
-    public bool IsOnRight(IEnumerable<string> attributes) => attributes.All(a => IsOnRight(a));
 
     public override string ToString() => $"{Left} --> {Right}";
 

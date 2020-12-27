@@ -1,9 +1,8 @@
-﻿using MinimalCover.Core;
-using Xunit;
+﻿using Xunit;
 
 namespace MinimalCover.Core.Xunit
 {
-  public class AttributeSetTest
+  public class AttributeSetTests
   {
     [Theory]
     [InlineData("", ',')]
@@ -13,11 +12,12 @@ namespace MinimalCover.Core.Xunit
     [InlineData("a,b,c,d,e,f,g,h,i,j,k", ',')]
     [InlineData("a|b|c|d", '|')]
     [InlineData("a-b-c-d-e-1-2-3-5", '-')]
-    public void String_Constructor_Test(string setStr, char separator)
+    public void Constructor_WithString_ReturnsAttributeSet(string setStr, char separator)
     {
       var tokens = setStr.Split(separator);
+      var tokensStr = $"[{string.Join(',', tokens)}]";
       var attributeSet = new AttributeSet(setStr, separator);
-      Assert.True(tokens.Length == attributeSet.Count, $"Set doesn't have {tokens.Length} items");
+      Assert.True(attributeSet.SetEquals(tokens), $"Set doesn't contain all attributes {tokensStr}");
     }
   }
 }
