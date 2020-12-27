@@ -18,11 +18,7 @@ namespace MinimalCover.Console
     public delegate void testc(int x);
 
     /// <summary>
-    ///  --input=text "..\..\..\TestData\fds_3.txt"
-    ///  --input=cli "A-->B;C-->D;A-->D"
-    ///  -i json "..\..\..\TestData\fds_1.json"
-    ///  -i text ..\..\..\..\unit_test\MinimalCover.Core.Xunit\Parsers\TestData\GoodData\fds_3.txt -f
-    ///  -i json ..\..\..\..\unit_test\MinimalCover.Core.Xunit\Parsers\TestData\GoodData\fds_1.json -f
+    /// 
     /// </summary>
     /// <param name="args"></param>
     public static int Main(string[] args)

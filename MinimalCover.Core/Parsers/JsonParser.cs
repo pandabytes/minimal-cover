@@ -49,6 +49,10 @@ namespace MinimalCover.Core.Parsers
     /// <see cref="FunctionalDependency"/>
     /// </summary>
     /// <param name="value">The string value to parse</param>
+    /// <exception cref="ArgumentException">
+    /// Throws when <paramref name="value"/> doesn't match with 
+    /// the schema defined in <see cref="SchemaFilePath"/>
+    /// </exception>
     /// <returns>Set of parsed <see cref="FunctionalDependency"/></returns>
     public static ReadOnlySet<FunctionalDependency> Parse(string value)
     {
@@ -61,11 +65,21 @@ namespace MinimalCover.Core.Parsers
       }
     }
 
-    private static JToken ValidateJson(string value, string schemaStr)
+    /// <summary>
+    /// Validate the <paramref name="jsonStr"/> against the 
+    /// <paramref name="schemaStr"/>
+    /// </summary>
+    /// <param name="jsonStr">JSON string to be validated</param>
+    /// <param name="schemaStr">JSON schema string</param>
+    /// <exception cref="ArgumentException">
+    /// Throws when validation when fails
+    /// </exception>
+    /// <returns>The JToken object parsed from <paramref name="jsonStr"/></returns>
+    private static JToken ValidateJson(string jsonStr, string schemaStr)
     {
       // Validate schema
       JSchema schema = JSchema.Parse(schemaStr);
-      var jToken = JToken.Parse(value);
+      var jToken = JToken.Parse(jsonStr);
 
       // There may be many error validations, but only
       // need to throw one at a time
@@ -73,7 +87,7 @@ namespace MinimalCover.Core.Parsers
       _ = jToken.IsValid(schema, out errors);
       foreach (var i in errors)
       {
-        string message = $"{i.Message} Path: {i.Path}. Line number: {i.LineNumber}";
+        string message = $"Fail to validate JSON string. {i.Message} Path: {i.Path}. Line number: {i.LineNumber}";
         throw new ArgumentException(message);
       }
 

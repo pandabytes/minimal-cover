@@ -1,8 +1,15 @@
 {
   "profiles": {
-    "MinimalCover.Console": {
+    "JsonFile": {
       "commandName": "Project",
-      "commandLineArgs": "-i json ..\\..\\..\\..\\unit_test\\MinimalCover.Core.Xunit\\Parsers\\TestData\\GoodData\\fds_3.json -f"
+      "commandLineArgs": "-i json -f ..\\..\\..\\SampleInputFiles\\fds_1.json"
+    },
+    "MinimalCover.Console": {
+      "commandName": "Project"
+    },
+    "TextFile": {
+      "commandName": "Project",
+      "commandLineArgs": "-i text -f ..\\..\\..\\SampleInputFiles\\fds_1.txt"
     }
   }
 }
