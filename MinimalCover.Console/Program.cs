@@ -1,16 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using MinimalCover.Core;
 using MinimalCover.Core.Parsers;
 
 namespace MinimalCover.Console
 {
   public class Program
   {
-    public enum InputType
+    public enum InputFormat
     {
-      // Command line interface
-      Cli,
       Text,
       Json
     }
@@ -21,42 +21,58 @@ namespace MinimalCover.Console
     ///  --input=text "..\..\..\TestData\fds_3.txt"
     ///  --input=cli "A-->B;C-->D;A-->D"
     ///  -i json "..\..\..\TestData\fds_1.json"
+    ///  -i text ..\..\..\..\unit_test\MinimalCover.Core.Xunit\Parsers\TestData\GoodData\fds_3.txt -f
+    ///  -i json ..\..\..\..\unit_test\MinimalCover.Core.Xunit\Parsers\TestData\GoodData\fds_1.json -f
     /// </summary>
     /// <param name="args"></param>
     public static int Main(string[] args)
     {
       var rootCommand = new RootCommand
       {
-        new Option<InputType>(
+        new Option<InputFormat>(
           new string[2] { "-i", "--input" },
-          description: "The input type of functional dependencies"),
+          description: "The input format of functional dependencies"),
+        new Option<bool>(
+          new string[2] { "-f", "--file" },
+          description: "Specify whether the functional dependency argument is a file"),
         new Argument("fds")
       };
       rootCommand.Description = "Find the minimal cover given a list of functional dependencies";
 
-      rootCommand.Handler = CommandHandler.Create<InputType, string>((input, fds) =>
+      rootCommand.Handler = CommandHandler.Create<InputFormat, bool, string>((input, file, fds) =>
       {
-        // Parse the functional dependencies
-        IParser parser = null;
+        // Select the correct parse method
+        ParseMethod parseMethod = null;
         switch (input)
         {
-          case InputType.Cli:
-            parser = new Core.Parsers.Cli.CliParser(fds);
+          case InputFormat.Text:
+            parseMethod = TextParser.Parse;
             break;
-          case InputType.Text:
-            parser = new Core.Parsers.Text.TextFileParser(fds);
-            break;
-          case InputType.Json:
-            parser = new Core.Parsers.Json.JsonFileParser(fds);
+          case InputFormat.Json:
+            parseMethod = JsonParser.Parse;
             break;
           default:
-            // System.CommandLine should handle the list of valid input types
-            throw new NotSupportedException("Default parser is not supported");
+            // System.CommandLine should handle the list of valid input formats
+            throw new NotSupportedException("Default parser method is not supported");
         }
-        parser.Parse();
+
+        // Parse the argument 
+        ReadOnlySet<FunctionalDependency> parsedFds = null;
+        if (file)
+        {
+          using (var streamReader = new StreamReader(fds))
+          {
+            var fileContent = streamReader.ReadToEnd();
+            parsedFds = parseMethod(fileContent);
+          }
+        }
+        else
+        {
+          parsedFds = parseMethod(fds);
+        }
 
         // 1. Single attribute RHS
-        var fdsSet = Core.MinimalCover.GetSingleAttributeRhsFds(parser.ParsedFds);
+        var fdsSet = Core.MinimalCover.GetSingleAttributeRhsFds(parsedFds);
         System.Console.WriteLine("\n1. Make all fds have single attribute on RHS");
         foreach (var fd in fdsSet)
         {

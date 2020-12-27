@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Parsers\fd-schema.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Parsers\Json\fd-schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

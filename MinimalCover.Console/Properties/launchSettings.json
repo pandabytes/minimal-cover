@@ -2,7 +2,7 @@
   "profiles": {
     "MinimalCover.Console": {
       "commandName": "Project",
-      "commandLineArgs": "-i json ..\\..\\..\\..\\unit_test\\MinimalCover.Core.Xunit\\Parsers\\TestData\\GoodData\\fds_3.json"
+      "commandLineArgs": "-i json ..\\..\\..\\..\\unit_test\\MinimalCover.Core.Xunit\\Parsers\\TestData\\GoodData\\fds_3.json -f"
     }
   }
 }
