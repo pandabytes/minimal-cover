@@ -12,10 +12,9 @@ namespace MinimalCover.Console
     public enum InputFormat
     {
       Text,
-      Json
+      Json,
+      Yaml
     }
-
-    public delegate void testc(int x);
 
     /// <summary>
     /// 
@@ -47,6 +46,9 @@ namespace MinimalCover.Console
           case InputFormat.Json:
             parseMethod = JsonParser.Parse;
             break;
+          case InputFormat.Yaml:
+            parseMethod = YamlParser.Parse;
+            break;
           default:
             // System.CommandLine should handle the list of valid input formats
             throw new NotSupportedException("Default parser method is not supported");
@@ -58,8 +60,7 @@ namespace MinimalCover.Console
         {
           using (var streamReader = new StreamReader(fds))
           {
-            var fileContent = streamReader.ReadToEnd();
-            parsedFds = parseMethod(fileContent);
+            parsedFds = parseMethod(streamReader.ReadToEnd());
           }
         }
         else

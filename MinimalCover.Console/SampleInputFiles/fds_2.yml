@@ -1,0 +1,17 @@
+---
+- left:
+    - A
+  right:
+    - B
+    - C
+
+- left:
+    - B
+  right:
+    - C
+
+- left:
+    - A
+    - B
+  right:
+    - D

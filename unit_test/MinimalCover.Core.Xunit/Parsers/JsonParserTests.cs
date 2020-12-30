@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using MinimalCover.Core.Data.Xunit;
 using Xunit;
 
 namespace MinimalCover.Core.Parsers.Xunit
 {
   public class JsonParserTests
   {
-    public class ParsedFdsTestData
-    {
-      public string Value { get; set; }
-
-      public ISet<FunctionalDependency> ExpectedFds;
-    }
-
     public static TheoryData<ParsedFdsTestData> ParseTheoryData =
       new TheoryData<ParsedFdsTestData>()
       {

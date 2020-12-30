@@ -10,6 +10,10 @@
     "TextFile": {
       "commandName": "Project",
       "commandLineArgs": "-i text -f ..\\..\\..\\SampleInputFiles\\fds_1.txt"
+    },
+    "YamlFile": {
+      "commandName": "Project",
+      "commandLineArgs": "-i yaml -f ..\\..\\..\\SampleInputFiles\\fds_1.yml"
     }
   }
 }
