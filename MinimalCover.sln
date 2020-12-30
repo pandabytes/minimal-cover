@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit_test", "unit_test", "{
 		unit_test\unitTest.bat = unit_test\unitTest.bat
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Core.Xunit", "unit_test\MinimalCover.Core.Xunit\MinimalCover.Core.Xunit.csproj", "{1DF36EF3-D09F-4B62-976A-90F0597FCC4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Xunit.Core", "unit_test\MinimalCover.Xunit.Core\MinimalCover.Xunit.Core.csproj", "{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,16 +28,16 @@ Global
 		{6553F141-4784-4C6B-88C4-5C578F1A079F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6553F141-4784-4C6B-88C4-5C578F1A079F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6553F141-4784-4C6B-88C4-5C578F1A079F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DF36EF3-D09F-4B62-976A-90F0597FCC4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DF36EF3-D09F-4B62-976A-90F0597FCC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DF36EF3-D09F-4B62-976A-90F0597FCC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DF36EF3-D09F-4B62-976A-90F0597FCC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1DF36EF3-D09F-4B62-976A-90F0597FCC4C} = {6F0A1967-40C4-4E8E-A77B-AC5ED2BF7FB2}
+		{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392} = {6F0A1967-40C4-4E8E-A77B-AC5ED2BF7FB2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CA904A0-AF2E-4648-BB82-49B06A5E8389}

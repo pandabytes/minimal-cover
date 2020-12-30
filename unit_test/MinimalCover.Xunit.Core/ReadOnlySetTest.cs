@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
+using MinimalCover.Core;
 
-namespace MinimalCover.Core.Xunit
+namespace MinimalCover.Xunit.Core
 {
   /// <summary>
   /// Inhereit <see cref="ReadOnlySet{T}"/> to use some of

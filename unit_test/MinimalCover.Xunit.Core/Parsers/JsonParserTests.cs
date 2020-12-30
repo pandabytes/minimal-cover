@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using MinimalCover.Core.Data.Xunit;
+using MinimalCover.Core;
+using MinimalCover.Core.Parsers;
+using MinimalCover.Xunit.Core.Data;
 using Xunit;
 
-namespace MinimalCover.Core.Parsers.Xunit
+namespace MinimalCover.Xunit.Core.Parsers
 {
   public class JsonParserTests
   {

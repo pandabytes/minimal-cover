@@ -1,6 +1,7 @@
 ﻿using Xunit;
+using MinimalCover.Core;
 
-namespace MinimalCover.Core.Xunit
+namespace MinimalCover.Xunit.Core
 {
   public class FunctionalDependencyTests
   {

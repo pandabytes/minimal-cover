@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xunit;
-using MinimalCover.Core.Xunit.Data;
+using MinimalCover.Core;
+using MinimalCover.Xunit.Core.Data;
 
-namespace MinimalCover.Core.Xunit
+namespace MinimalCover.Xunit.Core
 {
   public class MinimalCoverTests
   {
@@ -192,7 +193,7 @@ namespace MinimalCover.Core.Xunit
                 MemberType = typeof(RelationTestData))]
     public void GetSingleAttributeRhsFds_SimpleCall_AllFdsHaveSingleAttributeRhs(Relation relation)
     {
-      var fds = MinimalCover.GetSingleAttributeRhsFds(relation.Fds);
+      var fds = MinimalCover.Core.MinimalCover.GetSingleAttributeRhsFds(relation.Fds);
       Action<FunctionalDependency> isSingleRhs = fd => {
         Assert.Single(fd.Right);
       };
@@ -207,14 +208,14 @@ namespace MinimalCover.Core.Xunit
         new FunctionalDependency("C", "D"),
       };
 
-      Assert.Throws<ArgumentException>(() => MinimalCover.ComputeClosure("A", sampleFds));
+      Assert.Throws<ArgumentException>(() => MinimalCover.Core.MinimalCover.ComputeClosure("A", sampleFds));
     }
 
     [Theory]
     [MemberData(nameof(ComputeClosureTheoryData))]
     public void ComputeClosure_SimpleCall_MatchesExpectedClosure(ClosureTestData testData)
     {
-      var closure = MinimalCover.ComputeClosure(testData.Attributes, testData.Fds);
+      var closure = MinimalCover.Core.MinimalCover.ComputeClosure(testData.Attributes, testData.Fds);
       Assert.Equal(testData.Closure, closure);
     }
 
@@ -222,7 +223,7 @@ namespace MinimalCover.Core.Xunit
     [MemberData(nameof(RemoveExtrasAttributesLhsTheoryData))]
     public void RemoveExtrasAttributesLhs_SimpleCall_MatchesExpectedSet(FdsTestData testData)
     {
-      var fdsSet = MinimalCover.RemoveExtrasAttributesLhs(testData.Fds);
+      var fdsSet = MinimalCover.Core.MinimalCover.RemoveExtrasAttributesLhs(testData.Fds);
       Assert.Equal(testData.ExpectedFds, fdsSet);
     }
 
@@ -234,14 +235,14 @@ namespace MinimalCover.Core.Xunit
         new FunctionalDependency("C", "D"),
       };
 
-      Assert.Throws<ArgumentException>(() => MinimalCover.RemoveExtraFds(sampleFds));
+      Assert.Throws<ArgumentException>(() => MinimalCover.Core.MinimalCover.RemoveExtraFds(sampleFds));
     }
 
     [Theory]
     [MemberData(nameof(RemoveExtraFdsTheoryData))]
     public void RemoveExtraFds_SimpleCall_MatchesExpectedSet(FdsTestData testData)
     {
-      var fdsSet = MinimalCover.RemoveExtraFds(testData.Fds);
+      var fdsSet = MinimalCover.Core.MinimalCover.RemoveExtraFds(testData.Fds);
       Assert.Equal(testData.ExpectedFds, fdsSet);
     }
 

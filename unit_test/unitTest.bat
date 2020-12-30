@@ -1,5 +1,5 @@
 @echo off
 
-dotnet test .\MinimalCover.Core.Xunit -l "console;verbosity=detailed"
+dotnet test .\MinimalCover.Xunit.Core -l "console;verbosity=detailed"
 
 timeout 5

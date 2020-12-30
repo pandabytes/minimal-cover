@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xunit;
-using MinimalCover.Core.Data.Xunit;
+using MinimalCover.Xunit.Core.Data;
+using MinimalCover.Core;
+using MinimalCover.Core.Parsers;
 
-namespace MinimalCover.Core.Parsers.Xunit
+namespace MinimalCover.Xunit.Core.Parsers
 {
   public class TextParserTests
   {

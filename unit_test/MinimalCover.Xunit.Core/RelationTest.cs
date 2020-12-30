@@ -1,7 +1,7 @@
 ﻿using Xunit;
-using MinimalCover.Core.Xunit.Data;
-
-namespace MinimalCover.Core.Xunit
+using MinimalCover.Xunit.Core.Data;
+using MinimalCover.Core;
+namespace MinimalCover.Xunit.Core
 {
   public class RelationTests
   {
