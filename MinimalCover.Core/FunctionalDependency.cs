@@ -71,7 +71,7 @@ namespace MinimalCover.Core
 
     public static bool operator ==(FunctionalDependency a, FunctionalDependency b)
     {
-      if ((object)a == null || (object)b == null)
+      if (a is null || b is null)
       {
         return false;
       }
