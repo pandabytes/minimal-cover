@@ -16,6 +16,14 @@ namespace MinimalCover.Core
     public AttributeSet(ISet<string> set) : base(set)
     {}
 
+    /// <summary>
+    /// Construct an attribute set by providing a string and separator
+    /// </summary>
+    /// <remarks>
+    /// Example: "A,B,C" and "," ==> {"A", "B", "C"}
+    /// </remarks>
+    /// <param name="setStr">The attributes with separator included in 1 string</param>
+    /// <param name="separator">The separator to split the string</param>
     public AttributeSet(string setStr, char separator = ',')
     {
       var tokens = setStr.Split(separator).Select(t => t.Trim());

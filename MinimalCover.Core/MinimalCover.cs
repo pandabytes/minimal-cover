@@ -9,15 +9,31 @@ namespace MinimalCover.Core
   /// </summary>
   public static class MinimalCover
   {
+    /// <summary>
+    /// Check if all <see cref="fds"/> have a single attribute on RHS.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    /// Raise this exception when at least 1 <see cref="FunctionalDependency"/>
+    /// has more than 1 attribute on RHS
+    /// </exception>
+    /// <param name="fds">Collection of functional dependencies</param>
     private static void CheckSingleAttributeRhs(IEnumerable<FunctionalDependency> fds)
     {
       if (fds.Any(fd => fd.Right.Count > 1))
       {
-        throw new ArgumentException("Every functional dependency must only have 1 attribute on the \"right\"");
+        const string message = "Every functional dependency must only have 1 attribute on the \"right\"";
+        throw new ArgumentException(message);
       }
     }
 
-    public static ISet<FunctionalDependency> SingleAttributeRhs(FunctionalDependency fd)
+    /// <summary>
+    /// Transform a functional dependency that has n attributes on RHS
+    /// into n functional dependencies where each functional dependency
+    /// has only 1 attribute on RHS
+    /// </summary>
+    /// <param name="fd">Functional dependency</param>
+    /// <returns>Set of functional dependencies that only has 1 attribute on RHS</returns>
+    private static ISet<FunctionalDependency> SingleAttributeRhs(FunctionalDependency fd)
     {
       var fds = new HashSet<FunctionalDependency>();
       foreach (var attribute in fd.Right)
@@ -28,7 +44,17 @@ namespace MinimalCover.Core
       return fds;
     }
 
-    public static AttributeSet ComputeClosure(IEnumerable<string> attributes, IEnumerable<FunctionalDependency> fds)
+    /// <summary>
+    /// Compute the closure of <paramref name="attributes"/> given <paramref name="fds"/>
+    /// </summary>
+    /// <param name="attributes">Set of attributes</param>
+    /// <param name="fds">Set of functional dependencies</param>
+    /// <exception cref="ArgumentException">
+    /// Raise this exception when at least 1 <see cref="FunctionalDependency"/>
+    /// has more than 1 attribute on RHS
+    /// </exception>
+    /// <returns>Set of attributes that form the closure</returns>
+    public static AttributeSet ComputeClosure(ISet<string> attributes, ISet<FunctionalDependency> fds)
     {
       CheckSingleAttributeRhs(fds);
 
@@ -71,17 +97,32 @@ namespace MinimalCover.Core
       return new AttributeSet(closure);
     }
 
-    public static AttributeSet ComputeClosure(string attribute, IEnumerable<FunctionalDependency> fds)
+    /// <summary>
+    /// Compute the closure of <paramref name="attribute"/> given <paramref name="fds"/>
+    /// </summary>
+    /// <param name="attribute">Attribute</param>
+    /// <param name="fds">Set of functional dependencies</param>
+    /// <exception cref="ArgumentException">
+    /// Raise this exception when at least 1 <see cref="FunctionalDependency"/>
+    /// has more than 1 attribute on RHS
+    /// </exception>
+    /// <returns>Set of attributes that form the closure</returns>
+    public static AttributeSet ComputeClosure(string attribute, ISet<FunctionalDependency> fds)
     {
-      return ComputeClosure(new string[1] { attribute }, fds);
+      return ComputeClosure(new HashSet<string> { attribute }, fds);
     }
 
     /// <summary>
-    /// 1st step
+    /// Get all functional dependencies that have only have 1 attribute on RHS.
+    /// If a functional dependency already has 1 attribute on RHS, then
+    /// nothing is performed and it will be included in the returned set as well
     /// </summary>
-    /// <param name="fds"></param>
-    /// <returns></returns>
-    public static ISet<FunctionalDependency> GetSingleAttributeRhsFds(IEnumerable<FunctionalDependency> fds)
+    /// <remarks>
+    /// 1st step in finding minimal cover
+    /// </remarks>
+    /// <param name="fds">Set of functional dependencies</param>
+    /// <returns>Set of functional dependencies that have only 1 attribute on RHS</returns>
+    public static ISet<FunctionalDependency> GetSingleAttributeRhsFds(ISet<FunctionalDependency> fds)
     {
       var fdsSet = new HashSet<FunctionalDependency>();
       foreach (var fd in fds)
@@ -100,11 +141,16 @@ namespace MinimalCover.Core
     }
 
     /// <summary>
-    /// 2nd step
+    /// Remove any extraneous attributes on LHS of each functional dependency
     /// </summary>
-    /// <param name="fds"></param>
-    /// <returns></returns>
-    public static ISet<FunctionalDependency> RemoveExtrasAttributesLhs(IEnumerable<FunctionalDependency> fds)
+    /// <remarks>
+    /// 2nd step in finding minimal cover
+    /// </remarks>
+    /// <param name="fds">Set of functional dependencies</param>
+    /// <returns>
+    /// Set of functional dependencies that have extraneous attributes removed on LHS
+    /// </returns>
+    public static ISet<FunctionalDependency> RemoveExtrasAttributesLhs(ISet<FunctionalDependency> fds)
     {
       var fdsSet = new HashSet<FunctionalDependency>(fds);
       var manyAttributesLhs = fds.Where(fd => fd.Left.Count > 1);
@@ -137,11 +183,20 @@ namespace MinimalCover.Core
     }
 
     /// <summary>
-    /// 3rd step
+    /// Remove any extraneous functional dependency
     /// </summary>
-    /// <param name="fds"></param>
-    /// <returns></returns>
-    public static ISet<FunctionalDependency> RemoveExtraFds(IEnumerable<FunctionalDependency> fds)
+    /// <remarks>
+    /// 3rd step in finding minimal cover, which returns the set of minimal cover
+    /// </remarks>
+    /// <param name="fds">Set of functional dependencies</param>
+    /// <exception cref="ArgumentException">
+    /// Raise this exception when at least 1 <see cref="FunctionalDependency"/>
+    /// has more than 1 attribute on RHS
+    /// </exception>
+    /// <returns>
+    /// Set of functional dependencies have no extranenous functional dependencies
+    /// </returns>
+    public static ISet<FunctionalDependency> RemoveExtraFds(ISet<FunctionalDependency> fds)
     {
       CheckSingleAttributeRhs(fds);
 
@@ -153,7 +208,7 @@ namespace MinimalCover.Core
         var fd = fdsList[i];
 
         // Compute closure of fd.Left without "looking" at fd
-        var otherFds = fdsList.Where(otherFd => fd != otherFd);
+        var otherFds = fdsList.Where(otherFd => fd != otherFd).ToHashSet();
         var closure = ComputeClosure(fd.Left, otherFds);
 
         // There should only be 1 attribute on RHS.
@@ -168,7 +223,7 @@ namespace MinimalCover.Core
     }
 
     /// <summary>
-    /// Compute the minimal cover.
+    /// Find the minimal cover
     /// </summary>
     /// <remarks>
     /// Call these methods in the following order:
@@ -178,7 +233,7 @@ namespace MinimalCover.Core
     /// </remarks>
     /// <param name="fds">Collection of functional dependencies</param>
     /// <returns>The minimal cover set of functional dependencies</returns>
-    public static ISet<FunctionalDependency> ComputeMinimalCover(IEnumerable<FunctionalDependency> fds)
+    public static ISet<FunctionalDependency> FindMinimalCover(ISet<FunctionalDependency> fds)
     {
       // 1. Single attribute RHS
       var fdsSet = GetSingleAttributeRhsFds(fds);

@@ -5,23 +5,29 @@ using System.Collections.Generic;
 namespace MinimalCover.Core
 {
   /// <summary>
-  /// Contain a readonly set of attribute
+  /// Represent a readonly set where no modification is permitted
   /// </summary>
   public class ReadOnlySet<T> : ISet<T>, IReadOnlyCollection<T>
   {
     protected const string ReadonlySetMessage = "Readonly set does not support this method";
 
+    /// <summary>
+    /// Internal reference to the actual set object
+    /// </summary>
     protected ISet<T> m_set;
 
     /// <summary>
     /// Passed in set can still be update if there is a external reference to it.
-    /// This constructor only stores a reference to <see cref="set"/>
+    /// This constructor only stores a reference to <paramref name="set"/>
     /// </summary>
     public ReadOnlySet(ISet<T> set)
     {
       m_set = set;
     }
 
+    /// <summary>
+    /// Needed for subclasses
+    /// </summary>
     protected ReadOnlySet() { }
 
     public int Count => m_set.Count;
@@ -72,7 +78,6 @@ namespace MinimalCover.Core
     /// <exception cref="NotSupportedException">Method not supported for readonly set</exception>
     public void ExceptWith(IEnumerable<T> other) => throw new NotSupportedException(ReadonlySetMessage);
 
-
     /// <summary>
     /// Method not supported.
     /// </summary>
@@ -116,10 +121,12 @@ namespace MinimalCover.Core
       {
         return true;
       }
-      else if (obj is IEnumerable<T>)
+
+      if (obj is ReadOnlySet<T>)
       {
-        return SetEquals(obj as IEnumerable<T>);
+        return SetEquals(obj as ReadOnlySet<T>);
       }
+
       return false;
     }
 
