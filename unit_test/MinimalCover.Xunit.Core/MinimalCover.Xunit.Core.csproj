@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MinimalCover.Core\MinimalCover.Core.csproj" />
+    <ProjectReference Include="..\..\src\MinimalCover.Core\MinimalCover.Core.csproj" />
   </ItemGroup>
 
 </Project>
