@@ -124,6 +124,11 @@ namespace MinimalCover.Xunit.Core
       var readOnlySet = new ReadOnlySet<int>(set);
       Assert.Equal(count, readOnlySet.Count);
     }
-    
+   
+    [Fact]
+    public void Constructor_NullArgument_ThrowsArgumentNullException()
+    {
+      Assert.Throws<ArgumentNullException>(() => new ReadOnlySet<object>(null));
+    }
   }
 }
