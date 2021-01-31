@@ -64,5 +64,96 @@ namespace MinimalCover.Xunit.Core.Parsers
       var fdsSet = YamlParser.Parse(testData.Value);
       Assert.Equal(testData.ExpectedFds, fdsSet);
     }
+
+    [Theory]
+    [InlineData(@"
+                ---
+                - leftx:
+                    - A
+                  right:
+                    - B")]
+    [InlineData(@"
+                ---
+                - left:
+                    - A
+                  rightx:
+                    - B")]
+    [InlineData(@"
+                ---
+                - leftx:
+                    - A
+                  rightx:
+                    - B")]
+    [InlineData(@"
+                ---
+                - left:
+                    - A
+                  right:
+                    - B
+                - left:
+                    - A")]
+    public void Parse_MissingProperties_ThrowsException(string value)
+    {
+      var ex = Assert.Throws<ArgumentException>(() => YamlParser.Parse(value));
+      Assert.Contains(YamlParser.MissingPropertiesMessage, ex.Message);
+    }
+
+    [Theory]
+    [InlineData(@"
+                ---
+                - left: 0
+                  right:
+                    - B")]
+    [InlineData(@"
+                ---
+                - left:
+                    - A
+                  right: hello")]
+    [InlineData(@"
+                ---
+                - left: 0
+                  right: 0")]
+    [InlineData(@"
+                ---
+                - left:
+                    - A
+                  right:
+                    - B
+                - left: 0
+                  right: 0")]
+    public void Parse_NonYamlList_ThrowsException(string value)
+    {
+      var ex = Assert.Throws<ArgumentException>(() => YamlParser.Parse(value));
+      Assert.Contains(YamlParser.NonYamlListMessage, ex.Message);
+    }
+
+    [Theory]
+    [InlineData(@"
+                ---
+                - left: []
+                  right:
+                    - B")]
+    [InlineData(@"
+                ---
+                - left:
+                    - A
+                  right: []")]
+    [InlineData(@"
+                ---
+                - left: []
+                  right: []")]
+    [InlineData(@"
+                ---
+                - left:
+                    - A
+                  right:
+                    - B
+                - left: []
+                  right: []")]
+    public void Parse_EmptyLhsOrRhs_ThrowsException(string value)
+    {
+      var ex = Assert.Throws<ArgumentException>(() => YamlParser.Parse(value));
+      Assert.Contains(YamlParser.EmptyLhsOrRhsMessage, ex.Message);
+    }
   }
 }

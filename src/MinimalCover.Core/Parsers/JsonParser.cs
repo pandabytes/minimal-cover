@@ -9,6 +9,8 @@ namespace MinimalCover.Core.Parsers
 {
   public static class JsonParser
   {
+    public static readonly string SchemaFilePath = @".\Parsers\fd-schema.json";
+
     /// <summary>
     /// Helper class used to convert JSON string to a set of
     /// <see cref="FunctionalDependency"/> objects. If schema
@@ -41,8 +43,6 @@ namespace MinimalCover.Core.Parsers
         throw new NotImplementedException();
       }
     }
-
-    public static readonly string SchemaFilePath = @".\Parsers\fd-schema.json";
 
     /// <summary>
     /// Parse the given <paramref name="value"/> into a set of
@@ -85,9 +85,13 @@ namespace MinimalCover.Core.Parsers
       // need to throw one at a time
       IList<ValidationError> errors;
       _ = jToken.IsValid(schema, out errors);
-      foreach (var i in errors)
+      if (errors.Count > 0)
       {
-        string message = $"Fail to validate JSON string. {i.Message} Path: {i.Path}. Line number: {i.LineNumber}";
+        var message = $"Fail to validate JSON string.";
+        foreach (var error in errors)
+        {
+          message += $"{Environment.NewLine}{error.Message} Path: {error.Path}. Line number: {error.LineNumber}.";
+        }
         throw new ArgumentException(message);
       }
 

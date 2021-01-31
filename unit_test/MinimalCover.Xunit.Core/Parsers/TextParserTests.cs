@@ -69,7 +69,7 @@ namespace MinimalCover.Xunit.Core.Parsers
     public void Parse_BadLhsRhsSep_ThrowsArgumentException(string value)
     {
       var ex = Assert.Throws<ArgumentException>(() => TextParser.Parse(value));
-      Assert.Equal(TextParser.BadLhsRhsSepMessage, ex.Message);
+      Assert.Contains(TextParser.BadLhsRhsSepMessage, ex.Message);
     }
 
     [Theory]
@@ -77,7 +77,7 @@ namespace MinimalCover.Xunit.Core.Parsers
     public void Parse_EmptyLhsOrRhs_ThrowsArgumentException(string value)
     {
       var ex = Assert.Throws<ArgumentException>(() => TextParser.Parse(value));
-      Assert.Equal(TextParser.EmptyLhsOrRhsMessage, ex.Message);
+      Assert.Contains(TextParser.EmptyLhsOrRhsMessage, ex.Message);
     }
 
     [Theory]

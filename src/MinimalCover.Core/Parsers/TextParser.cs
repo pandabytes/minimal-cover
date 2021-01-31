@@ -9,7 +9,7 @@ namespace MinimalCover.Core.Parsers
     public static readonly char FdSeparator = ';';
     public static readonly string LeftRightSeparator = "-->";
     public static readonly string EmptyLhsOrRhsMessage = "LHS and RHS must not be empty";
-    public static readonly string BadLhsRhsSepMessage = $"LHS and RHS must be separated by '{LeftRightSeparator}'";
+    public static readonly string BadLhsRhsSepMessage = $"LHS and RHS must be separated by \"{LeftRightSeparator}\"";
 
     /// <summary>
     /// Parse the given <paramref name="value"/> into a set of
@@ -23,18 +23,19 @@ namespace MinimalCover.Core.Parsers
                            .Where(fd => !string.IsNullOrEmpty(fd))
                            .Select(fd => fd.Trim());
 
+      const string InvalidFdFormat = "{0}. Invalid functional dependency \"{1}\"";
       var fds = fdStrings.Select(fd => {
         var fdTokens = fd.Split(LeftRightSeparator);
         if (fdTokens.Length != 2)
         {
-          throw new ArgumentException(BadLhsRhsSepMessage);
+          throw new ArgumentException(string.Format(InvalidFdFormat, BadLhsRhsSepMessage, fd));
         }
 
         var left = fdTokens[0];
         var right = fdTokens[1];
         if (string.IsNullOrWhiteSpace(left) || string.IsNullOrWhiteSpace(right))
         {
-          throw new ArgumentException(EmptyLhsOrRhsMessage);
+          throw new ArgumentException(string.Format(InvalidFdFormat, EmptyLhsOrRhsMessage, fd));
         }
         return new FunctionalDependency(left, right, AttributeSeparator);
       }).ToHashSet();
