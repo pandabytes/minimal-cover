@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Console", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Core", "src\MinimalCover.Core\MinimalCover.Core.csproj", "{BDFD6569-6106-4225-B74F-641F3142F3C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalCover.WebApp", "src\MinimalCover.WebApp\MinimalCover.WebApp.csproj", "{765ED439-BD4C-4DF4-86FB-0B46A13B330F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{BDFD6569-6106-4225-B74F-641F3142F3C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDFD6569-6106-4225-B74F-641F3142F3C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDFD6569-6106-4225-B74F-641F3142F3C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{765ED439-BD4C-4DF4-86FB-0B46A13B330F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{765ED439-BD4C-4DF4-86FB-0B46A13B330F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{765ED439-BD4C-4DF4-86FB-0B46A13B330F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{765ED439-BD4C-4DF4-86FB-0B46A13B330F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 		{BBFC2B06-E1F6-47CA-95D7-C3EB4CADA392} = {6F0A1967-40C4-4E8E-A77B-AC5ED2BF7FB2}
 		{DA4A703A-13F9-46E2-AFFD-A40CADD5D29A} = {3CA8824C-FBBB-437D-A867-5C1D57C7F10C}
 		{BDFD6569-6106-4225-B74F-641F3142F3C8} = {3CA8824C-FBBB-437D-A867-5C1D57C7F10C}
+		{765ED439-BD4C-4DF4-86FB-0B46A13B330F} = {3CA8824C-FBBB-437D-A867-5C1D57C7F10C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CA904A0-AF2E-4648-BB82-49B06A5E8389}

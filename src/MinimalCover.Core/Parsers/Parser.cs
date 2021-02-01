@@ -49,7 +49,7 @@ namespace MinimalCover.Core.Parsers
           parseMethod = YamlParser.Parse;
           break;
         default:
-          throw new NotSupportedException($"Format {inputFormat} is not supported");
+          throw new NotSupportedException($"Format \"{inputFormat}\" is not supported");
       }
 
       return parseMethod(value);
