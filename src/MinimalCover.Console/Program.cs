@@ -9,13 +9,6 @@ namespace MinimalCover.Console
 {
   public class Program
   {
-    public enum InputFormat
-    {
-      Text,
-      Json,
-      Yaml
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -36,37 +29,16 @@ namespace MinimalCover.Console
 
       rootCommand.Handler = CommandHandler.Create<InputFormat, bool, string>((input, file, fds) =>
       {
-        // Select the correct parse method
-        ParseMethod parseMethod = null;
-        switch (input)
-        {
-          case InputFormat.Text:
-            parseMethod = TextParser.Parse;
-            break;
-          case InputFormat.Json:
-            parseMethod = JsonParser.Parse;
-            break;
-          case InputFormat.Yaml:
-            parseMethod = YamlParser.Parse;
-            break;
-          default:
-            // System.CommandLine should handle the list of valid input formats
-            throw new NotSupportedException("Default parser method is not supported");
-        }
-
         // Parse the argument 
-        ReadOnlySet<FunctionalDependency> parsedFds = null;
+        string value = fds;
         if (file)
         {
           using (var streamReader = new StreamReader(fds))
           {
-            parsedFds = parseMethod(streamReader.ReadToEnd());
+            value = streamReader.ReadToEnd();
           }
         }
-        else
-        {
-          parsedFds = parseMethod(fds);
-        }
+        var parsedFds = Parser.Parse(input, value);
 
         // 1. Single attribute RHS
         var fdsSet = Core.MinimalCover.GetSingleAttributeRhsFds(parsedFds);
