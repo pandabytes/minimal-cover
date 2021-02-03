@@ -21,10 +21,10 @@ namespace MinimalCover.WebApp.Controllers
     {
       object inputFormat;
       var validFormat = Enum.TryParse(typeof(InputFormat), fd.InputFormat, true, out inputFormat);
-
       if (!validFormat)
       {
-        return StatusCode(422, $"Bad input format \"{fd.InputFormat}\"");
+        var validFormats = $"[{string.Join(',', Enum.GetNames(typeof(InputFormat)))}]";
+        return StatusCode(422, $"Bad input format \"{fd.InputFormat}\". Available formats are {validFormats}");
       }
 
       try
@@ -32,7 +32,7 @@ namespace MinimalCover.WebApp.Controllers
         var fds = Parser.Parse((InputFormat)inputFormat, fd.Value);
         var minimalCover = Core.MinimalCover.FindMinimalCover(fds);
         var minimalCoverStr = string.Join(',', minimalCover);
-        m_logger.LogInformation($"[POST]: {minimalCoverStr}");
+        m_logger.LogInformation($"[POST]: Minimal Cover = {minimalCoverStr}");
         return Ok(minimalCover);
       }
       catch (ArgumentException ex)
