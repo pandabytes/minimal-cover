@@ -4,7 +4,7 @@ using Xunit;
 using MinimalCover.Infrastructure.Parsers;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Domain.Models;
-using MinimalCover.Infrastructure.UnitTests.Utils;
+using MinimalCover.UnitTests.Utils;
 
 namespace MinimalCover.Infrastructure.UnitTests.Parsers
 {
@@ -99,6 +99,13 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     // 3 null arguments
     [InlineData(null, null, null)]
     // 1 empty string argument
+    public void Constructor_NullArguments_ThrowsArgumentException(string attrbSep, string fdSep, string leftRightSep)
+    {
+      Assert.Throws<ArgumentException>(() => new TextParser(attrbSep, fdSep, leftRightSep));
+    }
+
+    [Theory]
+    // 1 empty string argument
     [InlineData(",", ";", "")]
     [InlineData(",", "", "-->")]
     [InlineData("", ";", "-->")]
@@ -108,7 +115,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [InlineData(",", "", "")]
     // 3 empty strings arguments
     [InlineData("", "", "")]
-    public void Constructor_NullArguments_ThrowsArgumentNullException(string attrbSep, string fdSep, string leftRightSep)
+    public void Constructor_EmptyStringArguments_ThrowsArgumentException(string attrbSep, string fdSep, string leftRightSep)
     {
       Assert.Throws<ArgumentException>(() => new TextParser(attrbSep, fdSep, leftRightSep));
     }

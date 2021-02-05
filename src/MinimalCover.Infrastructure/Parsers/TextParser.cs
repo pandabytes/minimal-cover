@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using MinimalCover.Domain.Core;
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
-using System.Collections.Generic;
 
 namespace MinimalCover.Infrastructure.Parsers
 {
@@ -38,7 +38,7 @@ namespace MinimalCover.Infrastructure.Parsers
     /// <summary>
     /// Construct the text parser with optional separators
     /// </summary>
-    /// <exception cref="ArgumentNullException">
+    /// <exception cref="ArgumentException">
     /// Throw when at least 1 parameter is null
     /// </exception>
     /// <param name="attrbSep">attribute separator</param>
