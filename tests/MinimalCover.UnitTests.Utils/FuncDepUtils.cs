@@ -5,6 +5,10 @@ using MinimalCover.Domain.Models;
 
 namespace MinimalCover.UnitTests.Utils
 {
+  /// <summary>
+  /// Provide utility methods for dealing with
+  /// <see cref="FunctionalDependency"/> objects
+  /// </summary>
   public static class FuncDepUtils
   {
     /// <summary>
