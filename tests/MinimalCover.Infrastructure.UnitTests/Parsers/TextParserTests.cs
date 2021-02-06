@@ -135,7 +135,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [InlineData("A, D-->B;E,H,J-->", ",", ";", "-->")]
     public void Parse_EmptyLhsOrRhs_ThrowsParserException(string value, string badAttrbSep, string fdSep, string leftRightSep)
     {
-      var textParser = new TextParser(badAttrbSep, fdSep, leftRightSep);
+      IParser textParser = new TextParser(badAttrbSep, fdSep, leftRightSep);
       var ex = Assert.Throws<ParserException>(() => textParser.Parse(value));
       Assert.Contains(TextParser.EmptyLhsOrRhsMessage, ex.Message);
     }
@@ -147,7 +147,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [InlineData("A, D-->B;E,H, J-->D", ",", ";", "xxx")]
     public void Parse_BadLhsRhsSep_ThrowsParserException(string value, string attrbSep, string fdSep, string badLeftRightSep)
     {
-      var textParser = new TextParser(attrbSep, fdSep, badLeftRightSep);
+      IParser textParser = new TextParser(attrbSep, fdSep, badLeftRightSep);
       var ex = Assert.Throws<ParserException>(() => textParser.Parse(value));
       Assert.Contains("must be separated by", ex.Message);
     }
@@ -156,9 +156,9 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [MemberData(nameof(ParsedTextTheoryData))]
     public void Parse_ValidString_ReturnsExpectedFdSet(ParsedTextFdsTestData testData)
     {
-      var textParser = new TextParser(testData.AttributeSeparator,
-                                      testData.FdSeparator, 
-                                      testData.LeftRightSeparator);
+      IParser textParser = new TextParser(testData.AttributeSeparator,
+                                          testData.FdSeparator, 
+                                          testData.LeftRightSeparator);
       var parsedFds = textParser.Parse(testData.Value);
       Assert.Equal(testData.ExpectedFds, parsedFds);
     }

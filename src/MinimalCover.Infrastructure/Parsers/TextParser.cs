@@ -77,7 +77,7 @@ namespace MinimalCover.Infrastructure.Parsers
     /// </summary>
     /// <param name="value">The string value to parse</param>
     /// <returns>Set of parsed <see cref="FunctionalDependency"/></returns>
-    public ISet<FunctionalDependency> Parse(string value)
+    ISet<FunctionalDependency> IParser.Parse(string value)
     {
       // Get each fd string
       var fdStrings = value.Split(FdSeparator)
