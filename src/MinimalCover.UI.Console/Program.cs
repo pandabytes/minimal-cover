@@ -4,14 +4,11 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 
-using MinimalCover.Domain.Models;
 using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 
 using MinimalCover.Infrastructure;
-using MinimalCover.Infrastructure.Algorithms;
-using MinimalCover.Infrastructure.Parsers;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -45,7 +42,7 @@ namespace MinimalCover.UI.Console
 
       rootCommand.Handler = CommandHandler.Create<ParseFormat, bool, string>((input, file, fds) =>
       {
-        // Parse the argument 
+        // Load the content of the file if the "value" is a file path
         string value = fds;
         if (file)
         {
@@ -55,7 +52,9 @@ namespace MinimalCover.UI.Console
           }
         }
 
-        IParser parser = provider.GetService<IParser>();
+        var getParser = provider.GetService<GetParser>();
+
+        IParser parser = getParser(input);
         IMinimalCover mc = provider.GetService<IMinimalCover>();
         var app = new MinimalCoverApp(mc);
         var result = app.FindMinimalCover(value, parser);
