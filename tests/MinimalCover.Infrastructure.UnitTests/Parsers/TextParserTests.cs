@@ -123,7 +123,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [Fact]
     public void Format_SimpleGet_ReturnsTextFormat()
     {
-      var textParser = new TextParser();
+      IParser textParser = new TextParser();
       Assert.Equal(ParseFormat.Text, textParser.Format);
     }
 

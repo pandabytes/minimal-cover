@@ -30,7 +30,7 @@ namespace MinimalCover.Infrastructure.Parsers
     /// <summary>
     /// Return <see cref="ParseFormat.Text"/>
     /// </summary>
-    public ParseFormat Format
+    ParseFormat IParser.Format
     {
       get { return ParseFormat.Text; }
     }
@@ -69,7 +69,7 @@ namespace MinimalCover.Infrastructure.Parsers
     /// </param>
     /// <param name="sep">Separator</param>
     /// <returns>Collection of attributes</returns>
-    private IEnumerable<string> GetAttributesWithSep(string value, string sep) => value.Split(sep).Select(a => a.Trim());
+    private static IEnumerable<string> GetAttributesWithSep(string value, string sep) => value.Split(sep).Select(a => a.Trim());
 
     /// <summary>
     /// Parse the given <paramref name="value"/> into a set of

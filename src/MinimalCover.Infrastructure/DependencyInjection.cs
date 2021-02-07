@@ -11,11 +11,15 @@ namespace MinimalCover.Infrastructure
     {
       // Register parsers
       services.AddTransient<Parsers.TextParser>();
+      services.AddTransient<Parsers.JsonParser>();
+
       services.AddTransient<GetParser>(serviceProvider => format => {
         switch (format)
         {
           case ParseFormat.Text:
             return serviceProvider.GetService<Parsers.TextParser>();
+          case ParseFormat.Json:
+            return serviceProvider.GetService<Parsers.JsonParser>();
           default:
             throw new NotSupportedException($"Format \"{format}\" is not supported yet");
         }
