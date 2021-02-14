@@ -4,18 +4,39 @@ using System.Linq;
 
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Domain.Models;
-using MinimalCover.Infrastructure.Algorithms;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+
 using Xunit;
 
 namespace MinimalCover.Infrastructure.UnitTests.Algorithms
 {
-  public class DefaultMinimalCoverTests
+  /// <summary>
+  /// This class tests the provided <see cref="IMinimalCover"/> implementation
+  /// from <see cref="DependencyInjection"/>.
+  /// </summary>
+  public class MinimalCoverTests
   {
-    private readonly IMinimalCover m_defaultMinimalCover;
+    /// <summary>
+    /// Object under test
+    /// </summary>
+    private readonly IMinimalCover m_minimalCover;
 
-    public DefaultMinimalCoverTests()
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    public MinimalCoverTests()
     {
-      m_defaultMinimalCover = new DefaultMinimalCover();
+      // Create empty configuration since the minimal cover
+      // class doesn't support any configuration
+      var config = new ConfigurationBuilder().Build();
+
+      var services = new ServiceCollection();
+      services.AddInfrastructure(config);
+      var provider = services.BuildServiceProvider();
+
+      m_minimalCover = provider.GetService<IMinimalCover>();
     }
 
     [Theory]
@@ -23,7 +44,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
                 MemberType = typeof(MinimalCoverTestData))]
     public void GetSingleRhsAttributeFds_MoreThanOneRhsAttribute_CountEqualOrGreater(ISet<FunctionalDependency> testFds)
     {
-      var fds = m_defaultMinimalCover.GetSingleRhsAttributeFds(testFds);
+      var fds = m_minimalCover.GetSingleRhsAttributeFds(testFds);
 
       // If the testFds have no fds that have more than 1 RHS attributes
       // the count of fds should be the same, else it should be greater than
@@ -37,9 +58,9 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
                 MemberType = typeof(MinimalCoverTestData))]
     public void GetSingleRhsAttributeFds_MoreThanOneRhsAttribute_ReturnSingleRhsAttrbSet(ISet<FunctionalDependency> testFds)
     {
-      var fds = m_defaultMinimalCover.GetSingleRhsAttributeFds(testFds);
+      var fds = m_minimalCover.GetSingleRhsAttributeFds(testFds);
       var allHaveSingleRhsAttrbs = fds.All(fd => fd.Right.Count == 1);
-      Assert.True(allHaveSingleRhsAttrbs, "Not all functional dependcies have single RHS attribute");
+      Assert.True(allHaveSingleRhsAttrbs, "Not all functional dependencies have single RHS attribute");
     }
 
     [Theory]
@@ -47,7 +68,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
                 MemberType = typeof(MinimalCoverTestData))]
     public void RemoveExtraFds_MoreThanOneRhsAttribute_ThrowsArgumentException(ISet<FunctionalDependency> testFds)
     {
-      Assert.Throws<ArgumentException>(() => m_defaultMinimalCover.RemoveExtraFds(testFds));
+      Assert.Throws<ArgumentException>(() => m_minimalCover.RemoveExtraFds(testFds));
     }
 
     [Theory]
@@ -55,7 +76,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
                 MemberType = typeof(MinimalCoverTestData))]
     public void RemoveExtrasLhsAttributes_FdsHaveExtraLhsAttrbs_ReturnsExpectedFds(MinimalCoverTestData.FdsTestData testData)
     {
-      var actualFds = m_defaultMinimalCover.RemoveExtrasLhsAttributes(testData.InputFds);
+      var actualFds = m_minimalCover.RemoveExtrasLhsAttributes(testData.InputFds);
       Assert.Equal(testData.ExpectedFds, actualFds);
     }
 
@@ -64,7 +85,7 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
                 MemberType = typeof(MinimalCoverTestData))]
     public void RemoveExtraFds_ThereAreExtraFds_ReturnsExpectedFds(MinimalCoverTestData.FdsTestData testData)
     {
-      var actualFds = m_defaultMinimalCover.RemoveExtraFds(testData.InputFds);
+      var actualFds = m_minimalCover.RemoveExtraFds(testData.InputFds);
       Assert.Equal(testData.ExpectedFds, actualFds);
     }
 
