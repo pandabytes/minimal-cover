@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
+﻿using System.Collections.Generic;
 
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
-using MinimalCover.Infrastructure.Parsers;
 using MinimalCover.UnitTests.Utils;
 
-namespace MinimalCover.Infrastructure.UnitTests.Parsers
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+
+using Xunit;
+
+namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
 {
+  /// <summary>
+  /// This class tests the provided <see cref="JsonParser"/> implementation
+  /// from <see cref="DependencyInjection"/>.
+  /// 
+  /// Currently, the test data rely on the schema defined in
+  /// <see cref="Infrastructure.Parsers.Json.Converter.FdSetConverter.SchemaFilePath"/>
+  /// </summary>
   public class JsonParserTests
   {
     /// <summary>
@@ -21,7 +30,10 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
       public ISet<FunctionalDependency> ExpectedFds { get; set; }
     }
 
-    public static TheoryData<ParsedJsonFdsTestData> ParsedJsonTheoryData =
+    /// <summary>
+    /// Provide valid JSON test data
+    /// </summary>
+    public static TheoryData<ParsedJsonFdsTestData> ValidJsonTheoryData =
       new TheoryData<ParsedJsonFdsTestData>()
       {
         new ParsedJsonFdsTestData()
@@ -60,11 +72,32 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
         }
       };
 
+    /// <summary>
+    /// Object under test
+    /// </summary>
+    private readonly JsonParser m_jsonParser;
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    public JsonParserTests()
+    {
+      // Create empty configuration since json parser
+      // currently doesn't support configurations
+      var config = new ConfigurationBuilder().Build();
+
+      var services = new ServiceCollection();
+      services.AddInfrastructure(config);
+      var provider = services.BuildServiceProvider();
+
+      var getParser = provider.GetService<GetParser>();
+      m_jsonParser = (JsonParser)getParser(ParseFormat.Json);
+    }
+
     [Fact]
     public void Format_SimpleGet_ReturnsJsonFormat()
     {
-      IParser jsonParser = new JsonParser();
-      Assert.Equal(ParseFormat.Json, jsonParser.Format);
+      Assert.Equal(ParseFormat.Json, ((IParser)m_jsonParser).Format);
     }
 
     [Theory]
@@ -76,18 +109,16 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': ['A'], 'right': []}]")]
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': ['B']}]")]
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': []}]")]
-    public void Parse_InvalidJsonString_ThrowsArgumentException(string value)
+    public void Parse_InvalidJsonString_ThrowsParserException(string value)
     {
-      IParser jsonParser = new JsonParser();
-      Assert.Throws<ParserException>(() => jsonParser.Parse(value));
+      Assert.Throws<ParserException>(() => m_jsonParser.Parse(value));
     }
     
     [Theory]
-    [MemberData(nameof(ParsedJsonTheoryData))]
+    [MemberData(nameof(ValidJsonTheoryData))]
     public void Parse_ValidString_ReturnsExpectedFdSet(ParsedJsonFdsTestData testData)
     {
-      IParser jsonParser = new JsonParser();
-      var parsedFds = jsonParser.Parse(testData.Value);
+      var parsedFds = m_jsonParser.Parse(testData.Value);
       Assert.Equal(testData.ExpectedFds, parsedFds);
     }
 

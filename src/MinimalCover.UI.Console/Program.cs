@@ -11,20 +11,27 @@ using MinimalCover.Application.Parsers;
 using MinimalCover.Infrastructure;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace MinimalCover.UI.Console
 {
   public class Program
   {
     /// <summary>
-    /// 
+    /// Main entry of the console app
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">Arguments</param>
     public static int Main(string[] args)
     {
+      // Config
+      var config = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
       // Register the services
       var services = new ServiceCollection();
-      DependencyInjection.AddDependencies(services);
+      services.AddInfrastructure(config);
       var provider = services.BuildServiceProvider();
 
       // Create arg parser

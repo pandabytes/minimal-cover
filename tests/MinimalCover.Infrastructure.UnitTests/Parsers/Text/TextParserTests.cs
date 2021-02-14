@@ -1,18 +1,30 @@
 using System;
 using System.Collections.Generic;
-using Xunit;
-using MinimalCover.Infrastructure.Parsers;
+using System.Reflection;
+
+using MinimalCover.Infrastructure.Parsers.Text;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Domain.Models;
 using MinimalCover.UnitTests.Utils;
 
-namespace MinimalCover.Infrastructure.UnitTests.Parsers
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+
+using NSubstitute;
+
+using Xunit;
+
+namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
 {
   /// <summary>
   /// Explicitly give all the separators to <see cref="TextParser"/>
   /// because if the default arguments ever change in the future,
   /// these tests won't break because we're explicitly overriding the defaults
   /// </summary>
+  /// <remarks>
+  /// This class tests the provided <see cref="TextParser"/> implementation
+  /// from <see cref="DependencyInjection"/>
+  /// </remarks>
   public class TextParserTests
   {
     /// <summary>
@@ -87,43 +99,70 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
         }
       };
 
-    [Theory]
-    // 1 null argument
-    [InlineData(",", ";", null)]
-    [InlineData(",", null, "-->")]
-    [InlineData(null, ";", "-->")]
-    // 2 null arguments
-    [InlineData(null, null, "-->")]
-    [InlineData(null, ";", null)]
-    [InlineData(",", null, null)]
-    // 3 null arguments
-    [InlineData(null, null, null)]
-    // 1 empty string argument
-    public void Constructor_NullArguments_ThrowsArgumentException(string attrbSep, string fdSep, string leftRightSep)
+    /// <summary>
+    /// Get a text parser object under test, provided with different
+    /// configurations
+    /// </summary>
+    /// <param name="dict">
+    /// Dictionary containing the following keys:
+    ///  "textParser:attrbSep"
+    ///  "textParser:fdSep"
+    ///  "textParser:leftRightSep"
+    /// </param>
+    /// <returns>Text parser object</returns>
+    private TextParser GetTextParser(IDictionary<string, string> dict)
     {
-      Assert.Throws<ArgumentException>(() => new TextParser(attrbSep, fdSep, leftRightSep));
+      var config = new ConfigurationBuilder()
+                    .AddInMemoryCollection(dict)
+                    .Build();
+
+      var services = new ServiceCollection();
+      services.AddInfrastructure(config);
+      var provider = services.BuildServiceProvider();
+
+      var getParser = provider.GetService<GetParser>();
+      return (TextParser)getParser(ParseFormat.Text);
     }
 
     [Theory]
-    // 1 empty string argument
+    // Invalid argument(s) is/are empty string(s)
     [InlineData(",", ";", "")]
     [InlineData(",", "", "-->")]
     [InlineData("", ";", "-->")]
-    // 2 empty strings arguments
     [InlineData("", "", "-->")]
     [InlineData("", ";", "")]
     [InlineData(",", "", "")]
-    // 3 empty strings arguments
     [InlineData("", "", "")]
-    public void Constructor_EmptyStringArguments_ThrowsArgumentException(string attrbSep, string fdSep, string leftRightSep)
+    // Invalid argument(s) is/are null
+    [InlineData(",", ";", null)]
+    [InlineData(",", null, "-->")]
+    [InlineData(null, ";", "-->")]
+    [InlineData(null, null, "-->")]
+    [InlineData(null, ";", null)]
+    [InlineData(",", null, null)]
+    [InlineData(null, null, null)]
+    public void Constructor_InvalidArguments_ThrowsArgumentException(string attrbSep, string fdSep, string leftRightSep)
     {
-      Assert.Throws<ArgumentException>(() => new TextParser(attrbSep, fdSep, leftRightSep));
+      // Mock the abstract class so that we can use its constructor
+      // The outer exception is thrown by NSubstitute and the actual
+      // exception of our code is the inner exception
+      var ex = Assert.Throws<TargetInvocationException>(() => Substitute.For<TextParser>(attrbSep, fdSep, leftRightSep));
+      var actualEx = ex.InnerException;
+
+      Assert.IsType<ArgumentException>(actualEx);
+      Assert.Equal(TextParser.InvalidSepsMessage, actualEx.Message);
     }
 
     [Fact]
     public void Format_SimpleGet_ReturnsTextFormat()
     {
-      IParser textParser = new TextParser();
+      var dict = new Dictionary<string, string>()
+      {
+        { "textParser:attrbSep", "," },
+        { "textParser:fdSep", ";" },
+        { "textParser:leftRightSep", "-->" }
+      };
+      IParser textParser = GetTextParser(dict);
       Assert.Equal(ParseFormat.Text, textParser.Format);
     }
 
@@ -135,7 +174,14 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [InlineData("A, D-->B;E,H,J-->", ",", ";", "-->")]
     public void Parse_EmptyLhsOrRhs_ThrowsParserException(string value, string badAttrbSep, string fdSep, string leftRightSep)
     {
-      IParser textParser = new TextParser(badAttrbSep, fdSep, leftRightSep);
+      var dict = new Dictionary<string, string>()
+      {
+        { "textParser:attrbSep", badAttrbSep },
+        { "textParser:fdSep", fdSep },
+        { "textParser:leftRightSep", leftRightSep }
+      };
+      IParser textParser = GetTextParser(dict);
+      
       var ex = Assert.Throws<ParserException>(() => textParser.Parse(value));
       Assert.Contains(TextParser.EmptyLhsOrRhsMessage, ex.Message);
     }
@@ -147,7 +193,14 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [InlineData("A, D-->B;E,H, J-->D", ",", ";", "xxx")]
     public void Parse_BadLhsRhsSep_ThrowsParserException(string value, string attrbSep, string fdSep, string badLeftRightSep)
     {
-      IParser textParser = new TextParser(attrbSep, fdSep, badLeftRightSep);
+      var dict = new Dictionary<string, string>()
+      {
+        { "textParser:attrbSep", attrbSep },
+        { "textParser:fdSep", fdSep },
+        { "textParser:leftRightSep", badLeftRightSep }
+      };
+      IParser textParser = GetTextParser(dict);
+
       var ex = Assert.Throws<ParserException>(() => textParser.Parse(value));
       Assert.Contains("must be separated by", ex.Message);
     }
@@ -156,9 +209,14 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers
     [MemberData(nameof(ParsedTextTheoryData))]
     public void Parse_ValidString_ReturnsExpectedFdSet(ParsedTextFdsTestData testData)
     {
-      IParser textParser = new TextParser(testData.AttributeSeparator,
-                                          testData.FdSeparator, 
-                                          testData.LeftRightSeparator);
+      var dict = new Dictionary<string, string>()
+      {
+        { "textParser:attrbSep", testData.AttributeSeparator },
+        { "textParser:fdSep", testData.FdSeparator },
+        { "textParser:leftRightSep", testData.LeftRightSeparator }
+      };
+      IParser textParser = GetTextParser(dict);
+
       var parsedFds = textParser.Parse(testData.Value);
       Assert.Equal(testData.ExpectedFds, parsedFds);
     }

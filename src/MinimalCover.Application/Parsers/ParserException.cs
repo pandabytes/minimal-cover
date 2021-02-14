@@ -3,7 +3,8 @@
 namespace MinimalCover.Application.Parsers
 {
   /// <summary>
-  /// 
+  /// Thrown exception when <see cref="IParser"/>
+  /// fails to parse a string of functional dependencies
   /// </summary>
   public class ParserException : Exception
   {

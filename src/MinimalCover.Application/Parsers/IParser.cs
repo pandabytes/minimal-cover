@@ -29,8 +29,17 @@ namespace MinimalCover.Application.Parsers
   /// </summary>
   public interface IParser
   {
+    /// <summary>
+    /// Specify which format the parser will be parsing
+    /// </summary>
     ParseFormat Format { get; }
 
+    /// <summary>
+    /// Parse the given <paramref name="value"/> into a set of
+    /// <see cref="FunctionalDependency"/>
+    /// </summary>
+    /// <param name="value">The string value to parse</param>
+    /// <returns>Set of parsed <see cref="FunctionalDependency"/></returns>
     ISet<FunctionalDependency> Parse(string value);
   }
 }
