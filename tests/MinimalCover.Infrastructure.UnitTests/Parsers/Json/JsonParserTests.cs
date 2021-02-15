@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
@@ -7,6 +9,7 @@ using MinimalCover.UnitTests.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
+using NSubstitute;
 using Xunit;
 
 namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
@@ -92,6 +95,21 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
 
       var getParser = provider.GetService<GetParser>();
       m_jsonParser = (JsonParser)getParser(ParseFormat.Json);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public void Constructor_InvalidArguments_ThrowsArgumentException(string schema)
+    {
+      // Mock the abstract class so that we can use its constructor
+      // The outer exception is thrown by NSubstitute and the actual
+      // exception of our code is the inner exception
+      var ex = Assert.Throws<TargetInvocationException>(() => Substitute.For<JsonParser>(schema));
+      var actualEx = ex.InnerException;
+
+      Assert.IsType<ArgumentException>(actualEx);
     }
 
     [Fact]
