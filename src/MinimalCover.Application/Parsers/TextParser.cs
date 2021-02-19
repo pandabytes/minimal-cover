@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MinimalCover.Domain.Core;
 using MinimalCover.Domain.Models;
-using MinimalCover.Application.Parsers;
+using MinimalCover.Application.Parsers.Settings;
 
 namespace MinimalCover.Application.Parsers
 {
@@ -59,6 +59,12 @@ namespace MinimalCover.Application.Parsers
       FdSeparator = fdSep;
       LeftRightSeparator = leftRightSep;
     }
+
+    public TextParser(TextParserSettings settings) 
+      : this(settings?.AttributeSeparator,
+             settings?.FdSeparator,
+             settings?.LeftRightSeparator)
+    { }
 
     /// <summary>
     /// Interface method <see cref="IParser.Parse(string)"/>

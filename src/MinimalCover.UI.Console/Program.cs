@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 
@@ -8,11 +7,8 @@ using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 
-using MinimalCover.Infrastructure;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 
 namespace MinimalCover.UI.Console
 {
@@ -31,7 +27,8 @@ namespace MinimalCover.UI.Console
 
       // Register the services
       var services = new ServiceCollection();
-      services.AddInfrastructure(config);
+      var startup = new Startup(config.GetSection("parsers"));
+      startup.ConfigureServices(services);
       var provider = services.BuildServiceProvider();
 
       // Create arg parser
@@ -72,9 +69,8 @@ namespace MinimalCover.UI.Console
         {
           System.Console.WriteLine(fd);
         }
-
       });
-
+      
       return rootCommand.InvokeAsync(args).Result;
     }
   }

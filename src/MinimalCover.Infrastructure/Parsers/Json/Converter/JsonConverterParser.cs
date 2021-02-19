@@ -18,7 +18,7 @@ namespace MinimalCover.Infrastructure.Parsers.Json.Converter
   /// This implementation relies on a converter object to
   /// convert the JSON string to a set of functional dependencies
   /// </summary>
-  internal class JsonConverterParser : JsonParser
+  public class JsonConverterParser : JsonParser
   {
     /// <summary>
     /// Object that contains the path to the

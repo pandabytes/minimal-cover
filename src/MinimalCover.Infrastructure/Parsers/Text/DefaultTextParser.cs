@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using MinimalCover.Domain.Core;
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
+using MinimalCover.Application.Parsers.Settings;
 
 namespace MinimalCover.Infrastructure.Parsers.Text
 {
-  internal class DefaultTextParser : TextParser
+  public class DefaultTextParser : TextParser
   {
     /// <summary>
     /// Construct the text parser with optional separators
@@ -20,6 +21,10 @@ namespace MinimalCover.Infrastructure.Parsers.Text
     /// <param name="leftRightSep">LHS and RHS separator</param>
     public DefaultTextParser(string attrbSep = ",", string fdSep = ";", string leftRightSep = "-->")
       : base(attrbSep, fdSep, leftRightSep)
+    {}
+
+    public DefaultTextParser(TextParserSettings settings)
+      : base(settings)
     {}
 
     /// <summary>
