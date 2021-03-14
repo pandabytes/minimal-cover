@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Reflection;
+using System.Collections.Generic;
 
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
@@ -8,19 +10,12 @@ using static MinimalCover.Infrastructure.UnitTests.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Moq;
 using Xunit;
 
 namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
 {
-  /// <summary>
-  /// This class encapsulates all the tests for any class
-  /// that inhereit <see cref="JsonParser"/>. 
-  /// 
-  /// To test an implementation of <see cref="JsonParser"/>, simply
-  /// inhereit <see cref="JsonParserTests"/> and provide
-  /// the implementation to the tests
-  /// </summary>
-  public abstract class JsonParserTests
+  public class JsonParserTests
   {
     /// <summary>
     /// This class is only used to stored data for testing purposes.
@@ -79,11 +74,29 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     /// </summary>
     protected JsonParser m_jsonParser;
 
-    [Fact]
-    public abstract void Constructor_InvalidArguments_ThrowsArgumentException();
+    public JsonParserTests()
+    {
+      m_jsonParser = GetJsonParser(@"Parsers\Json\fd-schema.json");
+    }
 
     [Fact]
-    public abstract void Format_SimpleGet_ReturnsJsonFormat();
+    public void Constructor_InvalidArguments_ThrowsArgumentException()
+    {
+      // Mock the abstract class so that we can use its constructor
+      // The outer exception is thrown by Mock and the actual
+      // exception of our code is the inner exception
+      var ex = Assert.Throws<TargetInvocationException>(() => new Mock<JsonParser>(null).Object);
+      var actualEx = ex.InnerException;
+
+      Assert.IsType<ArgumentNullException>(actualEx);
+    }
+
+
+    [Fact]
+    public void Format_SimpleGet_ReturnsJsonFormat()
+    {
+      Assert.Equal(ParseFormat.Json, ((IParser)m_jsonParser).Format);
+    }
 
     [Theory]
     [InlineData("[]")]
@@ -94,11 +107,18 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': ['A'], 'right': []}]")]
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': ['B']}]")]
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': []}]")]
-    public abstract void Parse_InvalidJsonString_ThrowsParserException(string value);
+    public void Parse_InvalidJsonString_ThrowsParserException(string value)
+    {
+      Assert.Throws<ParserException>(() => m_jsonParser.Parse(value));
+    }
 
     [Theory]
     [MemberData(nameof(ValidJsonTheoryData))]
-    public abstract void Parse_ValidString_ReturnsExpectedFdSet(ParsedJsonFdsTestData testData);
+    public void Parse_ValidString_ReturnsExpectedFdSet(ParsedJsonFdsTestData testData)
+    {
+      var parsedFds = m_jsonParser.Parse(testData.Value);
+      Assert.Equal(testData.ExpectedFds, parsedFds);
+    }
 
     /// <summary>
     /// Get the JSON parser via dependency injection

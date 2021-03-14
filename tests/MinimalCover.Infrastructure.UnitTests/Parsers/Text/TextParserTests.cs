@@ -13,15 +13,7 @@ using Xunit;
 
 namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
 {
-  /// <summary>
-  /// This class encapsulates all the tests for any class
-  /// that inhereit <see cref="TextParser"/>. 
-  /// 
-  /// To test an implementation of <see cref="TextParser"/>, simply
-  /// inhereit <see cref="TextParserTests"/> and provide
-  /// the implementation to the tests
-  /// </summary>
-  public abstract class TextParserTests
+  public class TextParserTests
   {
     /// <summary>
     /// This class is only used to stored data for testing purposes.
@@ -101,21 +93,42 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
     [InlineData("-->", ",", ";", "-->")]
     [InlineData("A-->B;-->D", ",", ";", "-->")]
     [InlineData("A, D-->B;E,H,J-->", ",", ";", "-->")]
-    public abstract void Parse_EmptyLhsOrRhs_ThrowsParserException(string value, string badAttrbSep, string fdSep, string leftRightSep);
+    public void Parse_EmptyLhsOrRhs_ThrowsParserException(string value, string badAttrbSep, string fdSep, string leftRightSep)
+    {
+      var textParser = GetTextParser(badAttrbSep, fdSep, leftRightSep);
+      var ex = Assert.Throws<ParserException>(() => textParser.Parse(value));
+      Assert.Contains(TextParser.EmptyLhsOrRhsMessage, ex.Message);
+    }
 
     [Fact]
-    public abstract void Format_SimpleGet_ReturnsTextFormat();
+    public void Format_SimpleGet_ReturnsTextFormat()
+    {
+      IParser textParser = GetTextParser(",", ";", "-->");
+      Assert.Equal(ParseFormat.Text, textParser.Format);
+    }
 
     [Theory]
     [InlineData("A-->B", ",", ";", "x")]
     [InlineData("A-->B", ",", ";", "oh_no")]
     [InlineData("A-->B;C-->D", ",", ";", "bad")]
     [InlineData("A, D-->B;E,H, J-->D", ",", ";", "xxx")]
-    public abstract void Parse_BadLhsRhsSep_ThrowsParserException(string value, string attrbSep, string fdSep, string badLeftRightSep);
+    public void Parse_BadLhsRhsSep_ThrowsParserException(string value, string attrbSep, string fdSep, string badLeftRightSep)
+    {
+      var textParser = GetTextParser(attrbSep, fdSep, badLeftRightSep);
+      var ex = Assert.Throws<ParserException>(() => textParser.Parse(value));
+      Assert.Contains("must be separated by", ex.Message);
+    }
 
     [Theory]
     [MemberData(nameof(ParsedTextTheoryData))]
-    public abstract void Parse_ValidString_ReturnsExpectedFdSet(ParsedTextFdsTestData testData);
+    public void Parse_ValidString_ReturnsExpectedFdSet(ParsedTextFdsTestData testData)
+    {
+      var textParser = GetTextParser(testData.AttributeSeparator,
+                                             testData.FdSeparator,
+                                             testData.LeftRightSeparator);
+      var parsedFds = textParser.Parse(testData.Value);
+      Assert.Equal(testData.ExpectedFds, parsedFds);
+    }
 
     /// <summary>
     /// Get the text parser via dependency injection
