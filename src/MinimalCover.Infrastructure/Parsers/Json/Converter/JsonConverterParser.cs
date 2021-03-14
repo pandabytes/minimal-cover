@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -10,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using MinimalCover.Domain.Core;
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
+using MinimalCover.Application.Parsers.Settings;
 
 namespace MinimalCover.Infrastructure.Parsers.Json.Converter
 {
@@ -18,33 +18,29 @@ namespace MinimalCover.Infrastructure.Parsers.Json.Converter
   /// This implementation relies on a converter object to
   /// convert the JSON string to a set of functional dependencies
   /// </summary>
-  public class JsonConverterParser : JsonParser
+  internal class JsonConverterParser : JsonParser
   {
     /// <summary>
-    /// Object that contains the path to the
-    /// schema file and provides method to 
-    /// convert a given JSON string to a <see cref="IEnumerable{FunctionalDependency}"/>
-    /// object, based on the defined schema
+    /// Converter object that is used to convert JSON string
+    /// to a collection of <see cref="FunctionalDependency"/>
     /// </summary>
     private readonly FdSetConverter m_converter;
 
     /// <summary>
-    /// Constructor that takes in a <see cref="FdSetConverter"/> object.
+    /// Constructor
     /// </summary>
+    /// <remarks>
+    /// The <paramref name="converter"/> must match with the schema file
+    /// specified in <paramref name="settings"/>
+    /// </remarks>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="converter"/> is null
     /// </exception>
     /// <param name="converter">Converter object</param>
-    public JsonConverterParser(FdSetConverter converter)
+    public JsonConverterParser(JsonParserSettings settings, FdSetConverter converter)
+      : base(settings)
     {
       _ = converter ?? throw new ArgumentNullException(nameof(converter));
-
-      // Load in the schema file
-      using (var reader = new StreamReader(converter.SchemaFilePath))
-      {
-        Schema = reader.ReadToEnd();
-      }
-
       m_converter = converter;
     }
 

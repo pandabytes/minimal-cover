@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 using MinimalCover.Domain.Models;
+using MinimalCover.Application.Parsers.Settings;
 
 namespace MinimalCover.Application.Parsers
 {
@@ -15,7 +17,7 @@ namespace MinimalCover.Application.Parsers
     /// The JSON schema that defines the structure of a 
     /// list of functional dependencies
     /// </summary>
-    public string Schema { get; protected set; }
+    public string Schema { get; }
 
     /// <summary>
     /// Return <see cref="ParseFormat.Json"/>
@@ -28,26 +30,22 @@ namespace MinimalCover.Application.Parsers
     public abstract ISet<FunctionalDependency> Parse(string value);
 
     /// <summary>
-    /// Create a JSON parser that uses <paramref name="schema"/>
-    /// to validate during parsing
+    /// Constructor
     /// </summary>
-    /// <exception cref="ArgumentException">
-    /// Thrown when <paramref name="schema"/> is null or empty
+    /// <exception cref="ArgumentNullException">
+    /// Throw when <paramref name="settings"/> is null
     /// </exception>
-    /// <param name="schema"></param>
-    public JsonParser(string schema)
+    /// <param name="settings">JSON parser settings</param>
+    public JsonParser(JsonParserSettings settings)
     {
-      if (string.IsNullOrWhiteSpace(schema))
-      {
-        throw new ArgumentException($"{nameof(schema)} cannot be null or empty");
-      }
-      Schema = schema;
-    }
+      _ = settings ?? throw new ArgumentNullException(nameof(settings));
 
-    /// <summary>
-    /// Default constructor
-    /// </summary>
-    protected JsonParser() { }
+      // Load in the schema file
+      using (var reader = new StreamReader(settings.SchemaFilePath))
+      {
+        Schema = reader.ReadToEnd();
+      }
+    }
 
     /// <summary>
     /// Validate the <paramref name="jsonStr"/> against the 

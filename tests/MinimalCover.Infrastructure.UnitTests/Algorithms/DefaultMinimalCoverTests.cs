@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MinimalCover.Application.Algorithms;
 using MinimalCover.Domain.Models;
-using MinimalCover.Infrastructure.Algorithms;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
 namespace MinimalCover.Infrastructure.UnitTests.Algorithms
 {
-  
-  public class DefaultMinimalCoverTests : IMinimalCoverTests
+  public class DefaultMinimalCoverTests : MinimalCoverTests
   {
     /// <summary>
     /// Constructor
     /// </summary>
     public DefaultMinimalCoverTests()
     {
-      m_minimalCover = new DefaultMinimalCover();
+      // Pass null since MinimalCover doesn't require any configuration
+      var dp = new DependencyInjection(null);
+      m_minimalCover = dp.Provider.GetRequiredService<IMinimalCover>();
     }
 
     public override void GetSingleRhsAttributeFds_MoreThanOneRhsAttribute_CountEqualOrGreater(ISet<FunctionalDependency> testFds)

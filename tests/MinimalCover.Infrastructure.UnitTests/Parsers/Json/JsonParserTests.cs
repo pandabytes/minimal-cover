@@ -3,6 +3,10 @@
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.UnitTests.Utils;
+using MinimalCover.Application.Parsers.Settings;
+using static MinimalCover.Infrastructure.UnitTests.ConfigurationUtils;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
@@ -75,11 +79,8 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     /// </summary>
     protected JsonParser m_jsonParser;
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData(null)]
-    public abstract void Constructor_InvalidArguments_ThrowsArgumentException(string schema);
+    [Fact]
+    public abstract void Constructor_InvalidArguments_ThrowsArgumentException();
 
     [Fact]
     public abstract void Format_SimpleGet_ReturnsJsonFormat();
@@ -99,5 +100,17 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     [MemberData(nameof(ValidJsonTheoryData))]
     public abstract void Parse_ValidString_ReturnsExpectedFdSet(ParsedJsonFdsTestData testData);
 
+    /// <summary>
+    /// Get the JSON parser via dependency injection
+    /// </summary>
+    /// <param name="schemaFilePath">Path to the schema file</param>
+    /// <returns>The JSON parser</returns>
+    protected static JsonParser GetJsonParser(string schemaFilePath)
+    {
+      var settings = new JsonParserSettings { SchemaFilePath = schemaFilePath };
+      var config = CreateConfig(settings, JsonParserSettings.SectionPath);
+      var dp = new DependencyInjection(config);
+      return dp.Provider.GetRequiredService<JsonParser>();
+    }
   }
 }

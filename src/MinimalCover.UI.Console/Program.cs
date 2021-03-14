@@ -6,6 +6,7 @@ using System.CommandLine.Invocation;
 using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
+using MinimalCover.Infrastructure;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -24,11 +25,11 @@ namespace MinimalCover.UI.Console
       var config = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build();
-
+      
       // Register the services
       var services = new ServiceCollection();
-      var startup = new Startup(config.GetSection("parsers"));
-      startup.ConfigureServices(services);
+      services.AddParsers(config)
+              .AddMinimalCoverAlgs();
       var provider = services.BuildServiceProvider();
 
       // Create arg parser
@@ -56,10 +57,10 @@ namespace MinimalCover.UI.Console
           }
         }
 
-        var getParser = provider.GetService<GetParser>();
-
-        IParser parser = getParser(input);
-        IMinimalCover mc = provider.GetService<IMinimalCover>();
+        // Get the parser based on the input format
+        IParser parser = GetParser(provider, input);
+        
+        IMinimalCover mc = provider.GetRequiredService<IMinimalCover>();
         var app = new MinimalCoverApp(mc);
         var result = app.FindMinimalCover(value, parser);
 
@@ -72,6 +73,20 @@ namespace MinimalCover.UI.Console
       });
       
       return rootCommand.InvokeAsync(args).Result;
+    }
+
+    public static IParser GetParser(ServiceProvider provider, ParseFormat format)
+    {
+      // Get the parser based on the input format
+      switch (format)
+      {
+        case ParseFormat.Text:
+          return provider.GetRequiredService<TextParser>();
+        case ParseFormat.Json:
+          return provider.GetRequiredService<JsonParser>();
+        default:
+          throw new NotSupportedException($"Format \"{format}\" is not supported yet");
+      }
     }
   }
 }

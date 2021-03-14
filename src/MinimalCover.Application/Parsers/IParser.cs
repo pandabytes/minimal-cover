@@ -16,14 +16,6 @@ namespace MinimalCover.Application.Parsers
   }
 
   /// <summary>
-  /// Delegate that defines signature to retrieve
-  /// an implementation of <see cref="IParser"/>
-  /// </summary>
-  /// <param name="format">Format</param>
-  /// <returns>The parser that supports the given format</returns>
-  public delegate IParser GetParser(ParseFormat format);
-
-  /// <summary>
   /// Interface for parser class that parses one of the
   /// string formats defined in <see cref="ParseFormat"/>
   /// </summary>

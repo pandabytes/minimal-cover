@@ -4,14 +4,14 @@ using System.Reflection;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Infrastructure.Parsers.Json.Converter;
 
-using NSubstitute;
 using Xunit;
+using Moq;
 
 namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
 {
   /// <summary>
   /// Currently, the test data rely on the schema defined in
-  /// <see cref="FdSetConverter.SchemaFilePath"/>
+  /// "fd-schema.json"
   /// </summary>
   public class JsonConverterParserTests : JsonParserTests
   {
@@ -20,19 +20,18 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     /// </summary>
     public JsonConverterParserTests()
     {
-      var converter = new FdSetConverter();
-      m_jsonParser = new JsonConverterParser(converter); 
+      m_jsonParser = GetJsonParser(@"Parsers\Json\fd-schema.json");
     }
 
-    public override void Constructor_InvalidArguments_ThrowsArgumentException(string schema)
+    public override void Constructor_InvalidArguments_ThrowsArgumentException()
     {
       // Mock the abstract class so that we can use its constructor
-      // The outer exception is thrown by NSubstitute and the actual
+      // The outer exception is thrown by Mock and the actual
       // exception of our code is the inner exception
-      var ex = Assert.Throws<TargetInvocationException>(() => Substitute.For<JsonParser>(schema));
+      var ex = Assert.Throws<TargetInvocationException>(() => new Mock<JsonParser>(null).Object);
       var actualEx = ex.InnerException;
 
-      Assert.IsType<ArgumentException>(actualEx);
+      Assert.IsType<ArgumentNullException>(actualEx);
     }
 
     public override void Format_SimpleGet_ReturnsJsonFormat()

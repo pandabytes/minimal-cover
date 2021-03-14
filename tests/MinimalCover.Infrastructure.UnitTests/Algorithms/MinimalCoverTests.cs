@@ -12,10 +12,10 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
   /// that inhereit <see cref="IMinimalCover"/>. 
   /// 
   /// To test an implementation of <see cref="IMinimalCover"/>, simply
-  /// inhereit <see cref="IMinimalCoverTests"/> and provide
+  /// inhereit <see cref="MinimalCoverTests"/> and provide
   /// the implementation to the tests
   /// </summary>
-  public abstract class IMinimalCoverTests
+  public abstract class MinimalCoverTests
   {
     /// <summary>
     /// Object under test

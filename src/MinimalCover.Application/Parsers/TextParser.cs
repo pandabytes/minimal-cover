@@ -38,33 +38,26 @@ namespace MinimalCover.Application.Parsers
     ParseFormat IParser.Format { get { return ParseFormat.Text; } }
 
     /// <summary>
-    /// Construct the text parser with optional separators
+    /// Constructor
     /// </summary>
     /// <exception cref="ArgumentException">
-    /// Throw when at least 1 parameter is null
+    /// Throw when <paramref name="settings"/> is null or
+    /// the properties in <paramref name="settings"/> are null or not empty
     /// </exception>
-    /// <param name="attrbSep">attribute separator</param>
-    /// <param name="fdSep">functional dependency separator</param>
-    /// <param name="leftRightSep">LHS and RHS separator</param>
-    public TextParser(string attrbSep, string fdSep, string leftRightSep)
+    /// <param name="settings">Text parser settings</param>
+    public TextParser(TextParserSettings settings)
     {
-      if (string.IsNullOrEmpty(attrbSep) ||
-          string.IsNullOrEmpty(fdSep) ||
-          string.IsNullOrEmpty(leftRightSep))
+      if (string.IsNullOrEmpty(settings?.AttributeSeparator) ||
+          string.IsNullOrEmpty(settings?.FdSeparator) ||
+          string.IsNullOrEmpty(settings?.LeftRightSeparator))
       {
         throw new ArgumentException(InvalidSepsMessage);
       }
 
-      AttributeSeparator = attrbSep;
-      FdSeparator = fdSep;
-      LeftRightSeparator = leftRightSep;
+      AttributeSeparator = settings.AttributeSeparator;
+      FdSeparator = settings.FdSeparator;
+      LeftRightSeparator = settings.LeftRightSeparator;
     }
-
-    public TextParser(TextParserSettings settings) 
-      : this(settings?.AttributeSeparator,
-             settings?.FdSeparator,
-             settings?.LeftRightSeparator)
-    { }
 
     /// <summary>
     /// Interface method <see cref="IParser.Parse(string)"/>

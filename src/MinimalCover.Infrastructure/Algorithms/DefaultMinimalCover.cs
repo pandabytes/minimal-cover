@@ -10,7 +10,7 @@ namespace MinimalCover.Infrastructure.Algorithms
   /// The default implementation of steps to
   /// find the minimal cover
   /// </summary>
-  public class DefaultMinimalCover : IMinimalCover
+  internal class DefaultMinimalCover : IMinimalCover
   {
     ISet<FunctionalDependency> IMinimalCover.GetSingleRhsAttributeFds(ISet<FunctionalDependency> fds)
     {

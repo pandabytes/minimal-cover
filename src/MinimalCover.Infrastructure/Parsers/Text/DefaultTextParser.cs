@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+
 using MinimalCover.Domain.Core;
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
@@ -8,21 +9,12 @@ using MinimalCover.Application.Parsers.Settings;
 
 namespace MinimalCover.Infrastructure.Parsers.Text
 {
-  public class DefaultTextParser : TextParser
+  /// <summary>
+  /// Default implementation of <see cref="TextParser"/>
+  /// </summary>
+  internal class DefaultTextParser : TextParser
   {
-    /// <summary>
-    /// Construct the text parser with optional separators
-    /// </summary>
-    /// <exception cref="ArgumentException">
-    /// Throw when at least 1 parameter is null
-    /// </exception>
-    /// <param name="attrbSep">attribute separator</param>
-    /// <param name="fdSep">functional dependency separator</param>
-    /// <param name="leftRightSep">LHS and RHS separator</param>
-    public DefaultTextParser(string attrbSep = ",", string fdSep = ";", string leftRightSep = "-->")
-      : base(attrbSep, fdSep, leftRightSep)
-    {}
-
+    /// <inheritdoc/>
     public DefaultTextParser(TextParserSettings settings)
       : base(settings)
     {}

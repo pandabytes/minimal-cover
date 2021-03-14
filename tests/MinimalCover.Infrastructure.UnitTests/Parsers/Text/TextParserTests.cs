@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 
 using MinimalCover.Application.Parsers;
+using MinimalCover.Application.Parsers.Settings;
 using MinimalCover.Domain.Models;
 using MinimalCover.UnitTests.Utils;
+using static MinimalCover.Infrastructure.UnitTests.ConfigurationUtils;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
@@ -112,6 +116,21 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
     [Theory]
     [MemberData(nameof(ParsedTextTheoryData))]
     public abstract void Parse_ValidString_ReturnsExpectedFdSet(ParsedTextFdsTestData testData);
+
+    /// <summary>
+    /// Get the text parser via dependency injection
+    /// </summary>
+    /// <param name="attrbSep">Attribute separator</param>
+    /// <param name="fdSep">Functional dependency separator</param>
+    /// <param name="leftRightSep">Separtor between LHS and RHS</param>
+    /// <returns>The text parser</returns>
+    protected static TextParser GetTextParser(string attrbSep, string fdSep, string leftRightSep)
+    {
+      var settings = new TextParserSettings { AttributeSeparator = attrbSep, FdSeparator = fdSep, LeftRightSeparator = leftRightSep };
+      var config = CreateConfig(settings, TextParserSettings.SectionPath);
+      var dp = new DependencyInjection(config);
+      return dp.Provider.GetRequiredService<TextParser>();
+    }
   }
 
 
