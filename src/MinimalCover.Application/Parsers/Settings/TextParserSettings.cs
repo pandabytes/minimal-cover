@@ -9,10 +9,10 @@ namespace MinimalCover.Application.Parsers.Settings
   {
     public static readonly string SectionPath = "Parsers:TextParser";
 
-    public string AttributeSeparator { get; set; }
+    public string AttributeSeparator { get; init; }
 
-    public string FdSeparator { get; set; }
+    public string FdSeparator { get; init; }
 
-    public string LeftRightSeparator { get; set; }
+    public string LeftRightSeparator { get; init; }
   }
 }

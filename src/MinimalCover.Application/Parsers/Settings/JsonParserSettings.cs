@@ -9,6 +9,6 @@ namespace MinimalCover.Application.Parsers.Settings
   {
     public static readonly string SectionPath = "Parsers:JsonParser";
 
-    public string SchemaFilePath { get; set; }
+    public string SchemaFilePath { get; init; }
   }
 }
