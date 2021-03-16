@@ -4,6 +4,7 @@ using System.Linq;
 
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Domain.Models;
+using static MinimalCover.Infrastructure.UnitTests.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,8 +19,8 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
     /// </summary>
     public DefaultMinimalCoverTests()
     {
-      // Pass null since MinimalCover doesn't require any configuration
-      var dp = new DependencyInjection(null);
+      // Pass empty config since MinimalCover doesn't require any configuration
+      var dp = new DependencyInjection(EmptyConfiguration);
       m_minimalCover = dp.Provider.GetRequiredService<IMinimalCover>();
     }
 

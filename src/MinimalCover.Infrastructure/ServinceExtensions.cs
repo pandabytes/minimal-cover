@@ -12,7 +12,7 @@ using MinimalCover.Infrastructure.Parsers.Json.Converter;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 
 namespace MinimalCover.Infrastructure
 {
@@ -28,34 +28,25 @@ namespace MinimalCover.Infrastructure
     /// </summary>
     /// <param name="services">Services object</param>
     /// <param name="configuration">Configuration that contains settings for each parser</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configuration"/> is null</exception>
     /// <returns>The passed in services object</returns>
     public static IServiceCollection AddParsers(this IServiceCollection services, IConfiguration configuration)
     {
+      _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
       // Register text parser
-      //services.Configure<TextParserSettings>(
-      //  configuration.GetSection(TextParserSettings.TextParser));
-      //services.AddSingleton(provider =>
-      //  provider.GetRequiredService<IOptions<TextParserSettings>>().Value);
-      services.AddTransient(p =>
-      {
-        var settings = new TextParserSettings();
-        configuration.GetSection(TextParserSettings.SectionPath).Bind(settings);
-        return settings;
-      });
+      services.Configure<TextParserSettings>(
+        configuration.GetSection(TextParserSettings.SectionPath));
+      services.AddSingleton(provider =>
+        provider.GetRequiredService<IOptions<TextParserSettings>>().Value);
 
       services.AddTransient<TextParser, DefaultTextParser>();
 
       // Register json parser
-      services.AddTransient(p =>
-      {
-        var settings = new JsonParserSettings();
-        configuration.GetSection(JsonParserSettings.SectionPath).Bind(settings);
-        return settings;
-      });
-      //services.Configure<JsonParserSettings>(
-      //  configuration.GetSection(JsonParserSettings.JsonParser));
-      //services.AddTransient(provider =>
-      //  provider.GetRequiredService<IOptions<JsonParserSettings>>().Value);
+      services.Configure<JsonParserSettings>(
+        configuration.GetSection(JsonParserSettings.SectionPath));
+      services.AddTransient(provider =>
+        provider.GetRequiredService<IOptions<JsonParserSettings>>().Value);
 
       services.AddTransient<FdSetConverter>();
       services.AddTransient<JsonParser, JsonConverterParser>();

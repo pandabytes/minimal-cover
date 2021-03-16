@@ -119,5 +119,9 @@ namespace MinimalCover.Infrastructure.UnitTests
       return config;
     }
 
+    /// <summary>
+    /// Represent an empty configuration
+    /// </summary>
+    public static readonly IConfiguration EmptyConfiguration = new ConfigurationBuilder().Build();
   }
 }
