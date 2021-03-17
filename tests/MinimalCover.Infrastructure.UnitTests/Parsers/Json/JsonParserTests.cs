@@ -6,7 +6,7 @@ using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.UnitTests.Utils;
 using MinimalCover.Application.Parsers.Settings;
-using static MinimalCover.Infrastructure.UnitTests.ConfigurationUtils;
+using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,8 +30,8 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     /// <summary>
     /// Provide valid JSON test data
     /// </summary>
-    public static TheoryData<ParsedJsonFdsTestData> ValidJsonTheoryData =
-      new TheoryData<ParsedJsonFdsTestData>()
+    public static readonly TheoryData<ParsedJsonFdsTestData> ValidJsonTheoryData =
+      new()
       {
         new ParsedJsonFdsTestData()
         {

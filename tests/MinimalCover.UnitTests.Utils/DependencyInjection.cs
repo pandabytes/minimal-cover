@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace MinimalCover.Infrastructure.UnitTests
+using MinimalCover.Infrastructure;
+
+namespace MinimalCover.UnitTests.Utils
 {
   /// <summary>
   /// This class that stores all dependencies that is 

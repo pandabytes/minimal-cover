@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\MinimalCover.Domain\MinimalCover.Domain.csproj" />
+    <ProjectReference Include="..\..\src\MinimalCover.Infrastructure\MinimalCover.Infrastructure.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0-preview.1.21102.12" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.2.21154.6" />
   </ItemGroup>
 
 </Project>

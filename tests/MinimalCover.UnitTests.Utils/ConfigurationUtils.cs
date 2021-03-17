@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
-namespace MinimalCover.Infrastructure.UnitTests
+namespace MinimalCover.UnitTests.Utils
 {
   /// <summary>
   /// Utilities for working with <see cref="IConfiguration"/>
@@ -50,7 +50,7 @@ namespace MinimalCover.Infrastructure.UnitTests
     /// <param name="obj">Object to build configuration from</param>
     /// <param name="levelKey">The key at a particular level in the configuration</param>
     /// <param name="dict">The dictionary that stores the configuration. Should be empty when first provided</param>
-    private static void CreateInMemoryConfig(object obj, string levelKey, Dictionary<string, string> dict)
+    private static void CreateInMemoryConfig<T>(T obj, string levelKey, Dictionary<string, string> dict) where T : class
     {
       var properties = obj.GetType().GetProperties();
       foreach (var property in properties)
@@ -94,14 +94,22 @@ namespace MinimalCover.Infrastructure.UnitTests
     }
 
     /// <summary>
-    /// Create a configuration object given an object and a root key
+    /// Create a configuration object given an object and a root key where the 
+    /// provider is a in-memory <see cref="Dictionary{string, string}"/>
     /// </summary>
+    /// <remarks>
+    /// This method recursively uses all public properties in <paramref name="obj"/>
+    /// to create a configuration object. The key will be something like
+    /// "Root:PropertyName1:NestedProperty1"
+    /// "Root:PropertyName2"
+    /// </remarks>
+    /// <typeparam name="T">Type that is a class with public get properties</typeparam>
     /// <param name="obj">Object that stores values that will be stored in a configuration object</param>
     /// <param name="rootKey">The root key that tells where to store the configuration</param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="rootKey"/> is null or empty</exception>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="obj"/> is null</exception>
     /// <returns><see cref="IConfiguration"/> object</returns>
-    public static IConfiguration CreateConfig(object obj, string rootKey)
+    public static IConfiguration CreateConfig<T>(T obj, string rootKey) where T : class
     {
       _ = obj ?? throw new ArgumentNullException(nameof(obj));
 
@@ -117,6 +125,30 @@ namespace MinimalCover.Infrastructure.UnitTests
                     .AddInMemoryCollection(dict)
                     .Build();
       return config;
+    }
+
+    /// <summary>
+    /// Update <paramref name="configuration"/> with additional configuration
+    /// take from <paramref name="obj"/>
+    /// </summary>
+    /// <remarks>
+    /// The provider for the new configuration is a in-memory <see cref="Dictionary{string, String}"/>
+    /// </remarks>
+    /// <typeparam name="T">Type that is a class with public get properties</typeparam>
+    /// <param name="configuration">Old configuration object</param>
+    /// <param name="obj">Object that stores values that will be stored in a configuration object</param>
+    /// <param name="rootKey">The root key that tells where to store the configuration</param>
+    /// <returns><see cref="IConfiguration"/> object</returns>
+    public static IConfiguration UpdateConfig<T>(this IConfiguration configuration, T obj, string rootKey) where T : class
+    {
+      var dict = new Dictionary<string, string>();
+      CreateInMemoryConfig(obj, rootKey, dict);
+
+      var updatedConfig = new ConfigurationBuilder()
+                            .AddConfiguration(configuration)
+                            .AddInMemoryCollection(dict)
+                            .Build();
+      return updatedConfig;
     }
 
     /// <summary>

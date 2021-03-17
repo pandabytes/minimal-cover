@@ -5,7 +5,7 @@ using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
 using MinimalCover.Domain.Models;
 using MinimalCover.UnitTests.Utils;
-using static MinimalCover.Infrastructure.UnitTests.ConfigurationUtils;
+using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,8 +31,8 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
       public string LeftRightSeparator { get; set; }
     }
 
-    public static TheoryData<ParsedTextFdsTestData> ParsedTextTheoryData =
-      new TheoryData<ParsedTextFdsTestData>()
+    public static readonly TheoryData<ParsedTextFdsTestData> ParsedTextTheoryData =
+      new ()
       {
         new ParsedTextFdsTestData()
         {

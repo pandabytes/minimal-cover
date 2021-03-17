@@ -31,6 +31,9 @@ namespace MinimalCover.Application.Parsers
     /// <see cref="FunctionalDependency"/>
     /// </summary>
     /// <param name="value">The string value to parse</param>
+    /// <exception cref="ParserException">
+    /// Thrown when parsing <paramref name="value"/> fails
+    /// </exception>
     /// <returns>Set of parsed <see cref="FunctionalDependency"/></returns>
     ISet<FunctionalDependency> Parse(string value);
   }
