@@ -48,19 +48,12 @@ namespace MinimalCover.UI.Console
       rootCommand.Handler = CommandHandler.Create<ParseFormat, bool, string>((input, file, fds) =>
       {
         // Load the content of the file if the "value" is a file path
-        string value = fds;
-        if (file)
-        {
-          using (var streamReader = new StreamReader(fds))
-          {
-            value = streamReader.ReadToEnd();
-          }
-        }
+        string value = (file) ? File.ReadAllText(fds) : fds;
 
         // Get the parser based on the input format
         IParser parser = GetParser(provider, input);
         
-        IMinimalCover mc = provider.GetRequiredService<IMinimalCover>();
+        var mc = provider.GetRequiredService<IMinimalCover>();
         var app = new MinimalCoverApp(mc);
         var result = app.FindMinimalCover(value, parser);
 
