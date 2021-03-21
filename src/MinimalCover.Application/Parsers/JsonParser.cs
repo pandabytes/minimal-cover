@@ -39,12 +39,10 @@ namespace MinimalCover.Application.Parsers
     public JsonParser(JsonParserSettings settings)
     {
       _ = settings ?? throw new ArgumentNullException(nameof(settings));
+      _ = settings?.SchemaFilePath ?? throw new ArgumentException($"Schema path must not be null");
 
       // Load in the schema file
-      using (var reader = new StreamReader(settings.SchemaFilePath))
-      {
-        Schema = reader.ReadToEnd();
-      }
+      Schema = File.ReadAllText(settings.SchemaFilePath);
     }
 
     /// <summary>
