@@ -34,18 +34,11 @@ namespace MinimalCover.Domain.Models
 
     public override string ToString() => $"{Left} --> {Right}";
 
-    public static bool operator ==(FunctionalDependency a, FunctionalDependency b)
-    {
-      if (a is null || b is null)
-      {
-        return false;
-      }
-      return a.Equals(b);
-    }
+    public static bool operator ==(FunctionalDependency a, FunctionalDependency b) => a.Equals(b);
 
     public static bool operator !=(FunctionalDependency a, FunctionalDependency b) => !(a == b);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (ReferenceEquals(this, obj))
       {
@@ -54,7 +47,7 @@ namespace MinimalCover.Domain.Models
 
       if (obj is FunctionalDependency)
       {
-        var otherFd = obj as FunctionalDependency;
+        var otherFd = (FunctionalDependency)obj;
         return Left == otherFd.Left && Right == otherFd.Right;
       }
 

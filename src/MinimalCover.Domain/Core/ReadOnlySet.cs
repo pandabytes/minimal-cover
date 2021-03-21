@@ -7,7 +7,7 @@ namespace MinimalCover.Domain.Core
   /// <summary>
   /// Represent a readonly set where no modification is permitted
   /// </summary>
-  public class ReadOnlySet<T> : ISet<T>, IReadOnlyCollection<T>
+  public class ReadOnlySet<T> : ISet<T>, IReadOnlyCollection<T> where T : notnull
   {
     protected const string ReadonlySetMessage = "Readonly set does not support this method";
 
@@ -25,11 +25,6 @@ namespace MinimalCover.Domain.Core
       _ = set ?? throw new ArgumentNullException(nameof(set));
       m_set = set;
     }
-
-    /// <summary>
-    /// Needed for subclasses
-    /// </summary>
-    protected ReadOnlySet() { }
 
     public int Count => m_set.Count;
 
@@ -105,18 +100,11 @@ namespace MinimalCover.Domain.Core
 
     public override string ToString() => $"{{{string.Join(',', m_set)}}}";
 
-    public static bool operator ==(ReadOnlySet<T> a, ReadOnlySet<T> b)
-    {
-      if ((object) a == null || (object) b == null )
-      {
-        return false;
-      }
-      return a.Equals(b);
-    }
+    public static bool operator ==(ReadOnlySet<T> a, ReadOnlySet<T> b) => a.Equals(b);
 
     public static bool operator !=(ReadOnlySet<T> a, ReadOnlySet<T> b) => !(a == b);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
       if (ReferenceEquals(this, obj))
       {
@@ -125,7 +113,7 @@ namespace MinimalCover.Domain.Core
 
       if (obj is ReadOnlySet<T>)
       {
-        return SetEquals(obj as ReadOnlySet<T>);
+        return SetEquals((ReadOnlySet<T>)obj);
       }
 
       return false;

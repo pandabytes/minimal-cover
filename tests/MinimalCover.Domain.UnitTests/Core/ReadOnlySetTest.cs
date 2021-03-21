@@ -11,6 +11,16 @@ namespace MinimalCover.Domain.UnitTests.Core
   /// </summary>
   public class ReadOnlySetTests : ReadOnlySet<object>
   {
+    /// <summary>
+    /// Constructor that creates an empty readonly set to 
+    /// satisfy the C# inhereitance from <see cref="ReadOnlySet{T}"/>
+    ///
+    /// Nothing is done in this constructor.
+    /// </summary>
+    public ReadOnlySetTests()
+      : base(new HashSet<object>())
+    { }
+
     [Fact]
     public void NotSupportedMethods_ThrowsNotSupportedException()
     {
@@ -92,6 +102,13 @@ namespace MinimalCover.Domain.UnitTests.Core
 #pragma warning disable CS0253 // Possible unintended reference comparison; right hand side needs cast
       Assert.False(readonlySet == obj, $"");
 #pragma warning restore CS0253 // Possible unintended reference comparison; right hand side needs cast
+    }
+
+    [Fact]
+    public void Equals_NullArgument_ReturnsFalse()
+    {
+      var readonlySet = new ReadOnlySet<int>(new HashSet<int>());
+      Assert.False(readonlySet.Equals(null), $"Readonly set is not supposed to be equal to null");
     }
 
     [Theory]

@@ -60,6 +60,13 @@ namespace MinimalCover.Domain.UnitTests.Models
       Assert.False(fd == null, $"{fd} is not supposed to be equal to null");
     }
 
+    [Fact]
+    public void Equals_NullArgument_ReturnsFalse()
+    {
+      var fd = FuncDepUtils.ConstructFdFromString("A,B", "C", ",");
+      Assert.False(fd.Equals(null), $"Functional dependency is not supposed to be equal to null");
+    }
+
     [Theory]
     [InlineData("a", "c", "a", "c")]
     [InlineData("a,b", "d,e,f", "b,a", "e,f,d")]
