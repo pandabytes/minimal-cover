@@ -46,6 +46,8 @@ namespace MinimalCover.UnitTests.Utils
     /// to <paramref name="dict"/>. The key will be something like
     /// "Root:PropertyName1:NestedProperty1"
     /// "Root:PropertyName2"
+    /// 
+    /// Note that properties that are null or have their ToString() return null will be skipped
     /// </remarks>
     /// <param name="obj">Object to build configuration from</param>
     /// <param name="levelKey">The key at a particular level in the configuration</param>
@@ -57,23 +59,26 @@ namespace MinimalCover.UnitTests.Utils
       {
         var propName = property.Name;
         var propValue = property.GetValue(obj);
+        var propStringValue = propValue?.ToString();
 
-        if (propValue != null)
+        if (propValue != null && propStringValue != null)
         {
           if (IsPrimitive(property.PropertyType))
           {
-            dict.Add($"{levelKey}:{propName}", propValue.ToString());
+            dict.Add($"{levelKey}:{propName}", propStringValue);
           }
           else if (IsEnumerable(property.PropertyType))
           {
             // Add each item that is primtive in the collection to the dictionary and
-            // recursively do the same for non-primitive item
+            // recursively do the same for non-primitive items
             int index = 0;
             foreach (var item in (IEnumerable)propValue)
             {
               if (IsPrimitive(item.GetType()))
               {
-                dict.Add($"{levelKey}:{propName}:{index}", item.ToString());
+                // Use null forgiving here because primitive always has ToString implemented
+                // If null reference exception occurs here, it means IsPrimitive is incorrectly implemented
+                dict.Add($"{levelKey}:{propName}:{index}", item.ToString()!);
               }
               else
               {
