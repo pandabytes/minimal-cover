@@ -21,7 +21,7 @@ namespace MinimalCover.Infrastructure
   /// Mainly provide methods to register dependencies to parse <see cref="FunctionalDependency"/>
   /// and to find minimal cover
   /// </summary>
-  public static class ServinceExtensions
+  public static class ServiceExtensions
   {
     /// <summary>
     /// Add parsers that can parse string to a collection of <see cref="FunctionalDependency"/>
@@ -48,7 +48,6 @@ namespace MinimalCover.Infrastructure
       services.AddTransient(provider =>
         provider.GetRequiredService<IOptions<JsonParserSettings>>().Value);
 
-      services.AddTransient<FdSetConverter>();
       services.AddTransient<JsonParser, JsonConverterParser>();
 
       return services;

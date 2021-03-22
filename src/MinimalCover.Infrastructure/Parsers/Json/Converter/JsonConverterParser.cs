@@ -15,41 +15,33 @@ namespace MinimalCover.Infrastructure.Parsers.Json.Converter
 {
   /// <summary>
   /// Default implementation of <see cref="JsonParser"/>.
-  /// This implementation relies on a converter object to
-  /// convert the JSON string to a set of functional dependencies
   /// </summary>
   internal class JsonConverterParser : JsonParser
   {
     /// <summary>
-    /// Converter object that is used to convert JSON string
-    /// to a collection of <see cref="FunctionalDependency"/>
-    /// </summary>
-    private readonly FdSetConverter m_converter;
-
-    /// <summary>
     /// Constructor
     /// </summary>
-    /// <remarks>
-    /// The <paramref name="converter"/> must match with the schema file
-    /// specified in <paramref name="settings"/>
-    /// </remarks>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="converter"/> is null
-    /// </exception>
-    /// <param name="converter">Converter object</param>
-    public JsonConverterParser(JsonParserSettings settings, FdSetConverter converter)
+    public JsonConverterParser(JsonParserSettings settings)
       : base(settings)
-    {
-      _ = converter ?? throw new ArgumentNullException(nameof(converter));
-      m_converter = converter;
-    }
+    {}
 
     /// <inheritdoc/>
     public override ISet<FunctionalDependency> Parse(string value)
     {
-      JArray jsonArray = (JArray)ValidateJson(value); 
-      var fds = JsonConvert.DeserializeObject<IEnumerable<FunctionalDependency>>(jsonArray.ToString(), m_converter);
-      return new ReadOnlySet<FunctionalDependency>(fds.ToHashSet());
+      JArray jsonArray = (JArray)ValidateJson(value);
+
+      try
+      {
+        // Null forgiving here because we already validate the input JSON string above
+        var fds = JsonConvert.DeserializeObject<IEnumerable<FunctionalDependency>>(jsonArray.ToString())!;
+        return new ReadOnlySet<FunctionalDependency>(fds.ToHashSet());
+      }
+      catch (Exception ex)
+      {
+        throw new ParserException("JSON parser wasn't able to parse correctly. " +
+                                  "Schema file may have been modified without updating " +
+                                  "the JSON parser implementation", ex);
+      }
     }
 
     /// <inheritdoc/>
