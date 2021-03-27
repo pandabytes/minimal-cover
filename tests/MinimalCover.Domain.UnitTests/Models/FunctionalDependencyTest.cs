@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using System;
+using MinimalCover.Domain.Models;
 using MinimalCover.UnitTests.Utils;
 
 namespace MinimalCover.Domain.UnitTests.Models
@@ -14,7 +15,7 @@ namespace MinimalCover.Domain.UnitTests.Models
     {
       var fd1 = FuncDepUtils.ConstructFdFromString(left1, right1);
       var fd2 = FuncDepUtils.ConstructFdFromString(left2, right2);
-      Assert.True(fd1 == fd2, $"{fd1} doesn't equal to {fd2}");
+      Assert.True(fd1 == fd2);
     }
 
     [Theory]
@@ -25,7 +26,7 @@ namespace MinimalCover.Domain.UnitTests.Models
     {
       var fd1 = FuncDepUtils.ConstructFdFromString(left1, right1);
       var fd2 = FuncDepUtils.ConstructFdFromString(left2, right2);
-      Assert.False(fd1 != fd2, $"{fd1} is incorrectly equal to {fd2}");
+      Assert.False(fd1 != fd2);
     }
 
     [Theory]
@@ -36,7 +37,7 @@ namespace MinimalCover.Domain.UnitTests.Models
     {
       var fd = FuncDepUtils.ConstructFdFromString(left, right);
       var tempFd = fd;
-      Assert.True(fd == tempFd, $"{fd} doesn't equal to itself");
+      Assert.True(fd == tempFd);
     }
 
     [Theory]
@@ -47,7 +48,7 @@ namespace MinimalCover.Domain.UnitTests.Models
     {
       var fd = FuncDepUtils.ConstructFdFromString(left, right);
       var tempFd = fd;
-      Assert.False(fd != tempFd, $"{fd} is incorrectly equal to itself");
+      Assert.False(fd != tempFd);
     }
 
     [Theory]
@@ -60,7 +61,7 @@ namespace MinimalCover.Domain.UnitTests.Models
     {
       var fd1 = FuncDepUtils.ConstructFdFromString(left1, right1);
       var fd2 = FuncDepUtils.ConstructFdFromString(left2, right2);
-      Assert.False(fd1 == fd2, $"{fd1} is not supposed to be equal to {fd2}");
+      Assert.False(fd1 == fd2);
     }
 
     [Theory]
@@ -73,23 +74,39 @@ namespace MinimalCover.Domain.UnitTests.Models
     {
       var fd1 = FuncDepUtils.ConstructFdFromString(left1, right1);
       var fd2 = FuncDepUtils.ConstructFdFromString(left2, right2);
-      Assert.True(fd1 != fd2, $"{fd1} is incorrectly equal to {fd2}");
+      Assert.True(fd1 != fd2);
     }
 
     [Fact]
     public void DoubleEquals_OneNullObj_ReturnsFalse()
     {
       var fd = FuncDepUtils.ConstructFdFromString("a", "b");
-      Assert.False(fd == null, $"{fd} is not supposed to be equal to null");
-      Assert.False(null == fd, $"{fd} is not supposed to be equal to null");
+      Assert.False(fd == null);
+      Assert.False(null == fd);
     }
 
     [Fact]
     public void NotEqual_OneNullObj_ReturnsTrue()
     {
       var fd = FuncDepUtils.ConstructFdFromString("a", "b");
-      Assert.True(fd != null, $"{fd} is incorrectly equal to null");
-      Assert.True(null != fd, $"{fd} is incorrectly equal to null");
+      Assert.True(fd != null);
+      Assert.True(null != fd);
+    }
+
+    [Fact]
+    public void DoubleEquals_TwoNullObjs_ReturnsTrue()
+    {
+      FunctionalDependency? fd = null;
+      Assert.True(fd == null);
+      Assert.True(null == fd);
+    }
+
+    [Fact]
+    public void NotEqual_TwoNullObjs_ReturnsFalse()
+    {
+      FunctionalDependency? fd = null;
+      Assert.False(fd != null);
+      Assert.False(null != fd);
     }
 
     [Theory]
@@ -101,22 +118,22 @@ namespace MinimalCover.Domain.UnitTests.Models
     public void Equals_OtherObj_ReturnsFalse(string left, string right, object obj)
     {
       var fd = FuncDepUtils.ConstructFdFromString(left, right);
-      Assert.False(fd.Equals(obj), $"{fd} is not supposed to be equal to {obj}");
+      Assert.False(fd.Equals(obj));
     }
 
     [Fact]
     public void Equals_NullArgument_ReturnsFalse()
     {
       var fd = FuncDepUtils.ConstructFdFromString("A,B", "C", ",");
-      Assert.False(fd.Equals(null), $"Functional dependency is not supposed to be equal to null");
+      Assert.False(fd.Equals(null));
     }
 
-  [Theory]
+    [Theory]
     [InlineData("a", "c", "a", "c")]
     [InlineData("a,b", "d,e,f", "b,a", "e,f,d")]
     [InlineData("a", "d,c", "a", "c,d")]
     [InlineData("a,b,c,d,e,f,g", "x", "a,b,c,d,e,f,g", "x")]
-    [InlineData("a,b,c,d,e,f,g", "x,y,z", "a,b,c,d,e,f,g", "x,y,z")]
+    [InlineData("a,b,c,d,e,f,g", "x,y,z", "b,a,c,d,e,f,g", "x,y,z")]
     public void GetHashCode_CompareTwoHashCodes_ReturnsTrue(string left1, string right1, string left2, string right2)
     {
       var fd1 = FuncDepUtils.ConstructFdFromString(left1, right1);

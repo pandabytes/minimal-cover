@@ -102,11 +102,16 @@ namespace MinimalCover.Domain.Core
 
     public static bool operator ==(ReadOnlySet<T>? a, ReadOnlySet<T>? b)
     {
-      if (a is null || b is null)
+      if (a is null && b is null)
       {
-        return false;
+        return true;
       }
-      return a.Equals(b);
+
+      if (a is not null)
+      {
+        return a.Equals(b);
+      }
+      return b!.Equals(a);
     }
 
     public static bool operator !=(ReadOnlySet<T>? a, ReadOnlySet<T>? b) => !(a == b);
