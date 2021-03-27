@@ -22,9 +22,9 @@ namespace MinimalCover.Application.UnitTests
     /// </summary>
     public class FdFileTestData
     {
-      public string InputFilePath { get; set; }
+      public string InputFilePath { get; set; } = null!;
 
-      public string ExpectedFilePath { get; set; }
+      public string ExpectedFilePath { get; set; } = null!;
 
       public ParseFormat Format { get; set; }
     }
@@ -118,24 +118,6 @@ namespace MinimalCover.Application.UnitTests
       }
     }
 
-    [Fact]
-    public void Constructor_NullArgument_ThrowsArgumentNullException()
-    {
-      Assert.Throws<ArgumentNullException>(() => new MinimalCoverApp(null));
-    }
-
-    [Fact]
-    public void FindMinimalCoverWithParser_NullArguments_ThrowsArgumentNullException()
-    {
-      var mockAlg = new Mock<IMinimalCover>().Object;
-      var mockParser = new Mock<IParser>().Object;
-      var app = new MinimalCoverApp(mockAlg);
-
-      Assert.Throws<ArgumentNullException>(() => app.FindMinimalCover(null, mockParser));
-      Assert.Throws<ArgumentNullException>(() => app.FindMinimalCover("", null));
-      Assert.Throws<ArgumentNullException>(() => app.FindMinimalCover(null, null));
-    }
-
     [Theory]
     [MemberData(nameof(FdFileTheoryData))]
     public void FindMinimalCover_StringArgument_ReturnsExpctedFds(FdFileTestData testData)
@@ -169,15 +151,6 @@ namespace MinimalCover.Application.UnitTests
       var actualMinimalCover = m_app.FindMinimalCover(fds); // Test this method 
       var expectedMinimalCover = parser.Parse(expectedValue);
       Assert.True(actualMinimalCover.SetEquals(expectedMinimalCover), "Minimal covers are not equal");
-    }
-
-    [Fact]
-    public void FindMinimalCover_NullArgument_ThrowsArgumentNullException()
-    {
-      var mockAlg = new Mock<IMinimalCover>().Object;
-      var app = new MinimalCoverApp(mockAlg);
-
-      Assert.Throws<ArgumentNullException>(() => app.FindMinimalCover(null));
     }
 
   }
