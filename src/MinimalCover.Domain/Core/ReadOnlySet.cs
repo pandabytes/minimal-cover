@@ -100,9 +100,16 @@ namespace MinimalCover.Domain.Core
 
     public override string ToString() => $"{{{string.Join(',', m_set)}}}";
 
-    public static bool operator ==(ReadOnlySet<T> a, ReadOnlySet<T> b) => a.Equals(b);
+    public static bool operator ==(ReadOnlySet<T>? a, ReadOnlySet<T>? b)
+    {
+      if (a is null || b is null)
+      {
+        return false;
+      }
+      return a.Equals(b);
+    }
 
-    public static bool operator !=(ReadOnlySet<T> a, ReadOnlySet<T> b) => !(a == b);
+    public static bool operator !=(ReadOnlySet<T>? a, ReadOnlySet<T>? b) => !(a == b);
 
     public override bool Equals(object? obj)
     {

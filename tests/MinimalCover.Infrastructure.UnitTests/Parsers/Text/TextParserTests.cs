@@ -20,15 +20,15 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
     /// </summary>
     public class ParsedTextFdsTestData
     {
-      public string Value { get; set; }
+      public string Value { get; set; } = null!;
 
-      public ISet<FunctionalDependency> ExpectedFds { get; set; }
+      public ISet<FunctionalDependency> ExpectedFds { get; set; } = null!;
 
-      public string AttributeSeparator { get; set; }
+      public string AttributeSeparator { get; set; } = null!;
 
-      public string FdSeparator { get; set; }
+      public string FdSeparator { get; set; } = null!;
 
-      public string LeftRightSeparator { get; set; }
+      public string LeftRightSeparator { get; set; } = null!;
     }
 
     public static readonly TheoryData<ParsedTextFdsTestData> ParsedTextTheoryData =

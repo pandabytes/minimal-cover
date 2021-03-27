@@ -22,9 +22,9 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     /// </summary>
     public class ParsedJsonFdsTestData
     {
-      public string Value { get; set; }
+      public string Value { get; set; } = null!;
 
-      public ISet<FunctionalDependency> ExpectedFds { get; set; }
+      public ISet<FunctionalDependency> ExpectedFds { get; set; } = null!;
     }
 
     /// <summary>

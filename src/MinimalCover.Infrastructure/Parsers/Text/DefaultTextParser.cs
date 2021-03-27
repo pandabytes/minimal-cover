@@ -30,7 +30,8 @@ namespace MinimalCover.Infrastructure.Parsers.Text
     /// </param>
     /// <param name="sep">Separator</param>
     /// <returns>Collection of attributes</returns>
-    protected static IEnumerable<string> GetAttributesWithSep(string value, string sep) => value.Split(sep).Select(a => a.Trim());
+    protected static IEnumerable<string> GetAttributesWithSep(string value, string sep) 
+      => value.Split(sep).Select(a => a.Trim());
 
     /// <inheritdoc/>
     public override ISet<FunctionalDependency> Parse(string value)

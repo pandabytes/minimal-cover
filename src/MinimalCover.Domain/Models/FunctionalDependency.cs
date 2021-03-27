@@ -34,9 +34,16 @@ namespace MinimalCover.Domain.Models
 
     public override string ToString() => $"{Left} --> {Right}";
 
-    public static bool operator ==(FunctionalDependency a, FunctionalDependency b) => a.Equals(b);
+    public static bool operator ==(FunctionalDependency? a, FunctionalDependency? b)
+    {
+      if (a is null || b is null)
+      {
+        return false;
+      }
+      return a.Equals(b);
+    }
 
-    public static bool operator !=(FunctionalDependency a, FunctionalDependency b) => !(a == b);
+    public static bool operator !=(FunctionalDependency? a, FunctionalDependency? b) => !(a == b);
 
     public override bool Equals(object? obj)
     {

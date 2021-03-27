@@ -23,9 +23,9 @@ namespace MinimalCover.Infrastructure.UnitTests.Algorithms
     /// </summary>
     public class FdsTestData
     {
-      public ISet<FunctionalDependency> InputFds { get; set; }
+      public ISet<FunctionalDependency> InputFds { get; set; } = null!;
 
-      public ISet<FunctionalDependency> ExpectedFds { get; set; }
+      public ISet<FunctionalDependency> ExpectedFds { get; set; } = null!;
     }
 
     /// <summary>

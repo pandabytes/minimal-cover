@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Xunit;
 using MinimalCover.Domain.Core;
@@ -26,6 +27,7 @@ namespace MinimalCover.Domain.UnitTests.Core
     {
       var set = new HashSet<string>() { "a", "b", "c" };
       var readOnlySet = new ReadOnlySet<string>(set);
+      var emptyEnumerable = Enumerable.Empty<string>();
 
       var ex = Assert.Throws<NotSupportedException>(() => ((ISet<string>)readOnlySet).Add("a"));
       Assert.Equal(ReadonlySetMessage, ex.Message);
@@ -36,19 +38,19 @@ namespace MinimalCover.Domain.UnitTests.Core
       ex = Assert.Throws<NotSupportedException>(() => readOnlySet.Clear());
       Assert.Equal(ReadonlySetMessage, ex.Message);
 
-      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.ExceptWith(null));
+      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.ExceptWith(emptyEnumerable));
       Assert.Equal(ReadonlySetMessage, ex.Message);
 
-      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.IntersectWith(null));
+      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.IntersectWith(emptyEnumerable));
       Assert.Equal(ReadonlySetMessage, ex.Message);
 
       ex = Assert.Throws<NotSupportedException>(() => readOnlySet.Remove("a"));
       Assert.Equal(ReadonlySetMessage, ex.Message);
 
-      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.SymmetricExceptWith(null));
+      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.SymmetricExceptWith(emptyEnumerable));
       Assert.Equal(ReadonlySetMessage, ex.Message);
 
-      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.UnionWith(null));
+      ex = Assert.Throws<NotSupportedException>(() => readOnlySet.UnionWith(emptyEnumerable));
       Assert.Equal(ReadonlySetMessage, ex.Message);
     }
 
@@ -59,6 +61,17 @@ namespace MinimalCover.Domain.UnitTests.Core
       var readonlySet = new ReadOnlySet<string>(set);
 
       Assert.False(readonlySet == null, $"{readonlySet} is not supposed to be equal to null");
+      Assert.False(null == readonlySet, $"{readonlySet} is not supposed to be equal to null");
+    }
+
+    [Fact]
+    public void NotEqual_OneNullObj_ReturnsTrue()
+    {
+      var set = new HashSet<string>() { "a", "b" };
+      var readonlySet = new ReadOnlySet<string>(set);
+
+      Assert.True(readonlySet != null, $"{readonlySet} is incorrectly equal to null");
+      Assert.True(null != readonlySet, $"{readonlySet} is incorrectly equal to null");
     }
 
     [Theory]
@@ -72,6 +85,16 @@ namespace MinimalCover.Domain.UnitTests.Core
     }
 
     [Theory]
+    [InlineData(new object[] { 1, 2, 3 })]
+    [InlineData(new object[] { 'a', 'b', 'c' })]
+    public void NotEqual_SameObj_ReturnsFalse(params object[] items)
+    {
+      var readOnlySet = new ReadOnlySet<object>(new HashSet<object>(items));
+      var tempReadonlySet = readOnlySet;
+      Assert.False(readOnlySet != tempReadonlySet, $"{readOnlySet} is incorrectly equal to itself");
+    }
+
+    [Theory]
     [InlineData(new object[] { 1, 2, 3 }, new object[] { 1, 2, 3 })]
     [InlineData(new object[] { "a", "b", "c" }, new object[] { "a", "b", "c" })]
     public void DoubleEquals_DifferentReadOnlySetObjs_ReturnsTrue(object[] a, object[] b)
@@ -79,6 +102,16 @@ namespace MinimalCover.Domain.UnitTests.Core
       var readOnlySetA = new ReadOnlySet<object>(new HashSet<object>(a));
       var readOnlySetB = new ReadOnlySet<object>(new HashSet<object>(b));
       Assert.True(readOnlySetA == readOnlySetB, $"{readOnlySetA} doesn't equal to {readOnlySetB}");
+    }
+
+    [Theory]
+    [InlineData(new object[] { 1, 2, 3 }, new object[] { 1, 2, 3 })]
+    [InlineData(new object[] { "a", "b", "c" }, new object[] { "a", "b", "c" })]
+    public void NotEqual_DifferentReadOnlySetObjs_ReturnsFalse(object[] a, object[] b)
+    {
+      var readOnlySetA = new ReadOnlySet<object>(new HashSet<object>(a));
+      var readOnlySetB = new ReadOnlySet<object>(new HashSet<object>(b));
+      Assert.False(readOnlySetA != readOnlySetB, $"{readOnlySetA} is incorrectly equal to {readOnlySetB}");
     }
 
     [Theory]
@@ -92,16 +125,13 @@ namespace MinimalCover.Domain.UnitTests.Core
     }
 
     [Theory]
-    [InlineData('c')]
-    [InlineData("hello")]
-    [InlineData(0.0f)]
-    [InlineData(0)]
-    public void DoubleEquals_OtherNonReadonlySetObj_ReturnsFalse(object obj)
+    [InlineData(new object[] { 1, 2, 4 }, new object[] { 1, 2, 3 })]
+    [InlineData(new object[] { "a", "bx", "c" }, new object[] { "a", "b", "c" })]
+    public void NotEqual_DifferentReadOnlySetObjs_ReturnsTrue(object[] a, object[] b)
     {
-      var readonlySet = new ReadOnlySet<int>(new HashSet<int>() { 0 });
-#pragma warning disable CS0253 // Possible unintended reference comparison; right hand side needs cast
-      Assert.False(readonlySet == obj, $"");
-#pragma warning restore CS0253 // Possible unintended reference comparison; right hand side needs cast
+      var readOnlySetA = new ReadOnlySet<object>(new HashSet<object>(a));
+      var readOnlySetB = new ReadOnlySet<object>(new HashSet<object>(b));
+      Assert.True(readOnlySetA != readOnlySetB, $"{readOnlySetA} is incorrectly equal to {readOnlySetB}");
     }
 
     [Fact]
@@ -142,10 +172,5 @@ namespace MinimalCover.Domain.UnitTests.Core
       Assert.Equal(count, readOnlySet.Count);
     }
    
-    [Fact]
-    public void Constructor_NullArgument_ThrowsArgumentNullException()
-    {
-      Assert.Throws<ArgumentNullException>(() => new ReadOnlySet<object>(null));
-    }
   }
 }
