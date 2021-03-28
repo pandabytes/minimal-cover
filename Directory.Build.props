@@ -1,10 +1,6 @@
 <Project>
-  <ItemDefinitionGroup>
-    <PackageReference>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <ProjectReference>
-      <PrivateAssets>all</PrivateAssets>
-    </ProjectReference>
-  </ItemDefinitionGroup>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+	<WarningsAsErrors>CS8600;CS8602;CS8603;CS8604;CS8618;CS8625;CS8765</WarningsAsErrors>
+  </PropertyGroup>
 </Project>

@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.UnitTests.Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.UI.Console", "src\MinimalCover.UI.Console\MinimalCover.UI.Console.csproj", "{259369D0-2A9F-4EB8-B71B-5F4B4FEEC165}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalCover.Application.UnitTests", "tests\MinimalCover.Application.UnitTests\MinimalCover.Application.UnitTests.csproj", "{921391AC-D5AB-4774-8FEE-83E542270BC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Application.UnitTests", "tests\MinimalCover.Application.UnitTests\MinimalCover.Application.UnitTests.csproj", "{921391AC-D5AB-4774-8FEE-83E542270BC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
