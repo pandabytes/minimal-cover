@@ -23,7 +23,6 @@ namespace MinimalCover.Application
     /// <param name="minimalCover">Minimal cover algorithm</param>
     public MinimalCoverApp(IMinimalCover minimalCover)
     {
-      _ = minimalCover ?? throw new ArgumentNullException(nameof(minimalCover));
       m_minimalCover = minimalCover;
     }
 
@@ -38,9 +37,6 @@ namespace MinimalCover.Application
     /// <returns>A set of <see cref="FunctionalDependency"/></returns>
     public ISet<FunctionalDependency> FindMinimalCover(string value, IParser parser)
     {
-      _ = value ?? throw new ArgumentNullException(nameof(value));
-      _ = parser ?? throw new ArgumentNullException(nameof(parser));
-
       var fds = parser.Parse(value);
       return FindMinimalCover(fds);
     }
@@ -55,8 +51,6 @@ namespace MinimalCover.Application
     /// <returns></returns>
     public ISet<FunctionalDependency> FindMinimalCover(ISet<FunctionalDependency> fds)
     {
-      _ = fds ?? throw new ArgumentNullException(nameof(fds));
-
       var singleRhsAttributeFds = m_minimalCover.GetSingleRhsAttributeFds(fds);
       var noExtraLhsAttributesFds = m_minimalCover.RemoveExtrasLhsAttributes(singleRhsAttributeFds);
       return m_minimalCover.RemoveExtraFds(noExtraLhsAttributesFds);

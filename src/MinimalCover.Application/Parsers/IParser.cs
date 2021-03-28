@@ -16,6 +16,13 @@ namespace MinimalCover.Application.Parsers
   }
 
   /// <summary>
+  /// A delegate used to get a parser based on the given parse format
+  /// </summary>
+  /// <param name="format">Parse format</param>
+  /// <returns>A <see cref="IParser"/> object</returns>
+  public delegate IParser GetParser(ParseFormat format);
+
+  /// <summary>
   /// Interface for parser class that parses one of the
   /// string formats defined in <see cref="ParseFormat"/>
   /// </summary>

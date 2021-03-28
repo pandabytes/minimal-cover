@@ -49,6 +49,17 @@ namespace MinimalCover.Infrastructure
 
       services.AddTransient<JsonParser, JsonConverterParser>();
 
+      // Register a delegate to resolve a parser
+      services.AddSingleton<GetParser>(provider => format =>
+      {
+        return format switch
+        {
+          ParseFormat.Text => provider.GetRequiredService<TextParser>(),
+          ParseFormat.Json => provider.GetRequiredService<JsonParser>(),
+          _ => throw new NotSupportedException($"Parse format {format} is not supported yet"),
+        };
+      });
+
       return services;
     }
 

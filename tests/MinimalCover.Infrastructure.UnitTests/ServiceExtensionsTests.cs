@@ -24,9 +24,9 @@ namespace MinimalCover.Infrastructure.UnitTests
       };
 
       var config = CreateConfig(settings, TextParserSettings.SectionPath);
-      var services = new ServiceCollection()
-                      .AddParsers(config);
-      var provider = services.BuildServiceProvider();
+      var provider = new ServiceCollection()
+                      .AddParsers(config)
+                      .BuildServiceProvider();
 
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if TextParser is not registered
@@ -42,13 +42,65 @@ namespace MinimalCover.Infrastructure.UnitTests
       };
 
       var config = CreateConfig(settings, JsonParserSettings.SectionPath);
-      var services = new ServiceCollection()
-                      .AddParsers(config);
-      var provider = services.BuildServiceProvider();
+      var provider = new ServiceCollection()
+                      .AddParsers(config)
+                      .BuildServiceProvider();
 
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if JsonParser is not registered
       provider.GetRequiredService<JsonParser>();
+    }
+
+    [Fact]
+    public void AddParsers_GetParser_GetParserIsRegistered()
+    {
+      var provider = new ServiceCollection()
+                      .AddParsers(EmptyConfiguration)
+                      .BuildServiceProvider();
+
+      // No need to call any Xunit.Assert because GetRequiredService
+      // would throw an exception if GetParser is not registered
+      provider.GetRequiredService<GetParser>();
+    }
+
+    [Fact]
+    public void AddParsers_GetAvailableParser_ReturnedParserMatchesParseFormat()
+    {
+      var textParserSettings = new TextParserSettings
+      {
+        AttributeSeparator = ",",
+        FdSeparator = ";",
+        LeftRightSeparator = "-->"
+      };
+
+      var jsonParserSettings = new JsonParserSettings
+      {
+        SchemaFilePath = @"Parsers\Json\fd-schema.json"
+      };
+
+      var config = CreateConfig(textParserSettings, TextParserSettings.SectionPath)
+                    .UpdateConfig(jsonParserSettings, JsonParserSettings.SectionPath);
+
+      var provider = new ServiceCollection()
+                      .AddParsers(config)
+                      .BuildServiceProvider();
+
+      var getParser = provider.GetRequiredService<GetParser>();
+
+      Assert.IsAssignableFrom<TextParser>(getParser(ParseFormat.Text));
+      Assert.IsAssignableFrom<JsonParser>(getParser(ParseFormat.Json));
+    }
+
+    [Fact]
+    public void AddParsers_GetUnavailableParser_ThrowNotSupportedException()
+    {
+      var provider = new ServiceCollection()
+                      .AddParsers(EmptyConfiguration)
+                      .BuildServiceProvider();
+
+      var getParser = provider.GetRequiredService<GetParser>();
+
+      Assert.Throws<NotSupportedException>(() => getParser(ParseFormat.Yaml));
     }
 
     [Fact]

@@ -51,7 +51,7 @@ namespace MinimalCover.UI.Console
         string value = (file) ? File.ReadAllText(fds) : fds;
 
         // Get the parser based on the input format
-        var parser = GetParser(provider, input);
+        var parser = provider.GetRequiredService<GetParser>()(input);
         
         var mc = provider.GetRequiredService<IMinimalCover>();
         var app = new MinimalCoverApp(mc);
@@ -68,18 +68,5 @@ namespace MinimalCover.UI.Console
       return rootCommand.InvokeAsync(args).Result;
     }
 
-    public static IParser GetParser(ServiceProvider provider, ParseFormat format)
-    {
-      // Get the parser based on the input format
-      switch (format)
-      {
-        case ParseFormat.Text:
-          return provider.GetRequiredService<TextParser>();
-        case ParseFormat.Json:
-          return provider.GetRequiredService<JsonParser>();
-        default:
-          throw new NotSupportedException($"Format \"{format}\" is not supported yet");
-      }
-    }
   }
 }
