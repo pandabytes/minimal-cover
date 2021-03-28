@@ -51,7 +51,7 @@ namespace MinimalCover.UI.Console
         string value = (file) ? File.ReadAllText(fds) : fds;
 
         // Get the parser based on the input format
-        IParser parser = GetParser(provider, input);
+        var parser = GetParser(provider, input);
         
         var mc = provider.GetRequiredService<IMinimalCover>();
         var app = new MinimalCoverApp(mc);

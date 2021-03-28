@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using MinimalCover.Domain.Models;
 
@@ -45,7 +46,7 @@ namespace MinimalCover.Infrastructure
       // Register json parser
       services.Configure<JsonParserSettings>(
         configuration.GetSection(JsonParserSettings.SectionPath));
-      services.AddTransient(provider =>
+      services.AddSingleton(provider =>
         provider.GetRequiredService<IOptions<JsonParserSettings>>().Value);
 
       services.AddTransient<JsonParser, JsonConverterParser>();
@@ -63,5 +64,6 @@ namespace MinimalCover.Infrastructure
       services.AddTransient<IMinimalCover, DefaultMinimalCover>();
       return services;
     }
+
   }
 }
