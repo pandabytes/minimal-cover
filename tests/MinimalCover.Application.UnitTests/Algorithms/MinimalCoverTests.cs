@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
-namespace MinimalCover.Infrastructure.UnitTests.Algorithms
+namespace MinimalCover.Application.UnitTests.Algorithms
 {
   /// <summary>
   /// This class encapsulates all the tests for any class

@@ -6,7 +6,7 @@ using MinimalCover.Domain.Models;
 using MinimalCover.UnitTests.Utils;
 using Xunit;
 
-namespace MinimalCover.Infrastructure.UnitTests.Algorithms
+namespace MinimalCover.Application.UnitTests.Algorithms
 {
   /// <summary>
   /// This class contains sample test data to test 

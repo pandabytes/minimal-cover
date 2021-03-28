@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
+namespace MinimalCover.Application.UnitTests.Parsers.Json
 {
   public class JsonParserTests
   {

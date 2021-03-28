@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
+namespace MinimalCover.Application.UnitTests.Parsers.Text
 {
   public class TextParserTests
   {
