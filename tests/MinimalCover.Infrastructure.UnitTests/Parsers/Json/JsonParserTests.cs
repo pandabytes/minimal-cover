@@ -80,17 +80,17 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Json
     }
 
     [Fact]
-    public void Constructor_InvalidArguments_ThrowsArgumentException()
+    public void Constructor_NullSchemaPath_ThrowsArgumentException()
     {
       // Mock the abstract class so that we can use its constructor
       // The outer exception is thrown by Mock and the actual
       // exception of our code is the inner exception
-      var ex = Assert.Throws<TargetInvocationException>(() => new Mock<JsonParser>(null).Object);
+      var settings = new JsonParserSettings();
+      var ex = Assert.Throws<TargetInvocationException>(() => new Mock<JsonParser>(settings).Object);
       var actualEx = ex.InnerException;
 
-      Assert.IsType<ArgumentNullException>(actualEx);
+      Assert.IsType<ArgumentException>(actualEx);
     }
-
 
     [Fact]
     public void Format_SimpleGet_ReturnsJsonFormat()

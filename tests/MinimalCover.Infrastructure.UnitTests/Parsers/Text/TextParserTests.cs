@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 using MinimalCover.Application.Parsers;
@@ -9,6 +10,7 @@ using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Moq;
 using Xunit;
 
 namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
@@ -86,6 +88,34 @@ namespace MinimalCover.Infrastructure.UnitTests.Parsers.Text
           }
         }
       };
+
+    [Theory]
+    [InlineData("", ";", "-->")]
+    [InlineData(" ", ";", "-->")]
+    [InlineData(null, ";", "-->")]
+    [InlineData(",", "", "-->")]
+    [InlineData(",", " ", "-->")]
+    [InlineData(",", null, "-->")]
+    [InlineData(",", ";", "")]
+    [InlineData(",", ";", " ")]
+    [InlineData(",", ";", null)]
+    public void Constructor_BadSeparators_ThrowArgumentException(string attributeSep, string fdSep, string leftRightSep)
+    {
+      var settings = new TextParserSettings 
+      { 
+        AttributeSeparator = attributeSep, 
+        FdSeparator = fdSep, 
+        LeftRightSeparator = leftRightSep 
+      };
+
+      // Mock the abstract class so that we can use its constructor
+      // The outer exception is thrown by Mock and the actual
+      // exception of our code is the inner exception
+      var ex = Assert.Throws<TargetInvocationException>(() => new Mock<TextParser>(settings).Object);
+      var actualEx = ex.InnerException;
+
+      Assert.IsType<ArgumentException>(actualEx);
+    }
 
     [Theory]
     [InlineData("A-->", ",", ";", "-->")]

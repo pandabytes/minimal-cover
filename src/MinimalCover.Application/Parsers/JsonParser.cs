@@ -32,13 +32,13 @@ namespace MinimalCover.Application.Parsers
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <exception cref="ArgumentNullException">
+    /// <exception cref="ArgumentException">
     /// Throw when <paramref name="settings"/> is null
     /// </exception>
     /// <param name="settings">JSON parser settings</param>
     public JsonParser(JsonParserSettings settings)
     {
-      _ = settings?.SchemaFilePath ?? throw new ArgumentNullException($"Schema path must not be null");
+      _ = settings.SchemaFilePath ?? throw new ArgumentException($"Schema path must not be null");
 
       // Load in the schema file
       Schema = File.ReadAllText(settings.SchemaFilePath);

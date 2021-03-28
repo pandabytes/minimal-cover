@@ -47,9 +47,9 @@ namespace MinimalCover.Application.Parsers
     /// <param name="settings">Text parser settings</param>
     public TextParser(TextParserSettings settings)
     {
-      if (string.IsNullOrEmpty(settings?.AttributeSeparator) ||
-          string.IsNullOrEmpty(settings?.FdSeparator) ||
-          string.IsNullOrEmpty(settings?.LeftRightSeparator))
+      if (string.IsNullOrWhiteSpace(settings.AttributeSeparator) ||
+          string.IsNullOrWhiteSpace(settings.FdSeparator) ||
+          string.IsNullOrWhiteSpace(settings.LeftRightSeparator))
       {
         throw new ArgumentException(InvalidSepsMessage);
       }
