@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using System;
+using System.Collections.Generic;
 using MinimalCover.Domain.Models;
 using MinimalCover.UnitTests.Utils;
 
@@ -7,6 +8,40 @@ namespace MinimalCover.Domain.UnitTests.Models
 {
   public class FunctionalDependencyTests
   {
+    [Theory]
+    [InlineData("a", "a")]
+    [InlineData("a,b", "b,a")]
+    [InlineData("a,b,c", "b,a,c")]
+    public void Constructor_LeftAndRightAreSameSets_ThrowsArgumentException(string left, string right)
+    {
+      var ex = Assert.Throws<ArgumentException>(() => FuncDepUtils.ConstructFdFromString(left, right, ","));
+      Assert.Equal(FunctionalDependency.SameLeftRightMessage, ex.Message);
+    }
+
+    [Theory]
+    [InlineData(new string[] { "a" }, new string[] { })]
+    [InlineData(new string[] { }, new string[] { "a" })]
+    public void Constructor_EmptyArguments_ThrowsArgumentException(string[] leftAttrbs, string[] rightAttrbs)
+    {
+      var left = new HashSet<string>(leftAttrbs);
+      var right = new HashSet<string>(rightAttrbs);
+      var ex = Assert.Throws<ArgumentException>(() => new FunctionalDependency(left, right));
+      Assert.Equal(FunctionalDependency.NonEmptyLeftRightMessage, ex.Message);
+    }
+
+    [Theory]
+    [InlineData(new string[] { " " }, new string[] { "   " })]
+    [InlineData(new string[] { "a" }, new string[] { "" })]
+    [InlineData(new string[] { "a", "b" }, new string[] { "  " })]
+    [InlineData(new string[] { "  ", "b" }, new string[] { "a", "b" })]
+    public void Constructor_NullAndEmptyAttributes_ThrowsArgumentException(string[] leftAttrbs, string[] rightAttrbs)
+    {
+      var left = new HashSet<string>(leftAttrbs);
+      var right = new HashSet<string>(rightAttrbs);
+      var ex = Assert.Throws<ArgumentException>(() => new FunctionalDependency(left, right));
+      Assert.Equal(FunctionalDependency.NonNullAndNonEmptyAttributesMessage, ex.Message);
+    }
+
     [Theory]
     [InlineData("a", "c", "a", "c")]
     [InlineData("a,b", "d,e,f", "b,a", "e,f,d")]

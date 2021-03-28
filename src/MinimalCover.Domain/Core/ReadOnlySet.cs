@@ -22,7 +22,6 @@ namespace MinimalCover.Domain.Core
     /// </summary>
     public ReadOnlySet(ISet<T> set)
     {
-      _ = set ?? throw new ArgumentNullException(nameof(set));
       m_set = set;
     }
 

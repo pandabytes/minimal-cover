@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace MinimalCover.Domain.Models
@@ -11,6 +12,10 @@ namespace MinimalCover.Domain.Models
   /// </summary>
   public sealed class FunctionalDependency
   {
+    public static readonly string SameLeftRightMessage = "Values in \"left\" must be different from the values in \"right\"";
+    public static readonly string NonEmptyLeftRightMessage = "Both left and right must have at least 1 attribute";
+    public static readonly string NonNullAndNonEmptyAttributesMessage = "Both left and right must have non-null and non-empty attributes";
+
     /// <summary>
     /// Determinant set of a functional dependency
     /// </summary>
@@ -24,10 +29,16 @@ namespace MinimalCover.Domain.Models
     /// <summary>
     /// Construct a functional dependency object
     /// </summary>
+    /// <exception cref="ArgumentException">Thrown when
+    /// <paramref name="left"/> and <paramref name="right"/> are not
+    /// different sets or each set is empty or an attribute in a set is null or empty
+    /// </exception>
     /// <param name="left">Left attributes</param>
     /// <param name="right">Right attributes</param>
     public FunctionalDependency(ISet<string> left, ISet<string> right)
     {
+      ValidateConstructorArgs(left, right);
+      
       Left = new AttributeSet(left);
       Right = new AttributeSet(right);
     }
@@ -82,5 +93,41 @@ namespace MinimalCover.Domain.Models
         return hashcode * 17;
       }
     }
+
+    /// <summary>
+    /// Validate the arguments in the constructor
+    /// </summary>
+    /// <remarks>
+    /// This method checks whether Left and Right are different non-empty sets,
+    /// where each attribute is not null or empty
+    /// </remarks>
+    /// <exception cref="ArgumentException">Thrown when
+    /// <paramref name="left"/> and <paramref name="right"/> are not
+    /// different sets or each set is empty or an attribute in a set is null or empty
+    /// </exception>
+    /// <param name="left">Left side of the functional dependency</param>
+    /// <param name="right">Right side of the functional dependency</param>
+    private void ValidateConstructorArgs(ISet<string> left, ISet<string> right)
+    {
+      if (left.SetEquals(right))
+      {
+        throw new ArgumentException(SameLeftRightMessage);
+      }
+
+      if (left.Count > 0 && right.Count > 0)
+      {
+        var hasEmptyLeftAttrbs = left.Any(a => string.IsNullOrWhiteSpace(a));
+        var hasEmptyRightAttrbs = right.Any(a => string.IsNullOrWhiteSpace(a));
+        if (hasEmptyLeftAttrbs || hasEmptyRightAttrbs)
+        {
+          throw new ArgumentException(NonNullAndNonEmptyAttributesMessage);
+        }
+      }
+      else
+      {
+        throw new ArgumentException(NonEmptyLeftRightMessage);
+      }
+    }
+
   }
 }
