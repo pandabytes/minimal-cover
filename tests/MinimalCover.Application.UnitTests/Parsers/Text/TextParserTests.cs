@@ -154,8 +154,8 @@ namespace MinimalCover.Application.UnitTests.Parsers.Text
     public void Parse_ValidString_ReturnsExpectedFdSet(ParsedTextFdsTestData testData)
     {
       var textParser = GetTextParser(testData.AttributeSeparator,
-                                             testData.FdSeparator,
-                                             testData.LeftRightSeparator);
+                                     testData.FdSeparator,
+                                     testData.LeftRightSeparator);
       var parsedFds = textParser.Parse(testData.Value);
       Assert.Equal(testData.ExpectedFds, parsedFds);
     }

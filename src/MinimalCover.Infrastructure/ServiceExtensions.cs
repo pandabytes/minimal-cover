@@ -33,8 +33,6 @@ namespace MinimalCover.Infrastructure
     /// <returns>The passed in services object</returns>
     public static IServiceCollection AddParsers(this IServiceCollection services, IConfiguration configuration)
     {
-      _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
-
       // Register text parser
       services.Configure<TextParserSettings>(
         configuration.GetSection(TextParserSettings.SectionPath));
