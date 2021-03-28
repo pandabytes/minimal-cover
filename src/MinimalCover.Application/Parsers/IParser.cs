@@ -19,6 +19,7 @@ namespace MinimalCover.Application.Parsers
   /// A delegate used to get a parser based on the given parse format
   /// </summary>
   /// <param name="format">Parse format</param>
+  /// <exception cref="NotSupportedException">Thrown when a format is not supported yet</exception>
   /// <returns>A <see cref="IParser"/> object</returns>
   public delegate IParser GetParser(ParseFormat format);
 

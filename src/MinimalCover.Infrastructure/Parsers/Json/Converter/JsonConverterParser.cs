@@ -47,14 +47,24 @@ namespace MinimalCover.Infrastructure.Parsers.Json.Converter
     /// <inheritdoc/>
     /// <exception cref="ParserException">
     /// Throws when <paramref name="value"/> doesn't match with 
-    /// the schema defined in <see cref="Schema"/>
+    /// the schema defined in <see cref="Schema"/>. Or thrown
+    /// when the <paramref name="jsonStr"/> has syntax errors
     /// </exception>
     /// <returns>The <see cref="JArray"/> object</returns>
     protected override object ValidateJson(string jsonStr)
     {
       // Parse the schema
       JSchema schema = JSchema.Parse(Schema);
-      var jToken = JToken.Parse(jsonStr);
+      JToken jToken;
+      try
+      {
+        jToken = JToken.Parse(jsonStr);
+      }
+      catch (JsonReaderException ex)
+      {
+        throw new ParserException($"Fail to parse the given JSON string \"{jsonStr}\". " + 
+                                   "This string may not be in correct JSON format", ex);
+      }
 
       // Throw exception if validation fails and include all the 
       // failed validation in the exception message

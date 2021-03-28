@@ -10,6 +10,8 @@ using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Newtonsoft.Json;
+
 using Moq;
 using Xunit;
 
@@ -107,9 +109,22 @@ namespace MinimalCover.Application.UnitTests.Parsers.Json
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': ['A'], 'right': []}]")]
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': ['B']}]")]
     [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': []}]")]
-    public void Parse_InvalidJsonString_ThrowsParserException(string value)
+    public void Parse_JsonStringNotMatchSchema_ThrowsParserException(string value)
     {
       Assert.Throws<ParserException>(() => m_jsonParser.Parse(value));
+    }
+
+    [Theory]
+    [InlineData("[")]
+    [InlineData("{")]
+    [InlineData("[{'left': [, 'right': []}]")]
+    [InlineData("[{'left': ['A'], 'right': ['B']}, 'left': ['A'], 'right': []}]")]
+    [InlineData("[{'left': ['A'], 'right': ['B'}, {'left': [], 'right': ['B']}]")]
+    [InlineData("[{'left': ['A'], 'right': ['B']}, {'left': [], 'right': ]}]")]
+    public void Parse_BadJsonSyntax_ThrowsParserException(string value)
+    {
+      var ex = Assert.Throws<ParserException>(() => m_jsonParser.Parse(value));
+      Assert.IsType<JsonReaderException>(ex.InnerException);
     }
 
     [Theory]
