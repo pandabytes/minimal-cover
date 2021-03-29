@@ -9,7 +9,6 @@ using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Moq;
 using Xunit;
 
 namespace MinimalCover.Application.UnitTests
@@ -105,19 +104,6 @@ namespace MinimalCover.Application.UnitTests
       m_app = new MinimalCoverApp(alg);
     }
 
-    private IParser GetParser(ParseFormat format)
-    {
-      switch (format)
-      {
-        case ParseFormat.Text:
-          return m_dp.Provider.GetRequiredService<TextParser>();
-        case ParseFormat.Json:
-          return m_dp.Provider.GetRequiredService<JsonParser>();
-        default:
-          throw new NotSupportedException($"Format {format} is not supported yet");
-      }
-    }
-
     [Theory]
     [MemberData(nameof(FdFileTheoryData))]
     public void FindMinimalCover_StringArgument_ReturnsExpctedFds(FdFileTestData testData)
@@ -127,7 +113,7 @@ namespace MinimalCover.Application.UnitTests
       var expectedValue = File.ReadAllText(testData.ExpectedFilePath);
 
       // Get the approriate parser
-      IParser parser = GetParser(testData.Format);
+      IParser parser = m_dp.Provider.GetRequiredService<GetParser>()(testData.Format);
       
       // Find the minimal cover and validate the result
       var actualMinimalCover = m_app.FindMinimalCover(value, parser);
@@ -144,7 +130,7 @@ namespace MinimalCover.Application.UnitTests
       var expectedValue = File.ReadAllText(testData.ExpectedFilePath);
 
       // Get the approriate parser
-      IParser parser = GetParser(testData.Format);
+      IParser parser = m_dp.Provider.GetRequiredService<GetParser>()(testData.Format);
 
       // Find the minimal cover and validate the result
       var fds = parser.Parse(value);

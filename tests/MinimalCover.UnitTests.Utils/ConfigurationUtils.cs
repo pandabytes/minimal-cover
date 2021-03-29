@@ -116,8 +116,6 @@ namespace MinimalCover.UnitTests.Utils
     /// <returns><see cref="IConfiguration"/> object</returns>
     public static IConfiguration CreateConfig<T>(T obj, string rootKey) where T : class
     {
-      _ = obj ?? throw new ArgumentNullException(nameof(obj));
-
       if (string.IsNullOrWhiteSpace(rootKey))
       {
         throw new ArgumentException($"{nameof(rootKey)} {rootKey} cannot be null or empty");
