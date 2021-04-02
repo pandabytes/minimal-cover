@@ -74,8 +74,10 @@ namespace MinimalCover.UI.WebApi.Controllers
       {
         var innerExMessage = ex.InnerException?.Message ?? "";
         var message = $"{ex.Message}. {innerExMessage}";
-        m_logger.LogDebug($"Exception type: {ex.GetType()}{Environment.NewLine}" + 
+        m_logger.LogDebug($"Exception type: {ex.GetType()}{Environment.NewLine}" +
+                          $"Inner Exception type: {ex.InnerException?.GetType()}{Environment.NewLine}" +
                           $"{message}{Environment.NewLine}{ex.StackTrace}");
+
         return BadRequest(message);
       }
     }
@@ -103,7 +105,9 @@ namespace MinimalCover.UI.WebApi.Controllers
         var innerExMessage = ex.InnerException?.Message ?? "";
         var message = $"{ex.Message}. {innerExMessage}";
         m_logger.LogDebug($"Exception type: {ex.GetType()}{Environment.NewLine}" +
+                          $"Inner Exception type: {ex.InnerException?.GetType()}{Environment.NewLine}" +
                           $"{message}{Environment.NewLine}{ex.StackTrace}");
+        
         return BadRequest(message);
       }
     }

@@ -36,11 +36,14 @@ namespace MinimalCover.Infrastructure.Parsers.Json.Converter
         var fds = JsonConvert.DeserializeObject<IEnumerable<FunctionalDependency>>(jsonArray.ToString())!;
         return new ReadOnlySet<FunctionalDependency>(fds.ToHashSet());
       }
-      catch (Exception ex)
+      // Occur when Newtonsoft fails to serialize the JSON string to our FunctionalDependency class
+      catch (JsonSerializationException ex)
       {
-        throw new ParserException("JSON parser wasn't able to parse correctly. " +
-                                  "Schema file may have been modified without updating " +
-                                  "the JSON parser implementation", ex);
+        throw new ParserException("Unable to parse string value to a set of functional dependencies", ex);
+      }
+      catch (ArgumentException ex)
+      {
+        throw new ParserException("Unable to construct functional dependency objects", ex);
       }
     }
 
