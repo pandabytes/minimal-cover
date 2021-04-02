@@ -22,14 +22,6 @@ namespace MinimalCover.UI.WebApi
             .ConfigureWebHostDefaults(webBuilder =>
             {
               webBuilder.UseStartup<Startup>();
-
-              //// Change the content path to where the assembly file is
-              //var assemblyPath = Assembly.GetEntryAssembly()?.Location;
-              //if (assemblyPath != null)
-              //{
-              //  var contentPath = assemblyPath.Substring(0, assemblyPath.LastIndexOf(@"\") + 1);
-              //  webBuilder.UseContentRoot(contentPath);
-              //}
             });
   }
 }
