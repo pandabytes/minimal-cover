@@ -85,7 +85,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       // Assert
       Assert.IsAssignableFrom<BadRequestObjectResult>(actionResult);
       var objectResult = ((BadRequestObjectResult)actionResult).Value;
-      Assert.IsAssignableFrom<string>(objectResult);
+      Assert.IsAssignableFrom<BadRequestMessage>(objectResult);
     }
 
     [Theory]
@@ -100,7 +100,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       // Arrange - Mock method to return dummy object
       m_mockMinimalCoverApp
         .Setup(app => app.FindMinimalCover(It.IsAny<IParser>(), It.IsAny<string>()))
-        .Returns(new HashSet<Domain.Models.FunctionalDependency>());
+        .Returns(new HashSet<FunctionalDependency>());
 
       // Act
       var actionResult = m_controller.FindMinimalCover(format, "dummy_value");
@@ -126,7 +126,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       // Assert
       Assert.IsAssignableFrom<BadRequestObjectResult>(actionResult);
       var objectResult = ((BadRequestObjectResult)actionResult).Value;
-      Assert.IsAssignableFrom<string>(objectResult);
+      Assert.IsAssignableFrom<BadRequestMessage>(objectResult);
     }
 
     [Fact]
@@ -139,8 +139,8 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       };
 
       m_mockMinimalCoverApp
-        .Setup(app => app.FindMinimalCover(It.IsAny<ISet<Domain.Models.FunctionalDependency>>()))
-        .Returns(new HashSet<Domain.Models.FunctionalDependency>());
+        .Setup(app => app.FindMinimalCover(It.IsAny<ISet<FunctionalDependency>>()))
+        .Returns(new HashSet<FunctionalDependency>());
 
       // Act
       var actionResult = m_controller.FindMinimalCover(fds);
@@ -148,7 +148,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       // Assert
       Assert.IsAssignableFrom<OkObjectResult>(actionResult);
       var objectResult = ((OkObjectResult)actionResult).Value;
-      Assert.IsAssignableFrom<ISet<Domain.Models.FunctionalDependency>>(objectResult);
+      Assert.IsAssignableFrom<IEnumerable<FunctionalDependencyDto>>(objectResult);
     }
 
     [Theory]
@@ -163,7 +163,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
 
       // Mock method to throw exception based on the given exception
       m_mockMinimalCoverApp
-        .Setup(app => app.FindMinimalCover(It.IsAny<ISet<Domain.Models.FunctionalDependency>>()))
+        .Setup(app => app.FindMinimalCover(It.IsAny<ISet<FunctionalDependency>>()))
         .Throws(ex);
 
       // Act
@@ -172,7 +172,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       // Assert
       Assert.IsAssignableFrom<BadRequestObjectResult>(actionResult);
       var objectResult = ((BadRequestObjectResult)actionResult).Value;
-      Assert.IsAssignableFrom<string>(objectResult);
+      Assert.IsAssignableFrom<BadRequestMessage>(objectResult);
     }
 
   }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.UI.WebApi.Services;
 using MinimalCover.UI.WebApi.Models;
@@ -56,13 +55,14 @@ namespace MinimalCover.UI.WebApi.Controllers
     /// <returns>Action result</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FunctionalDependencyDto>))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestMessage))]
     public IActionResult FindMinimalCover(string format, [FromBody] string value)
     {
       var isValidFormat = Enum.TryParse(format, true, out ParseFormat parseFormat);
       if (!isValidFormat)
       {
-        return BadRequest($"Format \"{format}\" is not one of the valid formats");
+        var badRequestMsg = new BadRequestMessage($"Format \"{format}\" is not one of the valid formats", new List<string>());
+        return BadRequest(badRequestMsg);
       }
 
       try
@@ -76,13 +76,16 @@ namespace MinimalCover.UI.WebApi.Controllers
       catch (Exception ex)
         when (ex is NotSupportedException || ex is ArgumentException || ex is ParserException)
       {
-        var innerExMessage = ex.InnerException?.Message ?? "";
-        var message = $"{ex.Message}. {innerExMessage}";
-        m_logger.LogDebug($"Exception type: {ex.GetType()}{Environment.NewLine}" +
-                          $"Inner Exception type: {ex.InnerException?.GetType()}{Environment.NewLine}" +
-                          $"{message}{Environment.NewLine}{ex.StackTrace}");
-
-        return BadRequest(message);
+        var innerExMessage = ex.InnerException?.Message;
+        var details = new List<string>();
+        if (innerExMessage != null)
+        {
+          details.Add(innerExMessage);
+        }
+        var badRequestMsg = new BadRequestMessage(ex.Message, details);
+        
+        LogDebugException(ex);
+        return BadRequest(badRequestMsg);
       }
     }
 
@@ -92,29 +95,48 @@ namespace MinimalCover.UI.WebApi.Controllers
     /// <param name="functionalDependencies">Array of functional dependencies</param>
     /// <returns>Action result</returns>
     [HttpPost("json")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ISet<FunctionalDependencyDto>))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FunctionalDependencyDto>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestMessage))]
     public IActionResult FindMinimalCover(FunctionalDependencyDto[] functionalDependencies)
     {
       try
       {
         var domainFds = functionalDependencies.Select(fd => fd.ToDomainFd()).ToHashSet();
         var fds = m_mcService.FindMinimalCover(domainFds);
+        var fdsDto = fds.Select(fd => 
+          new FunctionalDependencyDto { Left = fd.Left, Right = fd.Right });
 
-        return Ok(fds);
+        return Ok(fdsDto);
       }
       catch (Exception ex) 
         when (ex is ArgumentException || ex is ParserException)
       {
-        var innerExMessage = ex.InnerException?.Message ?? "";
-        var message = $"{ex.Message}. {innerExMessage}";
-        m_logger.LogDebug($"Exception type: {ex.GetType()}{Environment.NewLine}" +
-                          $"Inner Exception type: {ex.InnerException?.GetType()}{Environment.NewLine}" +
-                          $"{message}{Environment.NewLine}{ex.StackTrace}");
-        
-        return BadRequest(message);
+        var innerExMessage = ex.InnerException?.Message;
+        var details = new List<string>();
+        if (innerExMessage != null)
+        {
+          details.Add(innerExMessage);
+        }
+        var badRequestMsg = new BadRequestMessage(ex.Message, details);
+
+        LogDebugException(ex);
+        return BadRequest(badRequestMsg);
       }
     }
 
+    /// <summary>
+    /// Log exception stack trace in debug mode
+    /// </summary>
+    /// <param name="ex">Exception</param>
+    private void LogDebugException(Exception ex)
+    {
+      var innerExMessage = ex.InnerException?.Message ?? "";
+      m_logger.LogDebug($"Exception message      : {ex.Message}{Environment.NewLine}" +
+                        $"Exception type         : {ex.GetType()}{Environment.NewLine}" +
+                        $"Inner exception message: {innerExMessage}{Environment.NewLine}" +
+                        $"Inner exception type   : {ex.InnerException?.GetType()}{Environment.NewLine}" +
+                        ex.StackTrace);
+
+    }
   }
 }
