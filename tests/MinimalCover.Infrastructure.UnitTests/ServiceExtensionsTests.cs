@@ -64,8 +64,10 @@ namespace MinimalCover.Infrastructure.UnitTests
       provider.GetRequiredService<GetParser>();
     }
 
-    [Fact]
-    public void AddParsers_GetAvailableParser_ReturnedParserMatchesParseFormat()
+    [Theory]
+    [InlineData(ParseFormat.Json, typeof(JsonParser))]
+    [InlineData(ParseFormat.Text, typeof(TextParser))]
+    public void AddParsers_GetAvailableParser_ReturnedParserMatchesParseFormat(ParseFormat parseFormat, Type expectedParserType)
     {
       var textParserSettings = new TextParserSettings
       {
@@ -87,21 +89,19 @@ namespace MinimalCover.Infrastructure.UnitTests
                       .BuildServiceProvider();
 
       var getParser = provider.GetRequiredService<GetParser>();
-
-      Assert.IsAssignableFrom<TextParser>(getParser(ParseFormat.Text));
-      Assert.IsAssignableFrom<JsonParser>(getParser(ParseFormat.Json));
+      Assert.IsAssignableFrom(expectedParserType, getParser(parseFormat));
     }
 
-    [Fact]
-    public void AddParsers_GetUnavailableParser_ThrowNotSupportedException()
+    [Theory]
+    [InlineData(ParseFormat.Yaml)]
+    public void AddParsers_GetUnavailableParser_ThrowNotSupportedException(ParseFormat parseFormat)
     {
       var provider = new ServiceCollection()
                       .AddParsers(EmptyConfiguration)
                       .BuildServiceProvider();
 
       var getParser = provider.GetRequiredService<GetParser>();
-
-      Assert.Throws<NotSupportedException>(() => getParser(ParseFormat.Yaml));
+      Assert.Throws<NotSupportedException>(() => getParser(parseFormat));
     }
 
     [Fact]

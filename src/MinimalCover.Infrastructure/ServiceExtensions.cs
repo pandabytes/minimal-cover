@@ -57,7 +57,7 @@ namespace MinimalCover.Infrastructure
         {
           ParseFormat.Text => provider.GetRequiredService<TextParser>(),
           ParseFormat.Json => provider.GetRequiredService<JsonParser>(),
-          _ => throw new NotSupportedException($"Parse format {format} is not supported yet"),
+          _ => throw new NotSupportedException($"Parse format \"{format}\" is not supported yet"),
         };
       });
 

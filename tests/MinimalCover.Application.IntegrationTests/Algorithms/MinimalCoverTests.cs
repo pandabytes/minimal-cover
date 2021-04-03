@@ -4,7 +4,6 @@ using System.Linq;
 
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Domain.Models;
-using MinimalCover.Tests.Utils;
 using static MinimalCover.Tests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
