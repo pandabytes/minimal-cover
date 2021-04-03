@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Application.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.Tests.Utils", "tests\MinimalCover.Tests.Utils\MinimalCover.Tests.Utils.csproj", "{2A302FE2-C10E-465A-BD21-1A6F2B37B87C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalCover.UI.WebApi.UnitTests", "tests\MinimalCover.UI.WebApi.UnitTests\MinimalCover.UI.WebApi.UnitTests.csproj", "{6FFB72B3-ED8F-4E8D-A0D2-12320F10181D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{2A302FE2-C10E-465A-BD21-1A6F2B37B87C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A302FE2-C10E-465A-BD21-1A6F2B37B87C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A302FE2-C10E-465A-BD21-1A6F2B37B87C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FFB72B3-ED8F-4E8D-A0D2-12320F10181D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FFB72B3-ED8F-4E8D-A0D2-12320F10181D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FFB72B3-ED8F-4E8D-A0D2-12320F10181D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FFB72B3-ED8F-4E8D-A0D2-12320F10181D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{A3DE32F4-B3C3-45CD-A709-EC2A41488B66} = {3CA8824C-FBBB-437D-A867-5C1D57C7F10C}
 		{8FB7B233-E75F-433E-B562-238CD1CE944F} = {EC25A348-33B5-485E-84CF-2FA2088BCEDA}
 		{2A302FE2-C10E-465A-BD21-1A6F2B37B87C} = {EC25A348-33B5-485E-84CF-2FA2088BCEDA}
+		{6FFB72B3-ED8F-4E8D-A0D2-12320F10181D} = {EC25A348-33B5-485E-84CF-2FA2088BCEDA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CA904A0-AF2E-4648-BB82-49B06A5E8389}
