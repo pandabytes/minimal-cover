@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Xunit;
 
-using Moq;
+using MinimalCover.Domain.Models;
 using MinimalCover.Application;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.UI.WebApi.Controllers;
 using MinimalCover.UI.WebApi.Services;
+using MinimalCover.UI.WebApi.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
+using Xunit;
+using Moq;
 
 namespace MinimalCover.UI.WebApi.UnitTests.Controllers
 {
@@ -105,7 +108,7 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       // Assert
       Assert.IsAssignableFrom<OkObjectResult>(actionResult);
       var objectResult = ((OkObjectResult)actionResult).Value;
-      Assert.IsAssignableFrom<ISet<Domain.Models.FunctionalDependency>>(objectResult);
+      Assert.IsAssignableFrom<IEnumerable<FunctionalDependencyDto>>(objectResult);
     }
 
     [Theory]
@@ -130,9 +133,9 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
     public void FindMinimalCover_ValidFuncDeps_ReturnsOk()
     {
       // Arrange - Mock method to return dummy object
-      var fds = new Models.FunctionalDependency[] { 
-        new Models.FunctionalDependency { Left = new HashSet<string>{ "a" }, Right = new HashSet<string>{ "b" } },
-        new Models.FunctionalDependency { Left = new HashSet<string>{ "c" }, Right = new HashSet<string>{ "d", "e" } }
+      var fds = new FunctionalDependencyDto[] { 
+        new FunctionalDependencyDto { Left = new HashSet<string>{ "a" }, Right = new HashSet<string>{ "b" } },
+        new FunctionalDependencyDto { Left = new HashSet<string>{ "c" }, Right = new HashSet<string>{ "d", "e" } }
       };
 
       m_mockMinimalCoverApp
@@ -153,9 +156,9 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
     public void FindMinimalCover_CaughtExceptionThrown_ReturnsBadRequest(Exception ex)
     {
       // Arrange
-      var fds = new Models.FunctionalDependency[] {
-        new Models.FunctionalDependency { Left = new HashSet<string>{ "a" }, Right = new HashSet<string>{ "b" } },
-        new Models.FunctionalDependency { Left = new HashSet<string>{ "c" }, Right = new HashSet<string>{ "d", "e" } }
+      var fds = new FunctionalDependencyDto[] {
+        new FunctionalDependencyDto { Left = new HashSet<string>{ "a" }, Right = new HashSet<string>{ "b" } },
+        new FunctionalDependencyDto { Left = new HashSet<string>{ "c" }, Right = new HashSet<string>{ "d", "e" } }
       };
 
       // Mock method to throw exception based on the given exception

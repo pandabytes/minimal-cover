@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.UI.WebApi.Services;
+using MinimalCover.UI.WebApi.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -54,7 +55,7 @@ namespace MinimalCover.UI.WebApi.Controllers
     /// <param name="value">String value to be parsed</param>
     /// <returns>Action result</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ISet<FunctionalDependency>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FunctionalDependencyDto>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     public IActionResult FindMinimalCover(string format, [FromBody] string value)
     {
@@ -67,7 +68,10 @@ namespace MinimalCover.UI.WebApi.Controllers
       try
       {
         var fds = m_mcService.FindMinimalCover(parseFormat, value);
-        return Ok(fds);
+        var fdsDto = fds.Select(fd => 
+          new FunctionalDependencyDto { Left = fd.Left, Right = fd.Right });
+
+        return Ok(fdsDto);
       }
       catch (Exception ex)
         when (ex is NotSupportedException || ex is ArgumentException || ex is ParserException)
@@ -88,9 +92,9 @@ namespace MinimalCover.UI.WebApi.Controllers
     /// <param name="functionalDependencies">Array of functional dependencies</param>
     /// <returns>Action result</returns>
     [HttpPost("json")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ISet<FunctionalDependency>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ISet<FunctionalDependencyDto>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    public IActionResult FindMinimalCover(Models.FunctionalDependency[] functionalDependencies)
+    public IActionResult FindMinimalCover(FunctionalDependencyDto[] functionalDependencies)
     {
       try
       {
