@@ -4,12 +4,10 @@ using Xunit;
 
 using Moq;
 using MinimalCover.Application;
-using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.UI.WebApi.Controllers;
 using MinimalCover.UI.WebApi.Services;
-using MinimalCover.UI.WebApi.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,7 +28,6 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
       new()
       {
         new ArgumentException(),
-        
         new ParserException("dummy_message")
       };
 
@@ -155,12 +152,13 @@ namespace MinimalCover.UI.WebApi.UnitTests.Controllers
     [MemberData(nameof(CaughtExceptionsForFindMc))]
     public void FindMinimalCover_CaughtExceptionThrown_ReturnsBadRequest(Exception ex)
     {
-      // Arrange - Mock method to return dummy object
+      // Arrange
       var fds = new Models.FunctionalDependency[] {
         new Models.FunctionalDependency { Left = new HashSet<string>{ "a" }, Right = new HashSet<string>{ "b" } },
         new Models.FunctionalDependency { Left = new HashSet<string>{ "c" }, Right = new HashSet<string>{ "d", "e" } }
       };
 
+      // Mock method to throw exception based on the given exception
       m_mockMinimalCoverApp
         .Setup(app => app.FindMinimalCover(It.IsAny<ISet<Domain.Models.FunctionalDependency>>()))
         .Throws(ex);
