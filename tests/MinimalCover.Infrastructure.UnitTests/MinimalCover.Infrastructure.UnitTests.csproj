@@ -21,10 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MinimalCover.Application\MinimalCover.Application.csproj" />
-    <ProjectReference Include="..\..\src\MinimalCover.Domain\MinimalCover.Domain.csproj" />
     <ProjectReference Include="..\..\src\MinimalCover.Infrastructure\MinimalCover.Infrastructure.csproj" />
-    <ProjectReference Include="..\MinimalCover.UnitTests.Utils\MinimalCover.UnitTests.Utils.csproj" />
+    <ProjectReference Include="..\MinimalCover.Tests.Utils\MinimalCover.Tests.Utils.csproj" />
   </ItemGroup>
 
 </Project>

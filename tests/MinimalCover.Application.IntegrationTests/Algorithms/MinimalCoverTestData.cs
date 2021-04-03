@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Domain.Models;
-using MinimalCover.UnitTests.Utils;
+using MinimalCover.Tests.Utils;
 using Xunit;
 
-namespace MinimalCover.Application.UnitTests.Algorithms
+namespace MinimalCover.Application.IntegrationTests.Algorithms
 {
   /// <summary>
   /// This class contains sample test data to test 

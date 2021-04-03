@@ -4,7 +4,6 @@ using System.Linq;
 
 using MinimalCover.Application;
 using MinimalCover.Domain.Models;
-using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 
@@ -41,7 +40,7 @@ namespace MinimalCover.UI.WebApi.Services
     public ISet<FunctionalDependency> FindMinimalCover(ParseFormat parseFormat, string value)
     {
       var parser = m_getParser(parseFormat);
-      return m_mcApp.FindMinimalCover(value, parser);
+      return m_mcApp.FindMinimalCover(parser, value);
     }
 
     /// <summary>

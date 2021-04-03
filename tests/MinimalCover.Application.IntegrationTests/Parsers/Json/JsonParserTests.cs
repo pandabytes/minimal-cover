@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
-using MinimalCover.UnitTests.Utils;
 using MinimalCover.Application.Parsers.Settings;
-using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
+using MinimalCover.Tests.Utils;
+using static MinimalCover.Tests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using Moq;
 using Xunit;
 
-namespace MinimalCover.Application.UnitTests.Parsers.Json
+namespace MinimalCover.Application.IntegrationTests.Parsers.Json
 {
   public class JsonParserTests
   {

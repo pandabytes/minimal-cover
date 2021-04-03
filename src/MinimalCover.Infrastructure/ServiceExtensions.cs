@@ -72,7 +72,7 @@ namespace MinimalCover.Infrastructure
     public static IServiceCollection AddMinimalCover(this IServiceCollection services)
     {
       services.AddTransient<IMinimalCover, DefaultMinimalCover>();
-      services.AddTransient<MinimalCoverApp>();
+      services.AddTransient<MinimalCoverApp, DefaultMinimalCoverApp>();
       return services;
     }
 

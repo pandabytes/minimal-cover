@@ -4,14 +4,14 @@ using System.Linq;
 
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Domain.Models;
-using MinimalCover.UnitTests.Utils;
-using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
+using MinimalCover.Tests.Utils;
+using static MinimalCover.Tests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
-namespace MinimalCover.Application.UnitTests.Algorithms
+namespace MinimalCover.Application.IntegrationTests.Algorithms
 {
   /// <summary>
   /// This class encapsulates all the tests for any class

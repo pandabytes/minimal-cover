@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 using MinimalCover.Infrastructure;
 
-namespace MinimalCover.UnitTests.Utils
+namespace MinimalCover.Tests.Utils
 {
   /// <summary>
   /// This class that stores all dependencies that is 

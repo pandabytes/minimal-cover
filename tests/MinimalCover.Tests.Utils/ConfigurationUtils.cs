@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
-namespace MinimalCover.UnitTests.Utils
+namespace MinimalCover.Tests.Utils
 {
   /// <summary>
   /// Utilities for working with <see cref="IConfiguration"/>

@@ -54,7 +54,7 @@ namespace MinimalCover.UI.Console
         var parser = provider.GetRequiredService<GetParser>()(input);
         
         var app = provider.GetRequiredService<MinimalCoverApp>();
-        var result = app.FindMinimalCover(value, parser);
+        var result = app.FindMinimalCover(parser, value);
 
         // Display minimal cover
         System.Console.WriteLine($"Minimal Cover ({result.Count})");

@@ -1,6 +1,6 @@
 
 $StatusCodes = @{}
-Get-ChildItem -Path ".\*.UnitTests" | ForEach-Object {
+Get-ChildItem -Path ".\*.*Tests" | ForEach-Object {
   $ProjectDirPath = [string]$_
   & dotnet test $ProjectDirPath -l "console;verbosity=detailed"
 

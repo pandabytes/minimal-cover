@@ -5,15 +5,15 @@ using System.Collections.Generic;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
 using MinimalCover.Domain.Models;
-using MinimalCover.UnitTests.Utils;
-using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
+using MinimalCover.Tests.Utils;
+using static MinimalCover.Tests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Moq;
 using Xunit;
 
-namespace MinimalCover.Application.UnitTests.Parsers.Text
+namespace MinimalCover.Application.IntegrationTests.Parsers.Text
 {
   public class TextParserTests
   {

@@ -10,9 +10,9 @@ namespace MinimalCover.Application
   /// The main application that finds the minimal cover.
   /// This is where the logic of the application is defined.
   /// </summary>
-  public class MinimalCoverApp
+  public abstract class MinimalCoverApp
   {
-    private readonly IMinimalCover m_minimalCover;
+    protected readonly IMinimalCover m_minimalCover;
 
     /// <summary>
     /// Constructor
@@ -31,30 +31,15 @@ namespace MinimalCover.Application
     /// </summary>
     /// <param name="value">String value to be parsed</param>
     /// <param name="parser">The parser</param>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="value"/> or <paramref name="parser"/> is null
-    /// </exception>
     /// <returns>A set of <see cref="FunctionalDependency"/></returns>
-    public ISet<FunctionalDependency> FindMinimalCover(string value, IParser parser)
-    {
-      var fds = parser.Parse(value);
-      return FindMinimalCover(fds);
-    }
+    public abstract ISet<FunctionalDependency> FindMinimalCover(IParser parser, string value);
 
     /// <summary>
     /// Find the minimal cover
     /// </summary>
     /// <param name="fds">Set of <see cref="FunctionalDependency"/></param>
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="fds"/> is null
-    /// </exception>
     /// <returns></returns>
-    public ISet<FunctionalDependency> FindMinimalCover(ISet<FunctionalDependency> fds)
-    {
-      var singleRhsAttributeFds = m_minimalCover.GetSingleRhsAttributeFds(fds);
-      var noExtraLhsAttributesFds = m_minimalCover.RemoveExtrasLhsAttributes(singleRhsAttributeFds);
-      return m_minimalCover.RemoveExtraFds(noExtraLhsAttributesFds);
-    }
+    public abstract ISet<FunctionalDependency> FindMinimalCover(ISet<FunctionalDependency> fds);
 
   }
 }

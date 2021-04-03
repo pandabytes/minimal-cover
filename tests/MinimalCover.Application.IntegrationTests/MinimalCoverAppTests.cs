@@ -1,17 +1,16 @@
 using System;
 using System.IO;
 
-using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
-using MinimalCover.UnitTests.Utils;
-using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
+using MinimalCover.Tests.Utils;
+using static MinimalCover.Tests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Xunit;
 
-namespace MinimalCover.Application.UnitTests
+namespace MinimalCover.Application.IntegrationTests
 {
   public class MinimalCoverAppTests
   {
@@ -100,8 +99,7 @@ namespace MinimalCover.Application.UnitTests
                     .UpdateConfig(jsonParserSettings, JsonParserSettings.SectionPath);
 
       m_dp = new DependencyInjection(config);
-      var alg = m_dp.Provider.GetRequiredService<IMinimalCover>();
-      m_app = new MinimalCoverApp(alg);
+      m_app = m_dp.Provider.GetRequiredService<MinimalCoverApp>();
     }
 
     [Theory]
@@ -116,8 +114,8 @@ namespace MinimalCover.Application.UnitTests
       IParser parser = m_dp.Provider.GetRequiredService<GetParser>()(testData.Format);
       
       // Find the minimal cover and validate the result
-      var actualMinimalCover = m_app.FindMinimalCover(value, parser);
-      var expectedMinimalCover = m_app.FindMinimalCover(expectedValue, parser);
+      var actualMinimalCover = m_app.FindMinimalCover(parser, value);
+      var expectedMinimalCover = m_app.FindMinimalCover(parser, expectedValue);
       Assert.True(actualMinimalCover.SetEquals(expectedMinimalCover), "Minimal covers are not equal");
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MinimalCover.Domain.Models;
 
-namespace MinimalCover.UnitTests.Utils
+namespace MinimalCover.Tests.Utils
 {
   /// <summary>
   /// Provide utility methods for dealing with

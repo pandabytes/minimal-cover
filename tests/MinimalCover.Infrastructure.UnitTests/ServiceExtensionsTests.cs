@@ -4,7 +4,7 @@ using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
-using static MinimalCover.UnitTests.Utils.ConfigurationUtils;
+using static MinimalCover.Tests.Utils.ConfigurationUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 

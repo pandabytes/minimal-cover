@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using MinimalCover.Domain.Models;
-using MinimalCover.UnitTests.Utils;
+using MinimalCover.Tests.Utils;
 
 namespace MinimalCover.Domain.UnitTests.Models
 {
