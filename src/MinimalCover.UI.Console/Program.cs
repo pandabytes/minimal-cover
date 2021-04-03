@@ -29,7 +29,7 @@ namespace MinimalCover.UI.Console
       // Register the services
       var services = new ServiceCollection();
       services.AddParsers(config)
-              .AddMinimalCoverAlgs();
+              .AddMinimalCover();
       var provider = services.BuildServiceProvider();
 
       // Create arg parser
@@ -53,8 +53,7 @@ namespace MinimalCover.UI.Console
         // Get the parser based on the input format
         var parser = provider.GetRequiredService<GetParser>()(input);
         
-        var mc = provider.GetRequiredService<IMinimalCover>();
-        var app = new MinimalCoverApp(mc);
+        var app = provider.GetRequiredService<MinimalCoverApp>();
         var result = app.FindMinimalCover(value, parser);
 
         // Display minimal cover

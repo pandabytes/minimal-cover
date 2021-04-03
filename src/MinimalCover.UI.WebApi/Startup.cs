@@ -29,7 +29,7 @@ namespace MinimalCover.UI.WebApi
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddParsers(Configuration);
-      services.AddMinimalCoverAlgs();
+      services.AddMinimalCover();
       services.AddTransient<MinimalCoverService>();
 
       services.AddControllers();

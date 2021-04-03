@@ -1,5 +1,6 @@
 ﻿using System;
 
+using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
@@ -104,15 +105,27 @@ namespace MinimalCover.Infrastructure.UnitTests
     }
 
     [Fact]
-    public void AddMinimalCoverAlgs_GetMinimalCover_MinimalCoverIsRegistered()
+    public void AddMinimalCover_GetMinimalCover_MinimalCoverIsRegistered()
     {
       var services = new ServiceCollection()
-                      .AddMinimalCoverAlgs();
+                      .AddMinimalCover();
       var provider = services.BuildServiceProvider();
 
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if IMinimalCover is not registered
       provider.GetRequiredService<IMinimalCover>();
+    }
+
+    [Fact]
+    public void AddMinimalCover_GetMinimalCoverApp_MinimalCoverAppIsRegistered()
+    {
+      var services = new ServiceCollection()
+                      .AddMinimalCover();
+      var provider = services.BuildServiceProvider();
+
+      // No need to call any Xunit.Assert because GetRequiredService
+      // would throw an exception if IMinimalCover is not registered
+      provider.GetRequiredService<MinimalCoverApp>();
     }
 
   }

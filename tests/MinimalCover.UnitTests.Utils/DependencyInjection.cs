@@ -25,7 +25,7 @@ namespace MinimalCover.UnitTests.Utils
     {
       var services = new ServiceCollection();
       services.AddParsers(configuration)
-              .AddMinimalCoverAlgs();
+              .AddMinimalCover();
       Provider = services.BuildServiceProvider();  
     }
 

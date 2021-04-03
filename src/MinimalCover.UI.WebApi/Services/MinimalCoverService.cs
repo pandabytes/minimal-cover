@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
+using MinimalCover.Application;
 using MinimalCover.Domain.Models;
 using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
@@ -23,11 +23,11 @@ namespace MinimalCover.UI.WebApi.Services
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="minimalCover">Minimal cover algorithm</param>
+    /// <param name="minimalCoverApp">Minimal cover algorithm</param>
     /// <param name="getParser">Get parser delegate</param>
-    public MinimalCoverService(IMinimalCover minimalCover, GetParser getParser)
+    public MinimalCoverService(MinimalCoverApp minimalCoverApp, GetParser getParser)
     {
-      m_mcApp = new MinimalCoverApp(minimalCover);
+      m_mcApp = minimalCoverApp;
       m_getParser = getParser;
     }
 

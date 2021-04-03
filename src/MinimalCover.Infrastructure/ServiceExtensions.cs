@@ -3,6 +3,7 @@ using System.Linq;
 
 using MinimalCover.Domain.Models;
 
+using MinimalCover.Application;
 using MinimalCover.Application.Algorithms;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
@@ -64,13 +65,14 @@ namespace MinimalCover.Infrastructure
     }
 
     /// <summary>
-    /// Add minimal cover algorithms
+    /// Add minimal cover application
     /// </summary>
     /// <param name="services">Services object</param>
     /// <returns>The passed in services object</returns>
-    public static IServiceCollection AddMinimalCoverAlgs(this IServiceCollection services)
+    public static IServiceCollection AddMinimalCover(this IServiceCollection services)
     {
       services.AddTransient<IMinimalCover, DefaultMinimalCover>();
+      services.AddTransient<MinimalCoverApp>();
       return services;
     }
 
