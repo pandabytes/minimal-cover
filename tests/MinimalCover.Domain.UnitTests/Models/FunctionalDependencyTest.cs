@@ -9,16 +9,6 @@ namespace MinimalCover.Domain.UnitTests.Models
   public class FunctionalDependencyTests
   {
     [Theory]
-    [InlineData("a", "a")]
-    [InlineData("a,b", "b,a")]
-    [InlineData("a,b,c", "b,a,c")]
-    public void Constructor_LeftAndRightAreSameSets_ThrowsArgumentException(string left, string right)
-    {
-      var ex = Assert.Throws<ArgumentException>(() => FuncDepUtils.ConstructFdFromString(left, right, ","));
-      Assert.Equal(FunctionalDependency.SameLeftRightMessage, ex.Message);
-    }
-
-    [Theory]
     [InlineData(new string[] { "a" }, new string[] { })]
     [InlineData(new string[] { }, new string[] { "a" })]
     public void Constructor_EmptyArguments_ThrowsArgumentException(string[] leftAttrbs, string[] rightAttrbs)

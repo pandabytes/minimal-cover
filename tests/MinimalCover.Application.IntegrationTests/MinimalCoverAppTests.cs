@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 
+using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
 using MinimalCover.Tests.Utils;
@@ -135,6 +137,30 @@ namespace MinimalCover.Application.IntegrationTests
       var actualMinimalCover = m_app.FindMinimalCover(fds); // Test this method 
       var expectedMinimalCover = parser.Parse(expectedValue);
       Assert.True(actualMinimalCover.SetEquals(expectedMinimalCover), "Minimal covers are not equal");
+    }
+
+    [Fact]
+    public void FindMinimalCover_OneFuncDepWithSameLeftRight_ReturnsEmpty()
+    {
+      var fds = new HashSet<FunctionalDependency> {
+        FuncDepUtils.ConstructFdFromString("a", "a", ",")
+      };
+
+      var mc = m_app.FindMinimalCover(fds);
+      Assert.Empty(mc);
+    }
+
+    [Fact]
+    public void FindMinimalCover_MultipleFuncDepsWithSameLeftRight_ReturnsEmpty()
+    {
+      var fds = new HashSet<FunctionalDependency> {
+        FuncDepUtils.ConstructFdFromString("a", "a", ","),
+        FuncDepUtils.ConstructFdFromString("b", "b", ","),
+        FuncDepUtils.ConstructFdFromString("c", "c", ",")
+      };
+
+      var mc = m_app.FindMinimalCover(fds);
+      Assert.Empty(mc);
     }
 
   }
