@@ -78,7 +78,7 @@ namespace MinimalCover.Application.IntegrationTests.Parsers.Json
 
     public JsonParserTests()
     {
-      m_jsonParser = GetJsonParser(@"Parsers\Json\fd-schema.json");
+      m_jsonParser = GetJsonParser("Parsers/Json/fd-schema.json");
     }
 
     [Fact]

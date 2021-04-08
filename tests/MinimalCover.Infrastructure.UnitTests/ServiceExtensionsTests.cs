@@ -39,7 +39,7 @@ namespace MinimalCover.Infrastructure.UnitTests
     {
       var settings = new JsonParserSettings
       {
-        SchemaFilePath = @"Parsers\Json\fd-schema.json"
+        SchemaFilePath = "Parsers/Json/fd-schema.json"
       };
 
       var config = CreateConfig(settings, JsonParserSettings.SectionPath);
@@ -78,7 +78,7 @@ namespace MinimalCover.Infrastructure.UnitTests
 
       var jsonParserSettings = new JsonParserSettings
       {
-        SchemaFilePath = @"Parsers\Json\fd-schema.json"
+        SchemaFilePath = "Parsers/Json/fd-schema.json"
       };
 
       var config = CreateConfig(textParserSettings, TextParserSettings.SectionPath)

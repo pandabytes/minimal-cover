@@ -34,38 +34,38 @@ namespace MinimalCover.Application.IntegrationTests
       {
         new FdFileTestData()
         {
-          InputFilePath = @"..\..\..\SampleInputFiles\fds_1.json",
-          ExpectedFilePath = @"..\..\..\SampleInputFiles\fds_1_expected.json",
+          InputFilePath = "../../../SampleInputFiles/fds_1.json",
+          ExpectedFilePath = "../../../SampleInputFiles/fds_1_expected.json",
           Format = ParseFormat.Json
         },
         new FdFileTestData()
         {
-          InputFilePath = @"..\..\..\SampleInputFiles\fds_2.json",
-          ExpectedFilePath = @"..\..\..\SampleInputFiles\fds_2_expected.json",
+          InputFilePath = "../../../SampleInputFiles/fds_2.json",
+          ExpectedFilePath = "../../../SampleInputFiles/fds_2_expected.json",
           Format = ParseFormat.Json
         },
         new FdFileTestData()
         {
-          InputFilePath = @"..\..\..\SampleInputFiles\fds_3.json",
-          ExpectedFilePath = @"..\..\..\SampleInputFiles\fds_3_expected.json",
+          InputFilePath = "../../../SampleInputFiles/fds_3.json",
+          ExpectedFilePath = "../../../SampleInputFiles/fds_3_expected.json",
           Format = ParseFormat.Json
         },
         new FdFileTestData()
         {
-          InputFilePath = @"..\..\..\SampleInputFiles\fds_1.txt",
-          ExpectedFilePath = @"..\..\..\SampleInputFiles\fds_1_expected.txt",
+          InputFilePath = "../../../SampleInputFiles/fds_1.txt",
+          ExpectedFilePath = "../../../SampleInputFiles/fds_1_expected.txt",
           Format = ParseFormat.Text
         },
         new FdFileTestData()
         {
-          InputFilePath = @"..\..\..\SampleInputFiles\fds_2.txt",
-          ExpectedFilePath = @"..\..\..\SampleInputFiles\fds_2_expected.txt",
+          InputFilePath = "../../../SampleInputFiles/fds_2.txt",
+          ExpectedFilePath = "../../../SampleInputFiles/fds_2_expected.txt",
           Format = ParseFormat.Text
         },
         new FdFileTestData()
         {
-          InputFilePath = @"..\..\..\SampleInputFiles\fds_3.txt",
-          ExpectedFilePath = @"..\..\..\SampleInputFiles\fds_3_expected.txt",
+          InputFilePath = "../../../SampleInputFiles/fds_3.txt",
+          ExpectedFilePath = "../../../SampleInputFiles/fds_3_expected.txt",
           Format = ParseFormat.Text
         }
       };
@@ -94,7 +94,7 @@ namespace MinimalCover.Application.IntegrationTests
 
       var jsonParserSettings = new JsonParserSettings
       {
-        SchemaFilePath = @"Parsers\Json\fd-schema.json"
+        SchemaFilePath = "Parsers/Json/fd-schema.json"
       };
 
       var config = CreateConfig(textParserSettings, TextParserSettings.SectionPath)
