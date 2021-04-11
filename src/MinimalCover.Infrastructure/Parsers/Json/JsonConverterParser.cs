@@ -11,7 +11,7 @@ using MinimalCover.Domain.Models;
 using MinimalCover.Application.Parsers;
 using MinimalCover.Application.Parsers.Settings;
 
-namespace MinimalCover.Infrastructure.Parsers.Json.Converter
+namespace MinimalCover.Infrastructure.Parsers.Json
 {
   /// <summary>
   /// Default implementation of <see cref="JsonParser"/>.

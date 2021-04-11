@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using MinimalCover.Domain.Models;
 
@@ -10,7 +9,7 @@ using MinimalCover.Application.Parsers.Settings;
 
 using MinimalCover.Infrastructure.Algorithms;
 using MinimalCover.Infrastructure.Parsers.Text;
-using MinimalCover.Infrastructure.Parsers.Json.Converter;
+using MinimalCover.Infrastructure.Parsers.Json;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
