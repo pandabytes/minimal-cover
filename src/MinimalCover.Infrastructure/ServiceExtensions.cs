@@ -29,25 +29,37 @@ namespace MinimalCover.Infrastructure
     /// </summary>
     /// <param name="services">Services object</param>
     /// <param name="configuration">Configuration that contains settings for each parser</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="configuration"/> is null</exception>
     /// <returns>The passed in services object</returns>
     public static IServiceCollection AddParsers(this IServiceCollection services, IConfiguration configuration)
     {
-      // Register text parser
-      services.Configure<TextParserSettings>(
-        configuration.GetSection(TextParserSettings.SectionPath));
+      services.Configure<ParserSettings>(
+        configuration.GetSection(ParserSettings.SectionPath));
       services.AddSingleton(provider =>
-        provider.GetRequiredService<IOptions<TextParserSettings>>().Value);
+        provider.GetRequiredService<IOptions<ParserSettings>>().Value);
 
-      services.AddTransient<TextParser, DefaultTextParser>();
+      // Register text parser
+      services.AddTransient<TextParser>(provider =>
+      {
+        var parserSettings = provider.GetRequiredService<ParserSettings>();
+        var textParserSettings = parserSettings.TextParser;
+        if (textParserSettings == null)
+        {
+          throw new InvalidOperationException("Missing text parser settings in configuration");
+        }
+        return new DefaultTextParser(textParserSettings);
+      });
 
       // Register json parser
-      services.Configure<JsonParserSettings>(
-        configuration.GetSection(JsonParserSettings.SectionPath));
-      services.AddSingleton(provider =>
-        provider.GetRequiredService<IOptions<JsonParserSettings>>().Value);
-
-      services.AddTransient<JsonParser, JsonConverterParser>();
+      services.AddTransient<JsonParser>(provider =>
+      {
+        var parserSettings = provider.GetRequiredService<ParserSettings>();
+        var jsonParserSettings = parserSettings.JsonParser;
+        if (jsonParserSettings == null)
+        {
+          throw new InvalidOperationException("Missing JSON parser settings in configuration");
+        }
+        return new JsonConverterParser(jsonParserSettings);
+      });
 
       // Register a delegate to resolve a parser
       services.AddSingleton<GetParser>(provider => format =>

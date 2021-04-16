@@ -142,8 +142,15 @@ namespace MinimalCover.Application.IntegrationTests.Parsers.Json
     /// <returns>The JSON parser</returns>
     protected static JsonParser GetJsonParser(string schemaFilePath)
     {
-      var settings = new JsonParserSettings { SchemaFilePath = schemaFilePath };
-      var config = CreateConfig(settings, JsonParserSettings.SectionPath);
+      var parserSettings = new ParserSettings
+      {
+        JsonParser = new JsonParserSettings
+        {
+          SchemaFilePath = schemaFilePath
+        }
+      };
+
+      var config = CreateConfig(parserSettings, ParserSettings.SectionPath);
       var dp = new DependencyInjection(config);
       return dp.Provider.GetRequiredService<JsonParser>();
     }

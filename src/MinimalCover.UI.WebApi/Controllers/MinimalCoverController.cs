@@ -29,10 +29,7 @@ namespace MinimalCover.UI.WebApi.Controllers
     /// <param name="mcService">The minimal cover service</param>
     public MinimalCoverController(ILogger<MinimalCoverController> logger,
                                   MinimalCoverService mcService)
-    {
-      m_logger = logger;
-      m_mcService = mcService;
-    }
+      => (m_logger, m_mcService) = (logger, mcService);
 
     /// <summary>
     /// Get all the available formats that can be parsed

@@ -14,46 +14,49 @@ namespace MinimalCover.Infrastructure.UnitTests
 {
   public class ServiceExtensionsTests
   {
+    private readonly ServiceProvider m_provider;
+
+    public ServiceExtensionsTests()
+    {
+      var parserSettings = new ParserSettings
+      {
+        TextParser = new TextParserSettings
+        {
+          AttributeSeparator = ",",
+          FdSeparator = ";",
+          LeftRightSeparator = "-->"
+        },
+        JsonParser = new JsonParserSettings
+        {
+          SchemaFilePath = "Parsers/Json/fd-schema.json"
+        }
+      };
+
+      var config = CreateConfig(parserSettings, ParserSettings.SectionPath);
+      m_provider = new ServiceCollection()
+                      .AddParsers(config)
+                      .AddMinimalCover()
+                      .BuildServiceProvider();
+    }
+
     [Fact]
     public void AddParsers_GetTextParser_TextParserIsRegistered()
     {
-      var settings = new TextParserSettings
-      {
-        AttributeSeparator = ",",
-        FdSeparator = ";",
-        LeftRightSeparator = "-->"
-      };
-
-      var config = CreateConfig(settings, TextParserSettings.SectionPath);
-      var provider = new ServiceCollection()
-                      .AddParsers(config)
-                      .BuildServiceProvider();
-
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if TextParser is not registered
-      provider.GetRequiredService<TextParser>();
+      m_provider.GetRequiredService<TextParser>();
     }
 
     [Fact]
     public void AddParsers_GetJsonParser_JsonParserIsRegistered()
     {
-      var settings = new JsonParserSettings
-      {
-        SchemaFilePath = "Parsers/Json/fd-schema.json"
-      };
-
-      var config = CreateConfig(settings, JsonParserSettings.SectionPath);
-      var provider = new ServiceCollection()
-                      .AddParsers(config)
-                      .BuildServiceProvider();
-
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if JsonParser is not registered
-      provider.GetRequiredService<JsonParser>();
+      m_provider.GetRequiredService<JsonParser>();
     }
 
     [Fact]
-    public void AddParsers_GetParser_GetParserIsRegistered()
+    public void AddParsers_GetParser_GetParserDelegateIsRegistered()
     {
       var provider = new ServiceCollection()
                       .AddParsers(EmptyConfiguration)
@@ -65,30 +68,25 @@ namespace MinimalCover.Infrastructure.UnitTests
     }
 
     [Theory]
+    [InlineData(typeof(JsonParser))]
+    [InlineData(typeof(TextParser))]
+    public void AddParsers_IndividualParserSettingsNotRegistered_ThrowsInvalidOperationException(Type parserType)
+    {
+      var parserSettings = new ParserSettings();
+
+      var config = CreateConfig(parserSettings, ParserSettings.SectionPath);
+      var provider = new ServiceCollection()
+                      .AddParsers(config)
+                      .BuildServiceProvider();
+      Assert.Throws<InvalidOperationException>(() => provider.GetService(parserType));
+    }
+
+    [Theory]
     [InlineData(ParseFormat.Json, typeof(JsonParser))]
     [InlineData(ParseFormat.Text, typeof(TextParser))]
     public void AddParsers_GetAvailableParser_ReturnedParserMatchesParseFormat(ParseFormat parseFormat, Type expectedParserType)
     {
-      var textParserSettings = new TextParserSettings
-      {
-        AttributeSeparator = ",",
-        FdSeparator = ";",
-        LeftRightSeparator = "-->"
-      };
-
-      var jsonParserSettings = new JsonParserSettings
-      {
-        SchemaFilePath = "Parsers/Json/fd-schema.json"
-      };
-
-      var config = CreateConfig(textParserSettings, TextParserSettings.SectionPath)
-                    .UpdateConfig(jsonParserSettings, JsonParserSettings.SectionPath);
-
-      var provider = new ServiceCollection()
-                      .AddParsers(config)
-                      .BuildServiceProvider();
-
-      var getParser = provider.GetRequiredService<GetParser>();
+      var getParser = m_provider.GetRequiredService<GetParser>();
       Assert.IsAssignableFrom(expectedParserType, getParser(parseFormat));
     }
 
@@ -107,25 +105,17 @@ namespace MinimalCover.Infrastructure.UnitTests
     [Fact]
     public void AddMinimalCover_GetMinimalCover_MinimalCoverIsRegistered()
     {
-      var services = new ServiceCollection()
-                      .AddMinimalCover();
-      var provider = services.BuildServiceProvider();
-
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if IMinimalCover is not registered
-      provider.GetRequiredService<IMinimalCover>();
+      m_provider.GetRequiredService<IMinimalCover>();
     }
 
     [Fact]
     public void AddMinimalCover_GetMinimalCoverApp_MinimalCoverAppIsRegistered()
     {
-      var services = new ServiceCollection()
-                      .AddMinimalCover();
-      var provider = services.BuildServiceProvider();
-
       // No need to call any Xunit.Assert because GetRequiredService
       // would throw an exception if IMinimalCover is not registered
-      provider.GetRequiredService<MinimalCoverApp>();
+      m_provider.GetRequiredService<MinimalCoverApp>();
     }
 
   }

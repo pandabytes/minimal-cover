@@ -169,8 +169,16 @@ namespace MinimalCover.Application.IntegrationTests.Parsers.Text
     /// <returns>The text parser</returns>
     protected static TextParser GetTextParser(string attrbSep, string fdSep, string leftRightSep)
     {
-      var settings = new TextParserSettings { AttributeSeparator = attrbSep, FdSeparator = fdSep, LeftRightSeparator = leftRightSep };
-      var config = CreateConfig(settings, TextParserSettings.SectionPath);
+      var parserSettings = new ParserSettings
+      {
+        TextParser = new TextParserSettings
+        {
+          AttributeSeparator = attrbSep,
+          FdSeparator = fdSep,
+          LeftRightSeparator = leftRightSep
+        }
+      };
+      var config = CreateConfig(parserSettings, ParserSettings.SectionPath);
       var dp = new DependencyInjection(config);
       return dp.Provider.GetRequiredService<TextParser>();
     }

@@ -85,20 +85,21 @@ namespace MinimalCover.Application.IntegrationTests
     /// </summary>
     public MinimalCoverAppTests()
     {
-      var textParserSettings = new TextParserSettings 
-      { 
-        AttributeSeparator = ",", 
-        FdSeparator = ";", 
-        LeftRightSeparator = "-->" 
-      };
-
-      var jsonParserSettings = new JsonParserSettings
+      var parserSettings = new ParserSettings
       {
-        SchemaFilePath = "Parsers/Json/fd-schema.json"
+        TextParser = new TextParserSettings
+        {
+          AttributeSeparator = ",",
+          FdSeparator = ";",
+          LeftRightSeparator = "-->"
+        },
+        JsonParser = new JsonParserSettings
+        {
+          SchemaFilePath = "Parsers/Json/fd-schema.json"
+        }
       };
 
-      var config = CreateConfig(textParserSettings, TextParserSettings.SectionPath)
-                    .UpdateConfig(jsonParserSettings, JsonParserSettings.SectionPath);
+      var config = CreateConfig(parserSettings, ParserSettings.SectionPath);
 
       m_dp = new DependencyInjection(config);
       m_app = m_dp.Provider.GetRequiredService<MinimalCoverApp>();
