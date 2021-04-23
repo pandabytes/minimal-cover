@@ -37,29 +37,8 @@ namespace MinimalCover.Infrastructure
       services.AddSingleton(provider =>
         provider.GetRequiredService<IOptions<ParserSettings>>().Value);
 
-      // Register text parser
-      services.AddTransient<TextParser>(provider =>
-      {
-        var parserSettings = provider.GetRequiredService<ParserSettings>();
-        var textParserSettings = parserSettings.TextParser;
-        if (textParserSettings == null)
-        {
-          throw new InvalidOperationException("Missing text parser settings in configuration");
-        }
-        return new DefaultTextParser(textParserSettings);
-      });
-
-      // Register json parser
-      services.AddTransient<JsonParser>(provider =>
-      {
-        var parserSettings = provider.GetRequiredService<ParserSettings>();
-        var jsonParserSettings = parserSettings.JsonParser;
-        if (jsonParserSettings == null)
-        {
-          throw new InvalidOperationException("Missing JSON parser settings in configuration");
-        }
-        return new JsonConverterParser(jsonParserSettings);
-      });
+      services.AddTextParser()
+              .AddJsonParser();
 
       // Register a delegate to resolve a parser
       services.AddSingleton<GetParser>(provider => format =>
@@ -84,6 +63,38 @@ namespace MinimalCover.Infrastructure
     {
       services.AddTransient<IMinimalCover, DefaultMinimalCover>();
       services.AddTransient<MinimalCoverApp, DefaultMinimalCoverApp>();
+      return services;
+    }
+
+    private static IServiceCollection AddTextParser(this IServiceCollection services)
+    {
+      services.AddTransient<TextParser>(provider =>
+      {
+        var parserSettings = provider.GetRequiredService<ParserSettings>();
+        var textParserSettings = parserSettings.TextParser;
+        if (textParserSettings == null)
+        {
+          throw new InvalidOperationException("Missing text parser settings in configuration");
+        }
+        return new DefaultTextParser(textParserSettings);
+      });
+
+      return services;
+    }
+
+    private static IServiceCollection AddJsonParser(this IServiceCollection services)
+    {
+      services.AddTransient<JsonParser>(provider =>
+      {
+        var parserSettings = provider.GetRequiredService<ParserSettings>();
+        var jsonParserSettings = parserSettings.JsonParser;
+        if (jsonParserSettings == null)
+        {
+          throw new InvalidOperationException("Missing JSON parser settings in configuration");
+        }
+        return new JsonConverterParser(jsonParserSettings);
+      });
+
       return services;
     }
 
