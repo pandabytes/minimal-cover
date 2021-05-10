@@ -1,0 +1,35 @@
+﻿.json-button, .text-button {
+  margin: 0 auto;
+  display: inline;
+}
+
+.main {
+  /*text-align: center;
+  margin-left: auto;
+  margin-right: auto;*/
+  /*position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);*/
+  /*display: flex;
+  align-items: start;
+  justify-content: center;*/
+  /*display: grid;
+  place-items: center;*/
+  padding-left: 5%;
+}
+
+.instruction {
+  
+}
+
+.parser-buttons {
+  
+}
+
+.input-textarea {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px 0px;
+  width: 40vw;
+  height: 30vh;
+}

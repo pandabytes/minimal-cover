@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <ProjectReference Include="..\MinimalCover.Application\MinimalCover.Application.csproj" />
   </ItemGroup>
 
 </Project>

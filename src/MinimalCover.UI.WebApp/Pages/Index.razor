@@ -1,10 +1,54 @@
 ﻿@page "/"
+@using MinimalCover.Application.Parsers 
 
-<h2>Instruction:</h2>
-<ol>
-  <li>Select the format of your functional dependencies</li>
-  <li>Enter your functional dependencies</li>
-  <li>Click <b>Compute</b> button</li>
-</ol>
 
+<div class="main">
+  <div class="instruction">
+    <h2>Instruction:</h2>
+    <ol>
+      <li>Select the format of your functional dependencies</li>
+      <li>Enter your functional dependencies</li>
+      <li>Click <b>Compute</b> button</li>
+    </ol>
+  </div>
+
+  <div class="parser-buttons">
+    <button class="@GetParserButtonClassStatus(ParseFormat.Text) text-button" 
+            @onclick="() => ParserButtonClicked(ParseFormat.Text)">
+      Text
+    </button>
+
+    <button class="@GetParserButtonClassStatus(ParseFormat.Json) json-button" 
+            @onclick="() => ParserButtonClicked(ParseFormat.Json)">
+      JSON
+    </button>
+  </div>
+
+  <textarea class="input-textarea" type="text" @bind="@Input"></textarea>
+
+  <button>Example</button>
+
+</div>
+
+@code {
+  private ParseFormat CurrentFormat { get; set; }
+
+  private string Input { get; set; }
+
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+    CurrentFormat = ParseFormat.Text;
+  }
+
+  private string GetParserButtonClassStatus(ParseFormat format)
+    => format == CurrentFormat ? "button-primary" : "";
+
+  private void ParserButtonClicked(ParseFormat format)
+  {
+    Console.WriteLine($"{format} button");
+    CurrentFormat = format;
+  }
+
+}
 
