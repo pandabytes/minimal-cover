@@ -53,6 +53,16 @@ namespace MinimalCover.UI.WebApi
       app.UseRouting();
       app.UseAuthorization();
 
+      app.UseCors(c => {
+        // Allow all origin during development
+        if (env.IsDevelopment())
+        {
+          c.SetIsOriginAllowed(origin => true)
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+        }
+      });
+
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();

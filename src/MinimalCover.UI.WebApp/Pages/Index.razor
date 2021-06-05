@@ -1,9 +1,12 @@
 ﻿@page "/"
-@using MinimalCover.Application.Parsers 
-
+@using MinimalCover.Application.Parsers
+@using System.Text.Json
+@using System.Net
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
 
 <div class="main">
-  <div class="instruction">
+  <div>
     <h2>Instruction:</h2>
     <ol>
       <li>Select the format of your functional dependencies</li>
@@ -12,13 +15,13 @@
     </ol>
   </div>
 
-  <div class="parser-buttons">
-    <button class="@GetParserButtonClassStatus(ParseFormat.Text) text-button" 
+  <div>
+    <button class="@GetParserButtonClass(ParseFormat.Text) text-button"
             @onclick="() => ParserButtonClicked(ParseFormat.Text)">
       Text
     </button>
 
-    <button class="@GetParserButtonClassStatus(ParseFormat.Json) json-button" 
+    <button class="@GetParserButtonClass(ParseFormat.Json) json-button"
             @onclick="() => ParserButtonClicked(ParseFormat.Json)">
       JSON
     </button>
@@ -26,28 +29,112 @@
 
   <textarea class="input-textarea" type="text" @bind="@Input"></textarea>
 
-  <button>Example</button>
+  <textarea class="output-textarea" readonly type="text" @bind="@Output" />
 
+  <button class="button-primary" @onclick="ComputeButtonClicked">Compute</button>
+  <button class="button-primary" @onclick="ClearOutputButtonClicked">Clear Output</button>
+  <button class="button-primary" @onclick="ExampleButtonClicked">Example</button>
 </div>
 
-@code {
+@code
+{
   private ParseFormat CurrentFormat { get; set; }
 
   private string Input { get; set; }
 
+  private string Output { get; set; }
+
   protected override void OnInitialized()
   {
     base.OnInitialized();
+    Input = string.Empty;
+    Output = string.Empty;
     CurrentFormat = ParseFormat.Text;
   }
 
-  private string GetParserButtonClassStatus(ParseFormat format)
+  private string GetParserButtonClass(ParseFormat format)
     => format == CurrentFormat ? "button-primary" : "";
 
   private void ParserButtonClicked(ParseFormat format)
   {
     Console.WriteLine($"{format} button");
     CurrentFormat = format;
+  }
+
+  private async Task ComputeButtonClicked()
+  {
+    Output = string.Empty;
+
+    var minimalCoverApiUrl = $"http://localhost:5000/api/MinimalCover?format={CurrentFormat.ToString()}";
+    var body = Input.Trim();
+
+    using var response = await HttpClient.PostAsJsonAsync(minimalCoverApiUrl, body);
+    var content = await response.Content.ReadAsStringAsync();
+
+    if (response.StatusCode == HttpStatusCode.OK)
+    {
+      Output = PrettyJson(content);
+    }
+    else
+    {
+      await JSRuntime.InvokeVoidAsync("alert", content);
+    }
+  }
+
+  private void ClearOutputButtonClicked()
+  {
+    Output = string.Empty;
+  }
+
+  private void ExampleButtonClicked()
+  {
+    switch (CurrentFormat)
+    {
+      case ParseFormat.Text:
+        Input = $"A-->D;{Environment.NewLine}" +
+                $"B,C-->A,D;{Environment.NewLine}" +
+                $"C-->B;{Environment.NewLine}" +
+                $"E-->A;{Environment.NewLine}" +
+                $"E-->D;";
+        break;
+
+      case ParseFormat.Json:
+        var example = @"[
+                          {
+                            ""left"": [ ""A"" ],
+                            ""right"": [ ""D"" ]
+                          },
+                          {
+                            ""left"": [ ""B"", ""C"" ],
+                            ""right"": [ ""D"", ""A"" ]
+                          },
+                          {
+                            ""left"": [ ""C"" ],
+                            ""right"": [ ""B"" ]
+                          },
+                          {
+                            ""left"": [ ""E"" ],
+                            ""right"": [ ""D"" ]
+                          },
+                          {
+                            ""left"": [ ""E"" ],
+                            ""right"": [ ""A"" ]
+                          }
+                        ]";
+        Input = PrettyJson(example);
+        break;
+
+      default:
+        break;
+    }
+
+  }
+
+  private static string PrettyJson(string unPrettyJson)
+  {
+    var options = new JsonSerializerOptions { WriteIndented = true };
+    var jsonElement = JsonSerializer.Deserialize<JsonElement>(unPrettyJson);
+    return JsonSerializer.Serialize(jsonElement, options);
   }
 
 }
